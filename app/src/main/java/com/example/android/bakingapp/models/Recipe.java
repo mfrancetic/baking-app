@@ -19,7 +19,7 @@ public class Recipe implements Parcelable {
 
     private String image;
 
-    Recipe(int id, String name, List<Ingredient> ingredientList, List<Step> stepList,
+   public Recipe(int id, String name, List<Ingredient> ingredientList, List<Step> stepList,
            int servings, String image) {
         this.id = id;
         this.name = name;

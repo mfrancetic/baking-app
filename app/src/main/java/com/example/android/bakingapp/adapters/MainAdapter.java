@@ -59,7 +59,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         ImageView recipeImageView = viewHolder.recipeImageView;
 
-        Uri recipeImageUri = Uri.parse(recipe.getImage());
+        String image = recipe.getImage();
+        Uri recipeImageUri = Uri.parse(image);
 
         com.squareup.picasso.Picasso
                 .get()
