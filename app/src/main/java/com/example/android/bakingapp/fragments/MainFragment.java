@@ -1,16 +1,22 @@
 package com.example.android.bakingapp.fragments;
 
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.adapters.MainAdapter;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -33,6 +39,15 @@ public class MainFragment extends Fragment {
 
     private static final String LOG_TAG = MainFragment.class.getSimpleName();
 
+    List<Recipe> recipeList;
+
+    OnRecipeClickListener onRecipeClickListener;
+
+    MainAdapter mainAdapter;
+
+    public interface OnRecipeClickListener {
+        void onRecipeSelected(Recipe recipe);
+    }
 
     public MainFragment() {
         super();
@@ -42,12 +57,44 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        recipeList = new ArrayList<>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+//        final FragmentActivity fragmentActivity = getActivity();
+        Context context = rootView.getContext();
+        final FragmentActivity fragmentActivity = getActivity();
+        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
+        recyclerView.setLayoutManager(layoutManager);
+        recyclerView.setAdapter(mainAdapter);
 
+        recyclerView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+            }
+        });
+
+//        new RecipeAsyncTask(context, new RecipeCallback()
+        new RecipeAsyncTask().execute();
+//
         return rootView;
     }
 
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onRecipeClickListener = (OnRecipeClickListener) context;
+        } catch (ClassCastException e) {
+            throw new RuntimeException(context.toString() + "must implement OnRecipeClickListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onRecipeClickListener = null;
+    }
 
     private class RecipeAsyncTask extends AsyncTask<String, Void, List<Recipe>> {
 
@@ -68,19 +115,30 @@ public class MainFragment extends Fragment {
 
                     List<Ingredient> ingredientList = new ArrayList<>();
                     JSONArray ingredientArray = (JSONArray) recipeObject.get("ingredients");
-                    if (ingredientArray != null) {
-                        for (int ingredientI = 0;  ingredientI < ingredientArray.length(); ingredientI ++) {
-                            ingredientList.add(ingredientList.get(ingredientI));
-                        }
+//                    if (ingredientArray != null) {
+//                        for (int ingredientI = 0; ingredientI < ingredientArray.length(); ingredientI++) {
+//                            ingredientList.add(ingredientList.get(ingredientI));
+//                        }
+//                    }
+                    for (int j = 0; j < ingredientArray.length(); j++) {
+                        JSONObject ingredientObject = ingredientArray.getJSONObject(j);
+
+                        int quantity = ingredientObject.getInt("quantity");
+                        String measure = ingredientObject.getString("measure");
+                        String ingredient = ingredientObject.getString("ingredient");
+
+                        Ingredient newIngredient = new Ingredient(quantity, measure, ingredient);
+
+                        ingredientList.add(newIngredient);
                     }
 
                     List<Step> stepList = new ArrayList<>();
                     JSONArray stepArray = (JSONArray) recipeObject.get("steps");
-                    if (stepArray != null) {
-                        for (int stepI = 0;  stepI < stepArray.length(); stepI ++) {
-                            ingredientList.add(ingredientList.get(stepI));
-                        }
-                    }
+//                    if (stepArray != null) {
+//                        for (int stepI = 0; stepI < stepArray.length(); stepI++) {
+//                            ingredientList.add(ingredientList.get(stepI));
+//                        }
+//                    }
 
                     int servings = recipeObject.getInt("servings");
                     String image = recipeObject.getString("image");
@@ -103,5 +161,23 @@ public class MainFragment extends Fragment {
             }
             return recipeList;
         }
+
+        @Override
+        protected void onPostExecute(List<Recipe> recipes) {
+
+            if (recipes.size() == 0) {
+
+            } else {
+//            populateRecipes(recipes);
+            }
+        }
     }
+
+//    private void populateRecipes(List<Recipe> recipes) {
+//        this.recipeList = recipes;
+//        mainAdapter.setRecipes(recipeList);
+//    }
+
+
+
 }

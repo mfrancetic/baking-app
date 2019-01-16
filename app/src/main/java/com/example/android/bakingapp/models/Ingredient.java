@@ -9,7 +9,7 @@ public class Ingredient {
     private String ingredientName;
 
 
-    Ingredient(int ingredientQantity, String ingredientMeasure, String ingredientName) {
+   public Ingredient(int ingredientQantity, String ingredientMeasure, String ingredientName) {
         this.ingredientQantity = ingredientQantity;
         this.ingredientMeasure = ingredientMeasure;
         this.ingredientName = ingredientName;

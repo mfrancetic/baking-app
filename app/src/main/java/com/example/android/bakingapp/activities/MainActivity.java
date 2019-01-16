@@ -6,10 +6,11 @@ import android.os.Bundle;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.MainFragment;
+import com.example.android.bakingapp.models.Recipe;
 
 import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements MainFragment.OnRecipeClickListener {
 
     // @BindView (R.id.title_text_view) TextViw mTitleTextView;
 
@@ -27,8 +28,11 @@ public class MainActivity extends AppCompatActivity {
         fragmentManager.beginTransaction()
                 .add(R.id.main_fragment_container, mainFragment)
                 .commit();
+    }
 
 
+    @Override
+    public void onRecipeSelected(Recipe recipe) {
 
     }
 }

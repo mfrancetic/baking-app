@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailActivity;
+import com.example.android.bakingapp.fragments.MainFragment;
 import com.example.android.bakingapp.models.Recipe;
 
 import java.util.List;
@@ -21,7 +22,11 @@ import butterknife.BindView;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
-    private final List<Recipe> recipes;
+    private List<Recipe> recipes;
+
+    private Context context;
+
+    private MainFragment.OnRecipeClickListener onRecipeClickListener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -37,8 +42,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 
-    public MainAdapter(List<Recipe> recipes) {
+    public MainAdapter(Context context, List<Recipe> recipes, MainFragment.OnRecipeClickListener onRecipeClickListener) {
+        this.context = context;
         this.recipes = recipes;
+        this.onRecipeClickListener = onRecipeClickListener;
     }
 
     @NonNull
@@ -79,6 +86,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             }
         });
 
+    }
+
+    public void setRecipes(List<Recipe> recipeList) {
+        this.recipes = recipeList;
+        notifyDataSetChanged();
     }
 
     @Override

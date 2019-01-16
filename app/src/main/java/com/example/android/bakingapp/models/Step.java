@@ -13,7 +13,7 @@ public class Step {
     private String stepThumbnailUrl;
 
 
-    Step (int stepId, String stepShortDescription, String stepDescription,
+   public Step (int stepId, String stepShortDescription, String stepDescription,
           String stepVideoUrl, String stepThumbnailUrl) {
         this.stepId = stepId;
         this.stepShortDescription = stepShortDescription;
