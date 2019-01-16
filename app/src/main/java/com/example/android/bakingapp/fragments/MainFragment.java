@@ -47,7 +47,7 @@ public class MainFragment extends Fragment {
 
     MainAdapter mainAdapter;
 
-    RecyclerView recyclerView;
+    @BindView(R.id.main_recycler_view) RecyclerView recyclerView;
 
     @BindView(R.id.loading_indicator)
     ProgressBar loadingIndicator;
@@ -67,12 +67,17 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+
         recipeList = new ArrayList<>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-//        final FragmentActivity fragmentActivity = getActivity();
+
         Context context = rootView.getContext();
 
+        mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
+
         final FragmentActivity fragmentActivity = getActivity();
+        ButterKnife.bind(this, rootView);
+
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
         recyclerView.setLayoutManager(layoutManager);
@@ -180,18 +185,20 @@ public class MainFragment extends Fragment {
         protected void onPostExecute(List<Recipe> recipes) {
 
             if (recipes.size() == 0) {
+                emptyTextView.setVisibility(View.VISIBLE);
+                loadingIndicator.setVisibility(View.VISIBLE);
+            } else {
                 emptyTextView.setVisibility(View.GONE);
                 loadingIndicator.setVisibility(View.GONE);
-            } else {
-//                populateRecipes(recipes);
+                populateRecipes(recipes);
             }
         }
     }
 
-//    private void populateRecipes(List<Recipe> recipes) {
-//        this.recipeList = recipes;
-//        mainAdapter.setRecipes(recipeList);
-//    }
+    private void populateRecipes(List<Recipe> recipes) {
+        this.recipeList = recipes;
+        mainAdapter.setRecipes(recipeList);
+    }
 
 
 }

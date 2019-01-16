@@ -19,7 +19,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        ButterKnife.bind(this);
 
         MainFragment mainFragment = new MainFragment();
 

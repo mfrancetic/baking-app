@@ -67,14 +67,16 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         ImageView recipeImageView = viewHolder.recipeImageView;
 
         String image = recipe.getImage();
-        Uri recipeImageUri = Uri.parse(image);
+        if (image.isEmpty()) {
+            recipeImageView.setImageResource(R.mipmap.ic_launcher);
+        } else {
+            Uri recipeImageUri = Uri.parse(image);
 
-        com.squareup.picasso.Picasso
-                .get()
-                .load(recipeImageUri)
-                .centerInside()
-                .into(recipeImageView);
-
+            com.squareup.picasso.Picasso
+                    .get()
+                    .load(recipeImageUri)
+                    .into(recipeImageView);
+        }
 
         final Context context = recipeNameTextView.getContext();
 
