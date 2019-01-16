@@ -14,6 +14,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapters.MainAdapter;
@@ -45,6 +47,14 @@ public class MainFragment extends Fragment {
 
     MainAdapter mainAdapter;
 
+    RecyclerView recyclerView;
+
+    @BindView(R.id.loading_indicator)
+    ProgressBar loadingIndicator;
+
+    @BindView(R.id.empty_text_view)
+    TextView emptyTextView;
+
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
     }
@@ -61,8 +71,9 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 //        final FragmentActivity fragmentActivity = getActivity();
         Context context = rootView.getContext();
+
         final FragmentActivity fragmentActivity = getActivity();
-        final RecyclerView recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
+        recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
@@ -115,11 +126,7 @@ public class MainFragment extends Fragment {
 
                     List<Ingredient> ingredientList = new ArrayList<>();
                     JSONArray ingredientArray = (JSONArray) recipeObject.get("ingredients");
-//                    if (ingredientArray != null) {
-//                        for (int ingredientI = 0; ingredientI < ingredientArray.length(); ingredientI++) {
-//                            ingredientList.add(ingredientList.get(ingredientI));
-//                        }
-//                    }
+
                     for (int j = 0; j < ingredientArray.length(); j++) {
                         JSONObject ingredientObject = ingredientArray.getJSONObject(j);
 
@@ -134,11 +141,18 @@ public class MainFragment extends Fragment {
 
                     List<Step> stepList = new ArrayList<>();
                     JSONArray stepArray = (JSONArray) recipeObject.get("steps");
-//                    if (stepArray != null) {
-//                        for (int stepI = 0; stepI < stepArray.length(); stepI++) {
-//                            ingredientList.add(ingredientList.get(stepI));
-//                        }
-//                    }
+                    for (int k = 0; k < stepArray.length(); k++) {
+                        JSONObject stepObject = stepArray.getJSONObject(k);
+                        int stepId = stepObject.getInt("id");
+                        String shortDescription = stepObject.getString("shortDescription");
+                        String description = stepObject.getString("description");
+                        String videoUrl = stepObject.getString("videoURL");
+                        String thumbnailUrl = stepObject.getString("thumbnailURL");
+
+                        Step newStep = new Step(stepId, shortDescription, description, videoUrl, thumbnailUrl);
+
+                        stepList.add(newStep);
+                    }
 
                     int servings = recipeObject.getInt("servings");
                     String image = recipeObject.getString("image");
@@ -166,9 +180,10 @@ public class MainFragment extends Fragment {
         protected void onPostExecute(List<Recipe> recipes) {
 
             if (recipes.size() == 0) {
-
+                emptyTextView.setVisibility(View.GONE);
+                loadingIndicator.setVisibility(View.GONE);
             } else {
-//            populateRecipes(recipes);
+//                populateRecipes(recipes);
             }
         }
     }
@@ -177,7 +192,6 @@ public class MainFragment extends Fragment {
 //        this.recipeList = recipes;
 //        mainAdapter.setRecipes(recipeList);
 //    }
-
 
 
 }
