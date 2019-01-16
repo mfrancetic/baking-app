@@ -28,6 +28,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private MainFragment.OnRecipeClickListener onRecipeClickListener;
 
+    private static final String recipeKey = "recipe";
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.recipe_name_text_view)
@@ -60,7 +62,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, int position) {
 
-        Recipe recipe = recipes.get(position);
+        final Recipe recipe = recipes.get(position);
         TextView recipeNameTextView = viewHolder.recipeNameTextView;
         recipeNameTextView.setText(recipe.getName());
 
@@ -84,6 +86,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
+//                openRecipeIntent.putExtra(recipeKey, recipe);
                 context.startActivity(openRecipeIntent);
             }
         });

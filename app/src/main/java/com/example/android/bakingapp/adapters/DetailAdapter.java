@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 
@@ -20,6 +21,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     List<Step> steps;
 
+    private Context context;
+
+    private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.recipe_step_description)
@@ -29,6 +34,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             super(itemView);
             itemView.findViewById(R.id.recipe_step_description);
         }
+    }
+
+    public DetailAdapter(Context context, List<Step> steps, DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener) {
+        this.context = context;
+        this.steps = steps;
+        this.onRecipeStepClickListener = onRecipeStepClickListener;
     }
 
 
@@ -60,6 +71,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         });
 
 
+    }
+
+    public void setSteps(List<Step> stepList) {
+        this.steps = stepList;
+        notifyDataSetChanged();
     }
 
     @Override
