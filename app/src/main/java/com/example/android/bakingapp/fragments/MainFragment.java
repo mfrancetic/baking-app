@@ -67,7 +67,6 @@ public class MainFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-
         recipeList = new ArrayList<>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 

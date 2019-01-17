@@ -66,6 +66,9 @@ public class DetailRecipeFragment extends Fragment {
             recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
         }
 
+        String recipeName = recipe.getName();
+        getActivity().setTitle(recipeName);
+
         stepList = recipe.getStepList();
 
         ingredientList = recipe.getIngredientList();
@@ -132,4 +135,6 @@ public class DetailRecipeFragment extends Fragment {
         detailAdapter.setSteps(stepList);
         ingredientsTextView.setText(ingredients);
     }
+
+
 }
