@@ -70,9 +70,6 @@ public class DetailRecipeFragment extends Fragment {
 
         ingredientList = recipe.getIngredientList();
 
-
-//        stepList = new ArrayList<>();
-
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
         Context context = rootView.getContext();
@@ -87,7 +84,20 @@ public class DetailRecipeFragment extends Fragment {
         detailRecyclerView.setLayoutManager(layoutManager);
         detailRecyclerView.setAdapter(detailAdapter);
 
+        StringBuilder stringBuilder = new StringBuilder();
 
+        String ingredients;
+
+        for (int i = 0; i < ingredientList.size(); i++) {
+            int quantityInt = ingredientList.get(i).getIngredientQuantity();
+            String quantity = String.valueOf(quantityInt);
+            String measure = ingredientList.get(i).getIngredientMeasure();
+            String ingredient = ingredientList.get(i).getIngredientName();
+            String ingredientLine = quantity + " " + measure + " " + ingredient + "\n";
+            stringBuilder.append(ingredientLine);
+        }
+
+        ingredients = stringBuilder.toString();
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -96,7 +106,7 @@ public class DetailRecipeFragment extends Fragment {
             }
         });
 
-        populateDetailRecipeView("ingredients", stepList);
+        populateDetailRecipeView(ingredients, stepList);
 
         return rootView;
     }
@@ -120,7 +130,6 @@ public class DetailRecipeFragment extends Fragment {
     public void populateDetailRecipeView(String ingredients, List<Step> stepList) {
         this.stepList = stepList;
         detailAdapter.setSteps(stepList);
-//        detailAdapter.notifyDataSetChanged();
         ingredientsTextView.setText(ingredients);
     }
 }

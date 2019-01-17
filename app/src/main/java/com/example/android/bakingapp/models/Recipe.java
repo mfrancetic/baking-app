@@ -34,14 +34,14 @@ public class Recipe implements Parcelable {
         id = in.readInt();
         name = in.readString();
 //        if (in.readByte() == 0x01) {
-            ingredientList = new ArrayList<>();
-            in.readList(ingredientList, Ingredient.class.getClassLoader());
+        ingredientList = new ArrayList<>();
+        in.readList(ingredientList, Ingredient.class.getClassLoader());
 //        }
 //        ingredientList = in.readArrayList(Ingredient.class.getClassLoader());
 //        stepList = in.readArrayList(Step.class.getClassLoader());
 //        if (in.readByte() == 0x01) {
-            stepList = new ArrayList<>();
-            in.readList(stepList, Step.class.getClassLoader());
+        stepList = new ArrayList<>();
+        in.readList(stepList, Step.class.getClassLoader());
 //        }
         servings = in.readInt();
         image = in.readString();
