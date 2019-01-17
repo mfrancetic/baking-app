@@ -120,7 +120,7 @@ public class DetailRecipeFragment extends Fragment {
         try {
             onRecipeStepClickListener = (OnRecipeStepClickListener) context;
         } catch (ClassCastException e) {
-            throw new RuntimeException(context.toString() + "must implement OnRecipeStepClickListener");
+            throw new RuntimeException(context.toString() + "must implement OnDetailRecipeStepClickListener");
         }
     }
 

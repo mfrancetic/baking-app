@@ -1,36 +1,45 @@
 package com.example.android.bakingapp.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.activities.DetailStepActivity;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
-    private  List<Step> steps;
+    private List<Step> steps;
 
     private Context context;
+
+    private static final String stepKey = "step";
+
+    private static final String stepListKey = "stepList";
 
     private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-//        @BindView(R.id.recipe_step_description)
+        //        @BindView(R.id.recipe_step_description)
         final TextView recipeDescriptionTextView;
 
-         ViewHolder(@NonNull View itemView) {
+        ViewHolder(@NonNull View itemView) {
             super(itemView);
             recipeDescriptionTextView = itemView.findViewById(R.id.recipe_step_description);
         }
@@ -65,11 +74,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(context, DetailStepActivity.class);
+                intent.putExtra(stepKey, step);
+                intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
+                context.startActivity(intent);
             }
         });
-
-
     }
 
     public void setSteps(List<Step> stepList) {
