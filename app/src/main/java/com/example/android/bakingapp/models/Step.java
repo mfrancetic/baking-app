@@ -1,6 +1,9 @@
 package com.example.android.bakingapp.models;
 
-public class Step {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Step implements Parcelable {
 
     private int stepId;
 
@@ -12,15 +15,34 @@ public class Step {
 
     private String stepThumbnailUrl;
 
-
-   public Step (int stepId, String stepShortDescription, String stepDescription,
-          String stepVideoUrl, String stepThumbnailUrl) {
+    public Step(int stepId, String stepShortDescription, String stepDescription,
+                String stepVideoUrl, String stepThumbnailUrl) {
         this.stepId = stepId;
         this.stepShortDescription = stepShortDescription;
         this.stepDescription = stepDescription;
         this.stepVideoUrl = stepVideoUrl;
         this.stepThumbnailUrl = stepThumbnailUrl;
     }
+
+    private Step(Parcel in) {
+        stepId = in.readInt();
+        stepShortDescription = in.readString();
+        stepDescription = in.readString();
+        stepVideoUrl = in.readString();
+        stepThumbnailUrl = in.readString();
+    }
+
+    public static final Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
+        @Override
+        public Step createFromParcel(Parcel in) {
+            return new Step(in);
+        }
+
+        @Override
+        public Step[] newArray(int size) {
+            return new Step[size];
+        }
+    };
 
     public int getStepId() {
         return stepId;
@@ -60,5 +82,19 @@ public class Step {
 
     public void setStepThumbnailUrl(String stepThumbnailUrl) {
         this.stepThumbnailUrl = stepThumbnailUrl;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(stepId);
+        parcel.writeString(stepShortDescription);
+        parcel.writeString(stepDescription);
+        parcel.writeString(stepVideoUrl);
+        parcel.writeString(stepThumbnailUrl);
     }
 }

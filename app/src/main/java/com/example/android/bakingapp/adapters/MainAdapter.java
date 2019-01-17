@@ -86,11 +86,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
-//                openRecipeIntent.putExtra(recipeKey, recipe);
+                openRecipeIntent.putExtra(recipeKey, recipe);
                 context.startActivity(openRecipeIntent);
             }
         });
-
     }
 
     public void setRecipes(List<Recipe> recipeList) {
@@ -107,4 +106,3 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 }
-

@@ -19,7 +19,7 @@ import butterknife.BindView;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
-    List<Step> steps;
+    private  List<Step> steps;
 
     private Context context;
 
@@ -27,12 +27,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.recipe_step_description)
-        TextView recipeDescriptionTextView;
+//        @BindView(R.id.recipe_step_description)
+        final TextView recipeDescriptionTextView;
 
-        public ViewHolder(@NonNull View itemView) {
+         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            itemView.findViewById(R.id.recipe_step_description);
+            recipeDescriptionTextView = itemView.findViewById(R.id.recipe_step_description);
         }
     }
 
@@ -53,16 +53,15 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull DetailAdapter.ViewHolder viewHolder, int position) {
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
 
-        final Context context = recipeDescriptionTextView.getContext();
+//        final Context context = recipeDescriptionTextView.getContext();
 
-        String recipeDescription = step.getStepId() + "" + step.getStepShortDescription();
+        String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();
 
         recipeDescriptionTextView.setText(recipeDescription);
-
         recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

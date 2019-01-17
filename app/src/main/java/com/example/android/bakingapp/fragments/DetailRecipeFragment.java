@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapters.DetailAdapter;
+import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 
@@ -32,6 +33,8 @@ public class DetailRecipeFragment extends Fragment {
     Recipe recipe;
 
     List<Step> stepList;
+
+    List<Ingredient> ingredientList;
 
     DetailAdapter detailAdapter;
 
@@ -58,12 +61,15 @@ public class DetailRecipeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-//        Intent intent = getActivity().getIntent();
-//        if (intent != null) {
-//            recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
-//        }
+        Intent intent = getActivity().getIntent();
+        if (intent != null) {
+            recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
+        }
 
-//        stepList = recipe.getStepList();
+        stepList = recipe.getStepList();
+
+        ingredientList = recipe.getIngredientList();
+
 
 //        stepList = new ArrayList<>();
 
@@ -80,6 +86,7 @@ public class DetailRecipeFragment extends Fragment {
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
         detailRecyclerView.setLayoutManager(layoutManager);
         detailRecyclerView.setAdapter(detailAdapter);
+
 
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
@@ -113,11 +120,7 @@ public class DetailRecipeFragment extends Fragment {
     public void populateDetailRecipeView(String ingredients, List<Step> stepList) {
         this.stepList = stepList;
         detailAdapter.setSteps(stepList);
-        detailAdapter.notifyDataSetChanged();
+//        detailAdapter.notifyDataSetChanged();
         ingredientsTextView.setText(ingredients);
-
-
     }
-
-
 }

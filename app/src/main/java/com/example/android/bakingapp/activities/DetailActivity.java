@@ -27,7 +27,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
                 .add(R.id.detail_fragment_container, detailRecipeFragment)
                 .commit();
 
-
     }
 
     @Override

@@ -3,6 +3,7 @@ package com.example.android.bakingapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Parcelable {
@@ -19,8 +20,8 @@ public class Recipe implements Parcelable {
 
     private String image;
 
-   public Recipe(int id, String name, List<Ingredient> ingredientList, List<Step> stepList,
-           int servings, String image) {
+    public Recipe(int id, String name, List<Ingredient> ingredientList, List<Step> stepList,
+                  int servings, String image) {
         this.id = id;
         this.name = name;
         this.ingredientList = ingredientList;
@@ -32,8 +33,16 @@ public class Recipe implements Parcelable {
     private Recipe(Parcel in) {
         id = in.readInt();
         name = in.readString();
-        ingredientList = in.readArrayList(ClassLoader.getSystemClassLoader());
-        stepList = in.readArrayList(ClassLoader.getSystemClassLoader());
+//        if (in.readByte() == 0x01) {
+            ingredientList = new ArrayList<>();
+            in.readList(ingredientList, Ingredient.class.getClassLoader());
+//        }
+//        ingredientList = in.readArrayList(Ingredient.class.getClassLoader());
+//        stepList = in.readArrayList(Step.class.getClassLoader());
+//        if (in.readByte() == 0x01) {
+            stepList = new ArrayList<>();
+            in.readList(stepList, Step.class.getClassLoader());
+//        }
         servings = in.readInt();
         image = in.readString();
     }
