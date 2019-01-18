@@ -10,23 +10,37 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.models.Step;
 
 import java.util.List;
 
+import butterknife.BindView;
+
 public class DetailRecipeStepFragment extends Fragment {
 
     private static final String LOG_TAG = DetailRecipeStepFragment.class.getSimpleName();
 
-    private static final String stepKey = "step";
 
     private static final String stepListKey = "stepList";
 
+    private static final String stepIdKey = "stepId";
+
     private List<Step> stepList;
 
+    private String description;
+
     private Step step;
+
+    private int stepId;
+
+    private TextView instructionTextView;
+
+    private static final String recipeNameKey = "recipeName";
+
+    private String recipeName;
 
     OnDetailRecipeStepClickListener onDetailRecipeStepClickListener;
 
@@ -43,15 +57,27 @@ public class DetailRecipeStepFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
+
+
+        instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
+
         Intent intent = getActivity().getIntent();
 
         if (intent != null) {
-            step = intent.getParcelableExtra(stepKey);
+            stepId = intent.getIntExtra(stepIdKey, 0);
             stepList = intent.getParcelableArrayListExtra(stepListKey);
+//            recipeName = intent.getStringExtra(recipeNameKey);
         }
+
+
+//        getActivity().setTitle(recipeName);
+
 
         Context context = rootView.getContext();
 
+        description = stepList.get(stepId).getStepDescription();
+
+        instructionTextView.setText(description);
 
         return rootView;
     }

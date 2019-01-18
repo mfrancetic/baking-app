@@ -48,6 +48,8 @@ public class DetailRecipeFragment extends Fragment {
 
     private static final String recipeKey = "recipe";
 
+    public String recipeName;
+
 
     public interface OnRecipeStepClickListener {
         void onRecipeStepSelected(Recipe recipe);
@@ -66,7 +68,7 @@ public class DetailRecipeFragment extends Fragment {
             recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
         }
 
-        String recipeName = recipe.getName();
+         recipeName = recipe.getName();
         getActivity().setTitle(recipeName);
 
         stepList = recipe.getStepList();

@@ -28,9 +28,17 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private Context context;
 
-    private static final String stepKey = "step";
+    private static final String stepIdKey = "stepId";
 
     private static final String stepListKey = "stepList";
+
+    private String recipeName;
+
+    private static final String recipeNameKey = "recipeName";
+
+    private DetailRecipeFragment detailRecipeFragment;
+
+    private int stepId;
 
     private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
@@ -62,11 +70,11 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     @Override
-    public void onBindViewHolder(@NonNull DetailAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull final DetailAdapter.ViewHolder viewHolder, final int position) {
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
 
-//        final Context context = recipeDescriptionTextView.getContext();
+//        detailRecipeFragment =
 
         String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();
 
@@ -75,7 +83,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, DetailStepActivity.class);
-                intent.putExtra(stepKey, step);
+                stepId = viewHolder.getAdapterPosition();
+                intent.putExtra(stepIdKey, stepId);
+//                intent.putExtra(recipeNameKey, detailRecipeFragment.recipeName);
                 intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
                 context.startActivity(intent);
             }
