@@ -9,6 +9,7 @@ import android.content.res.Configuration;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -48,6 +49,7 @@ import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -168,7 +170,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
-        simpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.player_view);
+        simpleExoPlayerView = rootView.findViewById(R.id.player_view);
 
         instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
 
@@ -178,19 +180,33 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
         context = instructionTextView.getContext();
 
-        Intent intent = getActivity().getIntent();
-
-        if (intent != null) {
-            stepId = intent.getIntExtra(stepIdKey, 0);
-            stepList = intent.getParcelableArrayListExtra(stepListKey);
-//            recipeName = intent.getStringExtra(recipeNameKey);
+        if (savedInstanceState != null) {
+            savedInstanceState.getInt(stepIdKey, stepId);
+            savedInstanceState.getParcelableArrayList(stepListKey);
+        } else {
+            Intent intent = getActivity().getIntent();
+            if (intent != null) {
+                stepId = intent.getIntExtra(stepIdKey, 0);
+                stepList = intent.getParcelableArrayListExtra(stepListKey);
+                recipeName = intent.getStringExtra(recipeNameKey);
+            }
         }
+
+        getActivity().setTitle(recipeName);
 
         generateView();
 
         generateButtons();
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(stepIdKey, stepId);
+        outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
+        outState.getString(recipeNameKey, recipeName);
     }
 
     void generateView() {
@@ -212,6 +228,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         initializePlayer(videoUri);
 
     }
+
+    
 
     private void generateButtons() {
         nextStepButton.setOnClickListener(new View.OnClickListener() {
@@ -399,6 +417,4 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             MediaButtonReceiver.handleIntent(mediaSession, intent);
         }
     }
-
-
 }

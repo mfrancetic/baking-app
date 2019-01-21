@@ -48,7 +48,9 @@ public class DetailRecipeFragment extends Fragment {
 
     private static final String recipeKey = "recipe";
 
-    public String recipeName;
+    public static String recipeName;
+
+    private static final String recipeNameKey = "recipeName";
 
 
     public interface OnRecipeStepClickListener {
@@ -63,13 +65,19 @@ public class DetailRecipeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        Intent intent = getActivity().getIntent();
-        if (intent != null) {
-            recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
+        if (savedInstanceState != null) {
+            recipeName = savedInstanceState.getString(recipeNameKey);
+            recipe = savedInstanceState.getParcelable(recipeKey);
+        } else {
+            Intent intent = getActivity().getIntent();
+            if (intent != null) {
+                recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
+                recipeName = recipe.getName();
+            }
         }
-
-         recipeName = recipe.getName();
-        getActivity().setTitle(recipeName);
+        if (getActivity() != null) {
+            getActivity().setTitle(recipeName);
+        }
 
         stepList = recipe.getStepList();
 
@@ -107,13 +115,19 @@ public class DetailRecipeFragment extends Fragment {
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 
         populateDetailRecipeView(ingredients, stepList);
 
         return rootView;
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putString(recipeNameKey, recipeName);
+        outState.putParcelable(recipeKey, recipe);
     }
 
     @Override

@@ -74,8 +74,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
 
-//        detailRecipeFragment =
-
         String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();
 
         recipeDescriptionTextView.setText(recipeDescription);
@@ -85,7 +83,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
                 Intent intent = new Intent(context, DetailStepActivity.class);
                 stepId = viewHolder.getAdapterPosition();
                 intent.putExtra(stepIdKey, stepId);
-//                intent.putExtra(recipeNameKey, detailRecipeFragment.recipeName);
+                intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
                 intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
                 context.startActivity(intent);
             }
