@@ -5,20 +5,24 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
@@ -73,7 +77,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private SimpleExoPlayerView simpleExoPlayerView;
 
-    private Uri recipeStepUri;
+    private static Uri videoUri;
 
     private static MediaSessionCompat mediaSession;
     private PlaybackStateCompat.Builder stateBuilder;
@@ -115,6 +119,26 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         mediaSession.setPlaybackState(stateBuilder.build());
         showNotification(stateBuilder.build());
     }
+
+//    @Override
+//    public void onConfigurationChanged(Configuration newConfig) {
+//        super.onConfigurationChanged(newConfig);
+//
+//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//            params.width = params.MATCH_PARENT;
+//            params.height = params.MATCH_PARENT;
+//            simpleExoPlayerView.setLayoutParams(params);
+//            DetailRecipeStepFragment.this.getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
+//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
+//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//            params.width = params.MATCH_PARENT;
+//            params.height = 600;
+//            simpleExoPlayerView.setLayoutParams(params);
+//            DetailRecipeStepFragment.this.getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
+//        }
+//    }
+
 
     @Override
     public void onPlayerError(ExoPlaybackException error) {
@@ -158,7 +182,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
         initializeMediaSession();
 
-        Uri videoUri = Uri.parse(videoUrl);
+        videoUri = Uri.parse(videoUrl);
 
 //        getActivity().setTitle(recipeName);
 
@@ -302,30 +326,29 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         }
     }
 
-//    @Override
-//    public void onPause() {
-//        super.onPause();
-//        releasePlayer();
-//    }
-//
-//    @Override
-//    public void onStop() {
-//        super.onStop();
-//        releasePlayer();
-//    }
-//
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        initializePlayer(recipeStepUri);
-//    }
-//
-//    @Override
-//    public void onStart() {
-//        super.onStart();
-//        initializePlayer(recipeStepUri);
-//    }
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(videoUri);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer(videoUri);
+    }
 
 
     public static class MediaReceiver extends BroadcastReceiver {
