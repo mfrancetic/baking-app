@@ -22,8 +22,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailStepActivity;
@@ -83,6 +85,9 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     private PlaybackStateCompat.Builder stateBuilder;
     private NotificationManager notificationManager;
 
+    private Button previousStepButton;
+
+    private Button nextStepButton;
 
     private static final String recipeNameKey = "recipeName";
 
@@ -163,10 +168,13 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
-
         simpleExoPlayerView = (SimpleExoPlayerView) rootView.findViewById(R.id.player_view);
 
         instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
+
+        nextStepButton = rootView.findViewById(R.id.next_step_button);
+
+        previousStepButton = rootView.findViewById(R.id.previous_step_button);
 
         context = instructionTextView.getContext();
 
@@ -178,6 +186,17 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //            recipeName = intent.getStringExtra(recipeNameKey);
         }
 
+        generateView();
+
+        generateButtons();
+
+        return rootView;
+    }
+
+    void generateView() {
+
+        releasePlayer();
+
         videoUrl = stepList.get(stepId).getStepVideoUrl();
 
         initializeMediaSession();
@@ -186,18 +205,40 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
 //        getActivity().setTitle(recipeName);
 
-
-        Context context = rootView.getContext();
-
         description = stepList.get(stepId).getStepDescription();
 
         instructionTextView.setText(description);
 
         initializePlayer(videoUri);
 
-        return rootView;
     }
 
+    private void generateButtons() {
+        nextStepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (stepId < stepList.size()) {
+                    stepId++;
+                    generateView();
+                } else {
+                    Toast.makeText(context, getString(R.string.no_next_step), Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+
+        previousStepButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (stepId > 0) {
+                    stepId--;
+                    generateView();
+                } else {
+                    Toast.makeText(context, getString(R.string.no_previous_step), Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
 
     private void initializeMediaSession() {
 
@@ -216,6 +257,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
                                 | PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         mediaSession.setPlaybackState(stateBuilder.build());
+
 
         mediaSession.setCallback(new SessionCallback());
 

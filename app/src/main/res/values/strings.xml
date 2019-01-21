@@ -5,6 +5,8 @@
     <string name="play">Play</string>
     <string name="notification_text">Press play to see the instructions</string>
     <string name="recipe_instructions">Recipe Instructions</string>
-
-
+    <string name="previous_step">Previous step</string>
+    <string name="next_step">Next step</string>
+    <string name="no_previous_step">No previous steps</string>
+    <string name="no_next_step">No next step</string>
 </resources>
