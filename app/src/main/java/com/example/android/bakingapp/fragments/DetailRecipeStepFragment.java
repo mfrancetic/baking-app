@@ -21,6 +21,7 @@ import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -30,6 +31,7 @@ import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailStepActivity;
+import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
@@ -91,9 +93,17 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private Button nextStepButton;
 
+    private TextView emptyPlayerView;
+
     private static final String recipeNameKey = "recipeName";
 
-    private String recipeName;
+    private static final String recipeKey = "recipe";
+
+
+    public static String recipeName;
+
+    public static Recipe recipe;
+
 
     private Context context;
 
@@ -172,6 +182,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
 
+        emptyPlayerView = rootView.findViewById(R.id.empty_exo_player_view);
+
         instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
 
         nextStepButton = rootView.findViewById(R.id.next_step_button);
@@ -189,6 +201,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
                 stepId = intent.getIntExtra(stepIdKey, 0);
                 stepList = intent.getParcelableArrayListExtra(stepListKey);
                 recipeName = intent.getStringExtra(recipeNameKey);
+                recipe = intent.getParcelableExtra(recipeKey);
             }
         }
 
@@ -201,12 +214,17 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         return rootView;
     }
 
+    void checkIfVideoAvailable() {
+
+    }
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putInt(stepIdKey, stepId);
         outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
-        outState.getString(recipeNameKey, recipeName);
+        outState.putString(recipeNameKey, recipeName);
+        outState.putParcelable(recipeKey, recipe);
     }
 
     void generateView() {
@@ -215,21 +233,16 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
         videoUrl = stepList.get(stepId).getStepVideoUrl();
 
+        emptyPlayerView.setVisibility(View.GONE);
         initializeMediaSession();
-
         videoUri = Uri.parse(videoUrl);
-
-//        getActivity().setTitle(recipeName);
+        initializePlayer(videoUri);
 
         description = stepList.get(stepId).getStepDescription();
 
         instructionTextView.setText(description);
-
-        initializePlayer(videoUri);
-
     }
 
-    
 
     private void generateButtons() {
         nextStepButton.setOnClickListener(new View.OnClickListener() {
@@ -285,22 +298,29 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private void initializePlayer(Uri recipeStepUri) {
 
-        if (exoPlayer == null) {
-            TrackSelector trackSelector = new DefaultTrackSelector();
-            LoadControl loadControl = new DefaultLoadControl();
-            exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-            simpleExoPlayerView.setPlayer(exoPlayer);
+        if (videoUrl.isEmpty()) {
+            emptyPlayerView.setVisibility(View.VISIBLE);
+            simpleExoPlayerView.setVisibility(View.INVISIBLE);
+        } else {
+            emptyPlayerView.setVisibility(View.GONE);
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+            if (exoPlayer == null) {
+                TrackSelector trackSelector = new DefaultTrackSelector();
+                LoadControl loadControl = new DefaultLoadControl();
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+                simpleExoPlayerView.setPlayer(exoPlayer);
 
-            exoPlayer.addListener(this);
+                exoPlayer.addListener(this);
 
-            String userAgent = Util.getUserAgent(context, getString(R.string.app_name));
+                String userAgent = Util.getUserAgent(context, getString(R.string.app_name));
 
-            MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
-                    (context, userAgent), new DefaultExtractorsFactory(), null, null);
+                MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
+                        (context, userAgent), new DefaultExtractorsFactory(), null, null);
 
-            exoPlayer.prepare(mediaSource);
+                exoPlayer.prepare(mediaSource);
 
-            exoPlayer.setPlayWhenReady(true);
+                exoPlayer.setPlayWhenReady(true);
+            }
         }
     }
 

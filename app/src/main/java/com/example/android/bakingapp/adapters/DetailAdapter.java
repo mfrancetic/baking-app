@@ -22,6 +22,8 @@ import java.util.List;
 
 import butterknife.BindView;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeStepFragment.recipe;
+
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
     private List<Step> steps;
@@ -35,6 +37,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     private String recipeName;
 
     private static final String recipeNameKey = "recipeName";
+
+    private static final String recipeKey = "recipeName";
+
 
     private DetailRecipeFragment detailRecipeFragment;
 
@@ -84,6 +89,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
                 stepId = viewHolder.getAdapterPosition();
                 intent.putExtra(stepIdKey, stepId);
                 intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
+                intent.putExtra(recipeKey, recipe);
                 intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
                 context.startActivity(intent);
             }

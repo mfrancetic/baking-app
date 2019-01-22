@@ -9,4 +9,5 @@
     <string name="next_step">Next step</string>
     <string name="no_previous_step">No previous steps</string>
     <string name="no_next_step">No next step</string>
+    <string name="video_not_available">Video not available</string>
 </resources>

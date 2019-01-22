@@ -15,6 +15,17 @@
         android:layout_marginRight="0dp" />
 
     <TextView
+        android:id="@+id/empty_exo_player_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/video_not_available"
+        app:layout_constraintBottom_toBottomOf="@id/player_view"
+        app:layout_constraintLeft_toLeftOf="@id/player_view"
+        app:layout_constraintRight_toRightOf="@id/player_view"
+        android:textAlignment="center"
+        app:layout_constraintTop_toTopOf="@id/player_view" />
+
+    <TextView
         android:id="@+id/recipe_step_instructions"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
