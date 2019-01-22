@@ -89,7 +89,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
                 stepId = viewHolder.getAdapterPosition();
                 intent.putExtra(stepIdKey, stepId);
                 intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
-                intent.putExtra(recipeKey, recipe);
+                intent.putExtra(recipeKey, DetailRecipeFragment.recipe);
                 intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
                 context.startActivity(intent);
             }

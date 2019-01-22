@@ -43,7 +43,6 @@ public class DetailStepActivity extends AppCompatActivity implements DetailRecip
         if (count == 0) {
             super.onBackPressed();
             Intent intent = new Intent(DetailStepActivity.this, DetailActivity.class);
-//            intent.putExtra(DetailRecipeFragment.recipeName);
             intent.putExtra(recipeNameKey, recipeName);
             intent.putExtra(recipeKey, recipe);
             startActivity(intent);

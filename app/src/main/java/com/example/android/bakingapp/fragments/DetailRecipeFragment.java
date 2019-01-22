@@ -30,7 +30,7 @@ public class DetailRecipeFragment extends Fragment {
 
     private static final String LOG_TAG = DetailRecipeFragment.class.getSimpleName();
 
-    Recipe recipe;
+    public static Recipe recipe;
 
     List<Step> stepList;
 
@@ -52,6 +52,12 @@ public class DetailRecipeFragment extends Fragment {
 
     private static final String recipeNameKey = "recipeName";
 
+    private static final String stepListKey = "step";
+
+
+    private static final String ingredientListKey = "ingredient";
+
+
 
     public interface OnRecipeStepClickListener {
         void onRecipeStepSelected(Recipe recipe);
@@ -68,11 +74,15 @@ public class DetailRecipeFragment extends Fragment {
         if (savedInstanceState != null) {
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
+            stepList = savedInstanceState.getParcelableArrayList(stepListKey);
+            ingredientList = savedInstanceState.getParcelableArrayList(ingredientListKey);
         } else {
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
                 recipeName = recipe.getName();
+                stepList = getActivity().getIntent().getParcelableArrayListExtra(stepListKey);
+                ingredientList = getActivity().getIntent().getParcelableArrayListExtra(ingredientListKey);
             }
         }
         if (getActivity() != null) {

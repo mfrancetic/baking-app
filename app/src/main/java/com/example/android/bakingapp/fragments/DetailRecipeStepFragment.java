@@ -47,6 +47,7 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
@@ -67,7 +68,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private static final String stepIdKey = "stepId";
 
-    private List<Step> stepList;
+    public  List<Step> stepList;
 
     private String description;
 
@@ -195,7 +196,11 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         if (savedInstanceState != null) {
             savedInstanceState.getInt(stepIdKey, stepId);
             savedInstanceState.getParcelableArrayList(stepListKey);
-        } else {
+            savedInstanceState.getString(recipeNameKey);
+            savedInstanceState.getParcelable(recipeKey);
+        }
+
+        else {
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 stepId = intent.getIntExtra(stepIdKey, 0);
@@ -214,10 +219,6 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         return rootView;
     }
 
-    void checkIfVideoAvailable() {
-
-    }
-
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -228,8 +229,9 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     }
 
     void generateView() {
-
-        checkIfFirstOrLastButton();
+        if (stepList != null) {
+            checkIfFirstOrLastButton();
+        }
 
         releasePlayer();
 
@@ -243,6 +245,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         description = stepList.get(stepId).getStepDescription();
 
         instructionTextView.setText(description);
+
+
     }
 
     void checkIfFirstOrLastButton() {
@@ -252,7 +256,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             previousStepButton.setEnabled(true);
         }
 
-        if (stepId == (stepList.size()-1)) {
+        if (stepId == (stepList.size() - 1)) {
             nextStepButton.setEnabled(false);
         } else {
             nextStepButton.setEnabled(true);
@@ -453,4 +457,20 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             MediaButtonReceiver.handleIntent(mediaSession, intent);
         }
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            playVideoFullScreen();
+        }
+    }
+
+    void playVideoFullScreen() {
+        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+//        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
 }
