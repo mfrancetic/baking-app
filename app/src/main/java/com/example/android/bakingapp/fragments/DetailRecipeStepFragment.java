@@ -229,6 +229,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     void generateView() {
 
+        checkIfFirstOrLastButton();
+
         releasePlayer();
 
         videoUrl = stepList.get(stepId).getStepVideoUrl();
@@ -243,8 +245,23 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         instructionTextView.setText(description);
     }
 
+    void checkIfFirstOrLastButton() {
+        if (stepId == 0) {
+            previousStepButton.setEnabled(false);
+        } else {
+            previousStepButton.setEnabled(true);
+        }
+
+        if (stepId == (stepList.size()-1)) {
+            nextStepButton.setEnabled(false);
+        } else {
+            nextStepButton.setEnabled(true);
+        }
+    }
+
 
     private void generateButtons() {
+
         nextStepButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -254,7 +271,6 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
                 } else {
                     Toast.makeText(context, getString(R.string.no_next_step), Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
 
