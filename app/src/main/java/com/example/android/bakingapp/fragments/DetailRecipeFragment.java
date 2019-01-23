@@ -32,7 +32,7 @@ public class DetailRecipeFragment extends Fragment {
 
     public static Recipe recipe;
 
-    List<Step> stepList;
+    public static List<Step> stepList;
 
     List<Ingredient> ingredientList;
 
@@ -58,9 +58,8 @@ public class DetailRecipeFragment extends Fragment {
     private static final String ingredientListKey = "ingredient";
 
 
-
     public interface OnRecipeStepClickListener {
-        void onRecipeStepSelected(Recipe recipe);
+        void onRecipeStepSelected(int position);
     }
 
     public DetailRecipeFragment() {
@@ -122,11 +121,21 @@ public class DetailRecipeFragment extends Fragment {
 
         ingredients = stringBuilder.toString();
 
+
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                onRecipeStepClickListener.onRecipeStepSelected(detailRecyclerView.getId());
             }
         });
+
+
+//        onRecipeStepClickListener = new OnRecipeStepClickListener() {
+//            @Override
+//            public void onRecipeStepSelected(int position) {
+//                onRecipeStepSelected(position);
+//            }
+//        };
 
         populateDetailRecipeView(ingredients, stepList);
 

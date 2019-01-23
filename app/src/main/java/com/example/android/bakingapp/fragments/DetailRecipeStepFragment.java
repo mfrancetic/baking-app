@@ -204,11 +204,16 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             savedInstanceState.getParcelableArrayList(stepListKey);
             savedInstanceState.getString(recipeNameKey);
             savedInstanceState.getParcelable(recipeKey);
-        } else if (getActivity() != null) {
+        }
+
+        if (getActivity() != null) {
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 recipe = intent.getParcelableExtra(recipeKey);
-                stepId = intent.getIntExtra(stepIdKey, 0);
+                // TODO change the code!!
+                if (!twoPane) {
+                    stepId = intent.getIntExtra(stepIdKey, 0);
+                }
                 stepList = intent.getParcelableArrayListExtra(stepListKey);
                 recipeName = intent.getStringExtra(recipeNameKey);
             }
@@ -225,13 +230,13 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         if (getActivity() != null) {
             getActivity().setTitle(recipeName);
         }
+
         generateView();
 
         if (!twoPane) {
             checkIfFirstOrLastButton();
             generateButtons();
         }
-
         return rootView;
     }
 
@@ -486,5 +491,22 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 //        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
+
+    public void setStepId(int index) {
+        stepId = index;
+    }
+
+    public void setRecipeName(String name) {
+        recipeName = name;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setStepList(List<Step> stepList) {
+        this.stepList = stepList;
+    }
+
 
 }

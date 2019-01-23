@@ -2,11 +2,13 @@ package com.example.android.bakingapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
@@ -14,12 +16,24 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 import com.example.android.bakingapp.fragments.MainFragment;
 import com.example.android.bakingapp.models.Recipe;
 
+import java.util.ArrayList;
+
 import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
 
     private boolean twoPane;
+
+    private static final String recipeKey = "recipe";
+
+    private static final String recipeNameKey = "recipeName";
+
+    private static final String stepListKey = "step";
+
+    private static final String ingredientListKey = "ingredient";
+
+    private static final String stepIdKey = "stepId";
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -54,16 +68,37 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
         }
     }
 
-    @Override
-    public void onRecipeStepSelected(Recipe recipe) {
 
+    public void onRecipeStepSelected(int position) {
         if (twoPane) {
+            FragmentManager fragmentManager = getSupportFragmentManager();
 
+            DetailRecipeStepFragment newDetailRecipeStepFragment = new DetailRecipeStepFragment();
+            newDetailRecipeStepFragment.setStepId(position);
+            newDetailRecipeStepFragment.setRecipeName(DetailRecipeFragment.recipeName);
+            newDetailRecipeStepFragment.setRecipe(DetailRecipeFragment.recipe);
+            newDetailRecipeStepFragment.setStepList(DetailRecipeFragment.stepList);
+            fragmentManager.beginTransaction()
+                    .replace(R.id.detail_step_fragment_container, newDetailRecipeStepFragment)
+                    .commit();
+        } else {
+            final Intent intent = new Intent(this, DetailStepActivity.class);
+            intent.putExtra(stepIdKey, position);
+            intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
+            intent.putExtra(recipeKey, DetailRecipeFragment.recipe);
+            intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) DetailRecipeFragment.stepList);
 
-
+            startActivity(intent);
+//            TextView recipeDescriptionTextView = (TextView) findViewById(R.id.recipe_step_description);
+//            recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//                    startActivity(intent);
+//                }
+//            });
         }
-
     }
+
 
     @Override
     public void onDetailRecipeStepSelected() {

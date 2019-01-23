@@ -46,6 +46,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
+
     class ViewHolder extends RecyclerView.ViewHolder {
 
         //        @BindView(R.id.recipe_step_description)
@@ -75,24 +76,27 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final DetailAdapter.ViewHolder viewHolder, final int position) {
+
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
 
         String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();
 
         recipeDescriptionTextView.setText(recipeDescription);
-        recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+
+        viewHolder.recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, DetailStepActivity.class);
-                stepId = viewHolder.getAdapterPosition();
-                intent.putExtra(stepIdKey, stepId);
-                intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
-                intent.putExtra(recipeKey, DetailRecipeFragment.recipe);
-                intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
-                context.startActivity(intent);
+                onRecipeStepClickListener.onRecipeStepSelected(position);
             }
         });
+
+//        recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//
+//            }
+//        });
     }
 
     public void setSteps(List<Step> stepList) {
