@@ -12,13 +12,11 @@ import butterknife.ButterKnife;
 
 public class MainActivity extends AppCompatActivity implements MainFragment.OnRecipeClickListener {
 
-    // @BindView (R.id.title_text_view) TextViw mTitleTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         MainFragment mainFragment = new MainFragment();
 

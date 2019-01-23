@@ -10,8 +10,8 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
-import static com.example.android.bakingapp.fragments.DetailRecipeStepFragment.recipe;
 
 public class DetailStepActivity extends AppCompatActivity implements DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
 

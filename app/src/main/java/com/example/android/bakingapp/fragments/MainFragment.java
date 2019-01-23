@@ -87,11 +87,11 @@ public class MainFragment extends Fragment {
         final FragmentActivity fragmentActivity = getActivity();
 
 
-        if (rootView.findViewById(R.id.constraint_layout_tablet_mode) != null) {
+        if (rootView.findViewById(R.id.constraint_layout_main_tablet_mode) != null) {
             twoPane = true;
-            layoutManager = new LinearLayoutManager(fragmentActivity);
-        } else {
             layoutManager = new GridLayoutManager(context, spanCount);
+        } else {
+            layoutManager = new LinearLayoutManager(fragmentActivity);
         }
 
         mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);

@@ -22,7 +22,6 @@ import java.util.List;
 
 import butterknife.BindView;
 
-import static com.example.android.bakingapp.fragments.DetailRecipeStepFragment.recipe;
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
