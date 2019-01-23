@@ -37,7 +37,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private static final String recipeNameKey = "recipeName";
 
-    private static final String recipeKey = "recipeName";
+    private static final String recipeKey = "recipe";
 
 
     private DetailRecipeFragment detailRecipeFragment;

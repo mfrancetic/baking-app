@@ -189,7 +189,6 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             twoPane = false;
             nextStepButton = rootView.findViewById(R.id.next_step_button);
             previousStepButton = rootView.findViewById(R.id.previous_step_button);
-            generateButtons();
         }
 
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
@@ -228,6 +227,11 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         }
         generateView();
 
+        if (!twoPane) {
+            checkIfFirstOrLastButton();
+            generateButtons();
+        }
+
         return rootView;
     }
 
@@ -260,7 +264,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     }
 
     void checkIfFirstOrLastButton() {
-        if (twoPane) {
+        if (!twoPane) {
             if (stepId == 0) {
                 previousStepButton.setEnabled(false);
             } else {
@@ -275,101 +279,97 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     }
 
 
-        private void generateButtons () {
+    private void generateButtons() {
 
-            if (!twoPane) {
-                nextStepButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (stepId < stepList.size()) {
-                            stepId++;
-                            generateView();
-                        } else {
-                            Toast.makeText(context, getString(R.string.no_next_step), Toast.LENGTH_SHORT).show();
-                        }
+        if (!twoPane) {
+            nextStepButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (stepId < stepList.size()) {
+                        stepId++;
+                        generateView();
                     }
-                });
-
-                previousStepButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        if (stepId > 0) {
-                            stepId--;
-                            generateView();
-                        } else {
-                            Toast.makeText(context, getString(R.string.no_previous_step), Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-            }
-        }
-
-        private void initializeMediaSession () {
-
-            mediaSession = new MediaSessionCompat(context, LOG_TAG);
-
-            mediaSession.setFlags(
-                    MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
-                            | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
-
-            mediaSession.setMediaButtonReceiver(null);
-
-            stateBuilder = new PlaybackStateCompat.Builder()
-                    .setActions(
-                            PlaybackStateCompat.ACTION_PLAY |
-                                    PlaybackStateCompat.ACTION_PAUSE
-                                    | PlaybackStateCompat.ACTION_PLAY_PAUSE);
-
-            mediaSession.setPlaybackState(stateBuilder.build());
-
-
-            mediaSession.setCallback(new SessionCallback());
-
-            mediaSession.setActive(true);
-
-        }
-
-        private void initializePlayer (Uri recipeStepUri){
-
-            if (videoUrl.isEmpty()) {
-                emptyPlayerView.setVisibility(View.VISIBLE);
-                simpleExoPlayerView.setVisibility(View.INVISIBLE);
-            } else {
-                emptyPlayerView.setVisibility(View.GONE);
-                simpleExoPlayerView.setVisibility(View.VISIBLE);
-                if (exoPlayer == null) {
-                    TrackSelector trackSelector = new DefaultTrackSelector();
-                    LoadControl loadControl = new DefaultLoadControl();
-                    exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
-                    simpleExoPlayerView.setPlayer(exoPlayer);
-
-                    exoPlayer.addListener(this);
-
-                    String userAgent = Util.getUserAgent(context, getString(R.string.app_name));
-
-                    MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
-                            (context, userAgent), new DefaultExtractorsFactory(), null, null);
-
-                    exoPlayer.prepare(mediaSource);
-
-                    exoPlayer.setPlayWhenReady(true);
                 }
+            });
+
+            previousStepButton.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (stepId > 0) {
+                        stepId--;
+                        generateView();
+                    }
+                }
+            });
+        }
+    }
+
+    private void initializeMediaSession() {
+
+        mediaSession = new MediaSessionCompat(context, LOG_TAG);
+
+        mediaSession.setFlags(
+                MediaSessionCompat.FLAG_HANDLES_MEDIA_BUTTONS
+                        | MediaSessionCompat.FLAG_HANDLES_TRANSPORT_CONTROLS);
+
+        mediaSession.setMediaButtonReceiver(null);
+
+        stateBuilder = new PlaybackStateCompat.Builder()
+                .setActions(
+                        PlaybackStateCompat.ACTION_PLAY |
+                                PlaybackStateCompat.ACTION_PAUSE
+                                | PlaybackStateCompat.ACTION_PLAY_PAUSE);
+
+        mediaSession.setPlaybackState(stateBuilder.build());
+
+
+        mediaSession.setCallback(new SessionCallback());
+
+        mediaSession.setActive(true);
+
+    }
+
+    private void initializePlayer(Uri recipeStepUri) {
+
+        if (videoUrl.isEmpty()) {
+            emptyPlayerView.setVisibility(View.VISIBLE);
+            simpleExoPlayerView.setVisibility(View.INVISIBLE);
+        } else {
+            emptyPlayerView.setVisibility(View.GONE);
+            simpleExoPlayerView.setVisibility(View.VISIBLE);
+            if (exoPlayer == null) {
+                TrackSelector trackSelector = new DefaultTrackSelector();
+                LoadControl loadControl = new DefaultLoadControl();
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+                simpleExoPlayerView.setPlayer(exoPlayer);
+
+                exoPlayer.addListener(this);
+
+                String userAgent = Util.getUserAgent(context, getString(R.string.app_name));
+
+                MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
+                        (context, userAgent), new DefaultExtractorsFactory(), null, null);
+
+                exoPlayer.prepare(mediaSource);
+
+                exoPlayer.setPlayWhenReady(true);
             }
         }
+    }
 
 
-        private void showNotification (PlaybackStateCompat state){
-            NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
+    private void showNotification(PlaybackStateCompat state) {
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
-            int icon;
-            String play_pause;
-            if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-                icon = R.drawable.exo_controls_pause;
-                play_pause = getString(R.string.pause);
-            } else {
-                icon = R.drawable.exo_controls_play;
-                play_pause = getString(R.string.play);
-            }
+        int icon;
+        String play_pause;
+        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
+            icon = R.drawable.exo_controls_pause;
+            play_pause = getString(R.string.pause);
+        } else {
+            icon = R.drawable.exo_controls_play;
+            play_pause = getString(R.string.play);
+        }
 
 //        NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
 //                icon, play_pause, MediaButtonReceiver.buildMediaButtonPendingIntent(context,
@@ -393,98 +393,98 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //
 //        notificationManager.notify(0, builder.build());
 
-        }
+    }
 
-        private void releasePlayer () {
+    private void releasePlayer() {
 //        notificationManager.cancelAll();
-            if (exoPlayer != null) {
-                exoPlayer.stop();
-                exoPlayer.release();
-                exoPlayer = null;
-            }
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+        mediaSession.setActive(false);
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        try {
+            onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onDetailRecipeStepClickListener = null;
+    }
+
+    private class SessionCallback extends MediaSessionCompat.Callback {
+        @Override
+        public void onPlay() {
+            exoPlayer.setPlayWhenReady(true);
         }
 
         @Override
-        public void onDestroy () {
-            super.onDestroy();
-            releasePlayer();
-            mediaSession.setActive(false);
+        public void onPause() {
+            exoPlayer.setPlayWhenReady(false);
         }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(videoUri);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer(videoUri);
+    }
+
+
+    public static class MediaReceiver extends BroadcastReceiver {
         @Override
-        public void onAttach (Context context){
-            super.onAttach(context);
-            try {
-                onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
-            } catch (ClassCastException e) {
-                throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
-            }
-        }
-
-        @Override
-        public void onDetach () {
-            super.onDetach();
-            onDetailRecipeStepClickListener = null;
-        }
-
-        private class SessionCallback extends MediaSessionCompat.Callback {
-            @Override
-            public void onPlay() {
-                exoPlayer.setPlayWhenReady(true);
-            }
-
-            @Override
-            public void onPause() {
-                exoPlayer.setPlayWhenReady(false);
-            }
-        }
-
-        @Override
-        public void onPause () {
-            super.onPause();
-            releasePlayer();
-        }
-
-        @Override
-        public void onStop () {
-            super.onStop();
-            releasePlayer();
-        }
-
-        @Override
-        public void onResume () {
-            super.onResume();
-            initializePlayer(videoUri);
-        }
-
-        @Override
-        public void onStart () {
-            super.onStart();
-            initializePlayer(videoUri);
-        }
-
-
-        public static class MediaReceiver extends BroadcastReceiver {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                MediaButtonReceiver.handleIntent(mediaSession, intent);
-            }
-
-        }
-
-        @Override
-        public void onConfigurationChanged (Configuration newConfig){
-            super.onConfigurationChanged(newConfig);
-
-            int currentOrientation = getResources().getConfiguration().orientation;
-            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                playVideoFullScreen();
-            }
-        }
-
-        void playVideoFullScreen () {
-            simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
-//        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+        public void onReceive(Context context, Intent intent) {
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
         }
 
     }
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        int currentOrientation = getResources().getConfiguration().orientation;
+        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+            playVideoFullScreen();
+        }
+    }
+
+    void playVideoFullScreen() {
+        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+//        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+    }
+
+}
