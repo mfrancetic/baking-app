@@ -5,8 +5,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -47,13 +50,22 @@ public class MainFragment extends Fragment {
 
     MainAdapter mainAdapter;
 
-    @BindView(R.id.main_recycler_view) RecyclerView recyclerView;
+    @BindView(R.id.main_recycler_view)
+    RecyclerView recyclerView;
 
     @BindView(R.id.loading_indicator)
     ProgressBar loadingIndicator;
 
     @BindView(R.id.empty_text_view)
     TextView emptyTextView;
+
+    ConstraintLayout constraintLayoutTabletMode;
+
+    private boolean twoPane;
+
+    LinearLayoutManager layoutManager;
+
+    int spanCount = 3;
 
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
@@ -72,13 +84,22 @@ public class MainFragment extends Fragment {
 
         Context context = rootView.getContext();
 
+        final FragmentActivity fragmentActivity = getActivity();
+
+
+        if (rootView.findViewById(R.id.constraint_layout_tablet_mode) != null) {
+            twoPane = true;
+            layoutManager = new LinearLayoutManager(fragmentActivity);
+        } else {
+            layoutManager = new GridLayoutManager(context, spanCount);
+        }
+
         mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
 
-        final FragmentActivity fragmentActivity = getActivity();
         ButterKnife.bind(this, rootView);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
+
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
 
