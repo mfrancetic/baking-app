@@ -50,6 +50,8 @@ public class DetailRecipeFragment extends Fragment {
 
     public static String recipeName;
 
+    public static String ingredientsString;
+
     private static final String recipeNameKey = "recipeName";
 
     private static final String stepListKey = "step";
@@ -108,8 +110,6 @@ public class DetailRecipeFragment extends Fragment {
 
         StringBuilder stringBuilder = new StringBuilder();
 
-        String ingredients;
-
         for (int i = 0; i < ingredientList.size(); i++) {
             int quantityInt = ingredientList.get(i).getIngredientQuantity();
             String quantity = String.valueOf(quantityInt);
@@ -119,7 +119,7 @@ public class DetailRecipeFragment extends Fragment {
             stringBuilder.append(ingredientLine);
         }
 
-        ingredients = stringBuilder.toString();
+        ingredientsString = stringBuilder.toString();
 
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
@@ -137,7 +137,7 @@ public class DetailRecipeFragment extends Fragment {
 //            }
 //        };
 
-        populateDetailRecipeView(ingredients, stepList);
+        populateDetailRecipeView(ingredientsString, stepList);
 
         return rootView;
     }

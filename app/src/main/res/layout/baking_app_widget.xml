@@ -2,11 +2,37 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#09C"
     android:padding="@dimen/widget_margin">
 
+    <RelativeLayout
+        android:id="@+id/empty_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/widget_recipe_image"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:onClick="onClickHandler"
+            android:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/widget_select_recipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:contentDescription="@string/appwidget_text"
+            android:layout_below="@id/widget_recipe_image"
+            android:textColor="#000000"
+            android:textSize="24sp"
+            android:text="@string/widget_select_recipe" />
+
+    </RelativeLayout>
+
     <TextView
-        android:id="@+id/appwidget_name"
+        android:id="@+id/widget_recipe_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
@@ -19,10 +45,10 @@
         tools:text="Cheesecake" />
 
     <TextView
-        android:id="@+id/appwidget_ingredients"
+        android:id="@+id/widget_recipe_ingredients"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/appwidget_name"
+        android:layout_below="@id/widget_recipe_name"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
         android:background="#FFFFFF"
