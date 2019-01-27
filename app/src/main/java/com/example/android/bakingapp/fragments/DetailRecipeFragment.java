@@ -2,6 +2,7 @@ package com.example.android.bakingapp.fragments;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -46,6 +47,16 @@ public class DetailRecipeFragment extends Fragment {
     @BindView(R.id.ingredients_text_view)
     TextView ingredientsTextView;
 
+    SharedPreferences sharedPreferences;
+
+    public static final String preferenceId = "preferenceId";
+
+    public static final String preferenceName = "preferenceName";
+
+    public static final String preferenceIngredients = "preferenceIngredients";
+
+    public static final String preferences = "preferences";
+
     private static final String recipeKey = "recipe";
 
     public static String recipeName;
@@ -72,6 +83,10 @@ public class DetailRecipeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if (getContext() != null) {
+            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
+        }
+
         if (savedInstanceState != null) {
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
@@ -93,6 +108,8 @@ public class DetailRecipeFragment extends Fragment {
         stepList = recipe.getStepList();
 
         ingredientList = recipe.getIngredientList();
+
+        int recipeId = recipe.getId();
 
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
@@ -121,6 +138,11 @@ public class DetailRecipeFragment extends Fragment {
 
         ingredientsString = stringBuilder.toString();
 
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt(preferenceId, recipeId);
+        editor.putString(preferenceName, recipeName);
+        editor.putString(preferenceIngredients, ingredientsString);
+        editor.apply();
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override

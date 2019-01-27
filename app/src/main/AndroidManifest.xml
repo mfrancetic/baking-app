@@ -44,5 +44,7 @@
                 android:name="android.appwidget.provider"
                 android:resource="@xml/baking_app_widget_info" />
         </receiver>
+
+        <service android:name=".data.WidgetIntentService"/>
     </application>
 </manifest>
