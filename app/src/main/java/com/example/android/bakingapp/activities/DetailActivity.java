@@ -48,12 +48,12 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
                 DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
                 fragmentManager.beginTransaction()
-                        .add(R.id.detail_fragment_container, detailRecipeFragment)
+                        .replace(R.id.detail_fragment_container, detailRecipeFragment)
                         .commit();
 
                 DetailRecipeStepFragment detailRecipeStepFragment = new DetailRecipeStepFragment();
                 fragmentManager.beginTransaction()
-                        .add(R.id.detail_step_fragment_container, detailRecipeStepFragment)
+                        .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
                         .commit();
             }
         } else {
@@ -63,7 +63,7 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
             DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
             fragmentManager.beginTransaction()
-                    .add(R.id.detail_fragment_container, detailRecipeFragment)
+                    .replace(R.id.detail_fragment_container, detailRecipeFragment)
                     .commit();
         }
     }

@@ -210,7 +210,6 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 recipe = intent.getParcelableExtra(recipeKey);
-                // TODO change the code!!
                 if (!twoPane) {
                     stepId = intent.getIntExtra(stepIdKey, 0);
                 }

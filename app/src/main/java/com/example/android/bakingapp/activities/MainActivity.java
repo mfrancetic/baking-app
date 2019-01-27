@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .add(R.id.main_fragment_container, mainFragment)
+                .replace(R.id.main_fragment_container, mainFragment)
                 .commit();
     }
 

@@ -28,7 +28,7 @@ public class DetailStepActivity extends AppCompatActivity implements DetailRecip
         FragmentManager fragmentManager = getSupportFragmentManager();
 
         fragmentManager.beginTransaction()
-                .add(R.id.detail_step_fragment_container, detailRecipeStepFragment)
+                .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
                 .commit();
     }
 
