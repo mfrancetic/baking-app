@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.fragments;
 
+import android.appwidget.AppWidgetManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,6 +18,7 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapters.DetailAdapter;
+//import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -27,13 +29,15 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailRecipeFragment extends Fragment {
+public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
 
     private static final String LOG_TAG = DetailRecipeFragment.class.getSimpleName();
 
     public static Recipe recipe;
 
     public static List<Step> stepList;
+
+    public static final String recipeKey = "recipe";
 
     List<Ingredient> ingredientList;
 
@@ -57,18 +61,24 @@ public class DetailRecipeFragment extends Fragment {
 
     public static final String preferences = "preferences";
 
-    private static final String recipeKey = "recipe";
-
     public static String recipeName;
 
     public static String ingredientsString;
 
-    private static final String recipeNameKey = "recipeName";
-
-    private static final String stepListKey = "step";
+    public static final String recipeNameKey = "recipeName";
 
 
-    private static final String ingredientListKey = "ingredient";
+//    WidgetRemoteViewsService widgetRemoteViewsService;
+
+    public static final String stepListKey = "step";
+
+
+    public static final String ingredientListKey = "ingredient";
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+    }
 
 
     public interface OnRecipeStepClickListener {
@@ -83,10 +93,6 @@ public class DetailRecipeFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        if (getContext() != null) {
-            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
-        }
-
         if (savedInstanceState != null) {
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
@@ -94,13 +100,16 @@ public class DetailRecipeFragment extends Fragment {
             ingredientList = savedInstanceState.getParcelableArrayList(ingredientListKey);
         } else {
             Intent intent = getActivity().getIntent();
-            if (intent != null) {
+            if (intent != null && intent.getParcelableExtra(recipeKey) != null) {
                 recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
                 recipeName = recipe.getName();
                 stepList = getActivity().getIntent().getParcelableArrayListExtra(stepListKey);
                 ingredientList = getActivity().getIntent().getParcelableArrayListExtra(ingredientListKey);
             }
         }
+
+        recipeName = recipe.getName();
+
         if (getActivity() != null) {
             getActivity().setTitle(recipeName);
         }
@@ -138,11 +147,21 @@ public class DetailRecipeFragment extends Fragment {
 
         ingredientsString = stringBuilder.toString();
 
+        if (getContext() != null) {
+            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
+        }
+
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putInt(preferenceId, recipeId);
         editor.putString(preferenceName, recipeName);
         editor.putString(preferenceIngredients, ingredientsString);
         editor.apply();
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+//        appWidgetManager.notify();
+
+
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -169,6 +188,11 @@ public class DetailRecipeFragment extends Fragment {
         super.onSaveInstanceState(outState);
         outState.putString(recipeNameKey, recipeName);
         outState.putParcelable(recipeKey, recipe);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
     }
 
     @Override

@@ -14,20 +14,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:onClick="onClickHandler"
             android:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/widget_select_recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_below="@id/widget_recipe_image"
             android:layout_centerHorizontal="true"
             android:layout_centerVertical="true"
             android:contentDescription="@string/appwidget_text"
-            android:layout_below="@id/widget_recipe_image"
+            android:text="@string/widget_select_recipe"
             android:textColor="#000000"
-            android:textSize="24sp"
-            android:text="@string/widget_select_recipe" />
+            android:textSize="24sp" />
 
     </RelativeLayout>
 
@@ -40,7 +39,6 @@
         android:background="#FFFFFF"
         android:contentDescription="@string/appwidget_text"
         android:textColor="#000000"
-        android:textSize="24sp"
         android:textStyle="bold"
         tools:text="Cheesecake" />
 
@@ -54,7 +52,6 @@
         android:background="#FFFFFF"
         android:contentDescription="@string/appwidget_text"
         android:textColor="#000000"
-        android:textSize="20sp"
         tools:text="Ingredients" />
 
 </RelativeLayout>

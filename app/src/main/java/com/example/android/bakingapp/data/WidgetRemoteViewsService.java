@@ -2,6 +2,7 @@
 //
 //import android.content.Context;
 //import android.content.Intent;
+//import android.content.SharedPreferences;
 //import android.widget.RemoteViews;
 //import android.widget.RemoteViewsService;
 //
@@ -10,7 +11,13 @@
 //
 //import java.util.List;
 //
+//import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
+//import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
+//import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
+//
 //public class WidgetRemoteViewsService extends RemoteViewsService {
+//
+//    SharedPreferences sharedPreferences;
 //
 //
 //    @Override
@@ -24,7 +31,8 @@
 //
 //        String recipeName;
 //
-//        List<String> recipeNames;
+//        String ingredients;
+//
 //
 //        public WidgetRemoteViewsFactory(Context context) {
 //            this.context = context;
@@ -37,6 +45,12 @@
 //        @Override
 //        public void onDataSetChanged() {
 //
+//            sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
+//
+//            recipeName = sharedPreferences.getString(preferenceName, null);
+//            ingredients = sharedPreferences.getString(preferenceIngredients, null);
+//
+//
 //        }
 //
 //        @Override
@@ -46,19 +60,20 @@
 //
 //        @Override
 //        public int getCount() {
-//            if (recipeNames == null) {
-//                return 0;
-//            } else {
-//                return recipeNames.size();
-//            }
+////            if (recipeName == null) {
+//            return 0;
+////            }
 //        }
 //
 //        @Override
 //        public RemoteViews getViewAt(int position) {
 //
-////            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+//            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 //
-//            return null;
+//            remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
+//            remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredients);
+//
+//            return remoteViews;
 //        }
 //
 //        @Override

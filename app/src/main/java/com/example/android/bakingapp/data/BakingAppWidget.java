@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.RemoteViews;
 
@@ -16,6 +17,7 @@ import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.spec.DESedeKeySpec;
@@ -25,7 +27,10 @@ import static com.example.android.bakingapp.fragments.DetailRecipeFragment.prefe
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepList;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepListKey;
 
 /**
  * Implementation of App Widget functionality.
@@ -41,14 +46,14 @@ public class BakingAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId, String recipeName, String ingredientsString) {
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-
-//        remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
-//        remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
-
         sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
 
         if (sharedPreferences != null) {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+
+            Intent intent = new Intent(context, DetailActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
             recipeName = sharedPreferences.getString(preferenceName, null);
             ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
             remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
@@ -58,12 +63,24 @@ public class BakingAppWidget extends AppWidgetProvider {
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
 
-//            Intent intent = new Intent(context, DetailActivity.class);
-//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            intent.putExtra(recipeNameKey, recipeName);
+            intent.putExtra(recipeKey, recipe);
+            intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>)stepList);
+            intent.putExtra(ingredientsKey, ingredientsString);
+            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
 //            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_ingredients, pendingIntent);
+
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
         } else {
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+
 //            Intent intent = new Intent(context, MainActivity.class);
 //            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
             remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
@@ -71,7 +88,11 @@ public class BakingAppWidget extends AppWidgetProvider {
 //            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
 
 
-//            Intent detailActivityIntent = new Intent(context, DetailActivity.class);
+            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
+//            remoteViews.setOnClickPendingIntent(R.id.widget_select_recipe, pendingIntent);
+
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+
 //            detailActivityIntent.addCategory(Intent.ACTION_MAIN);
 //            detailActivityIntent.addCategory(Intent.CATEGORY_LAUNCHER);
 //            detailActivityIntent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT|Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -86,32 +107,18 @@ public class BakingAppWidget extends AppWidgetProvider {
         }
 
         // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
 
-//        sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
-//
-//        recipeName = sharedPreferences.getString(preferenceName, null);
-//        ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
-
-//        WidgetIntentService.startActionGetRecipeDetails(context, recipeName, ingredientsString);
-
 //        if (recipeName != null && ingredientsString != null) {
-            for (int appWidgetId : appWidgetIds) {
-                updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
-            }
-//        } else {
-//            for (int appWidgetId : appWidgetIds) {
-//                updateAppWidget(context, appWidgetManager, appWidgetId, null, null);
-//            }
-//        }
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
+        }
 
-        super.onUpdate(context,appWidgetManager,appWidgetIds);
-
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
     public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
