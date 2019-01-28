@@ -24,6 +24,8 @@
             style="@style/TextViewStyle"
             android:text="@string/video_not_available"
             android:textAlignment="center"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextIcons"
             app:layout_constraintBottom_toBottomOf="@id/player_view"
             app:layout_constraintLeft_toLeftOf="@id/player_view"
             app:layout_constraintRight_toRightOf="@id/player_view"

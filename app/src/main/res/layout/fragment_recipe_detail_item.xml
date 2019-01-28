@@ -1,9 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ImageView
+        android:id="@+id/step_image"
+        style="@style/StepImageViewStyle"
+        android:contentDescription="@string/image_step_content_description"
+        android:src="@drawable/step" />
+
     <TextView
         android:id="@+id/recipe_step_description"
-        style="@style/TextViewStyle" />
-</FrameLayout>
+        style="@style/TextViewStyle"
+        android:layout_toEndOf="@id/step_image"
+        tools:text="0 Introduction" />
+</RelativeLayout>

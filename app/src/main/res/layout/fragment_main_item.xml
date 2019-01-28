@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        style="@style/ImageViewStyle"
+        style="@style/RecipeImageViewStyle"
         android:id="@+id/recipe_image_view"
         android:contentDescription="@string/image_content_description"
         android:src="@drawable/cupcake" />

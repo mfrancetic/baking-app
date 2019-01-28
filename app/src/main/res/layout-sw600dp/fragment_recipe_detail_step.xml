@@ -24,6 +24,8 @@
             android:id="@+id/empty_exo_player_view"
             style="@style/TextViewStyle"
             android:text="@string/video_not_available"
+            android:background="@color/colorPrimaryDark"
+            android:textColor="@color/colorTextIcons"
             android:textAlignment="center"
             app:layout_constraintBottom_toBottomOf="@id/player_view"
             app:layout_constraintLeft_toLeftOf="@id/player_view"
