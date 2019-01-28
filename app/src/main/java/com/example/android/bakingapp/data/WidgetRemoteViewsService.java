@@ -55,13 +55,13 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
             sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
-            recipeName = sharedPreferences.getString(preferenceName, null);
-            ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
 
-            if (recipeName != null && ingredientsString != null) {
+            if (sharedPreferences != null) {
+                recipeName = sharedPreferences.getString(preferenceName, null);
+                ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
+
                 remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
                 remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredients);
-                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.GONE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
@@ -75,7 +75,6 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
                 remoteViews.setOnClickFillInIntent(R.id.widget_recipe_ingredients, fillInIntent);
                 remoteViews.setOnClickFillInIntent(R.id.widget_recipe_name, fillInIntent);
             } else {
-                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
                 remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
@@ -97,35 +96,35 @@ public class WidgetRemoteViewsService extends RemoteViewsService {
 
         @Override
         public RemoteViews getViewAt(int position) {
-
+//
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-
-            sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
-            recipeName = sharedPreferences.getString(preferenceName, null);
-            ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
-
-            if (recipeName != null && ingredientsString != null) {
-                remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
-                remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredients);
-                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.GONE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
-
-                Bundle extras = new Bundle();
-                extras.putString(preferenceName, recipeName);
-                extras.putString(preferenceIngredients, ingredientsString);
-
-                Intent fillInIntent = new Intent();
-                fillInIntent.putExtras(extras);
-                remoteViews.setOnClickFillInIntent(R.id.widget_recipe_ingredients, fillInIntent);
-                remoteViews.setOnClickFillInIntent(R.id.widget_recipe_name, fillInIntent);
-            } else {
-                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
-                remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
-            }
+//
+//            sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
+//            recipeName = sharedPreferences.getString(preferenceName, null);
+//            ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
+//
+//            if (recipeName != null && ingredientsString != null) {
+//                remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
+//                remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredients);
+//                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.GONE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
+//
+//                Bundle extras = new Bundle();
+//                extras.putString(preferenceName, recipeName);
+//                extras.putString(preferenceIngredients, ingredientsString);
+//
+//                Intent fillInIntent = new Intent();
+//                fillInIntent.putExtras(extras);
+//                remoteViews.setOnClickFillInIntent(R.id.widget_recipe_ingredients, fillInIntent);
+//                remoteViews.setOnClickFillInIntent(R.id.widget_recipe_name, fillInIntent);
+//            } else {
+//                remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
+//                remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
+//            }
 
 
             return remoteViews;

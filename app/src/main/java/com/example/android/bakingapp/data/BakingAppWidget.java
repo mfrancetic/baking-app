@@ -45,13 +45,13 @@ public class BakingAppWidget extends AppWidgetProvider {
     private static final String ingredientsKey = "ingredients";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId, String recipeName, String ingredientsString) {
+                                int appWidgetId) {
 
         sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
 
-        if (sharedPreferences != null) {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
+        if (sharedPreferences != null) {
             Intent intent = new Intent(context, DetailActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
@@ -60,39 +60,29 @@ public class BakingAppWidget extends AppWidgetProvider {
             remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
             remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
             remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
-            remoteViews.setViewVisibility(R.id.widget_select_recipe, View.GONE);
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
 
             intent.putExtra(recipeNameKey, recipeName);
             intent.putExtra(recipeKey, recipe);
-            intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>)stepList);
+            intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) stepList);
             intent.putExtra(ingredientsKey, ingredientsString);
             remoteViews.setOnClickPendingIntent(R.id.widget_recipe_name, pendingIntent);
-//            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_ingredients, pendingIntent);
-
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-
         } else {
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-
+            remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
+            remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
+            remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
 //            Intent intent = new Intent(context, MainActivity.class);
 //            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-            Intent intent = new Intent(context, MainActivity.class);
-            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-
-            remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
-            remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
-            remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
+//
+//            remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
+//            remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
+//            remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
+//            remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
+//
 //            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
-
-
-            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
-            remoteViews.setOnClickPendingIntent(R.id.widget_select_recipe, pendingIntent);
-
-            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
+//
+//            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
 //            detailActivityIntent.addCategory(Intent.ACTION_MAIN);
 //            detailActivityIntent.addCategory(Intent.CATEGORY_LAUNCHER);
@@ -104,62 +94,63 @@ public class BakingAppWidget extends AppWidgetProvider {
 
 //            Intent getRecipeDetailsServiceIntent = new Intent(context, WidgetIntentService.class);
 //            remoteViews.setRemoteAdapter(R.id.widget_recipe_name, getRecipeDetailsServiceIntent);
-
         }
+        appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
-        // Instruct the widget manager to update the widget
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-
-
-//        if (recipeName != null && ingredientsString != null) {
         for (int appWidgetId : appWidgetIds) {
 
-            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-            remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
-            remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
+//            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
-
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
-            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+//            if (sharedPreferences != null) {
+//                remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
+//                remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
+//
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+//            } else {
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_image);
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_select_recipe);
+//            }
+            updateAppWidget(context, appWidgetManager, appWidgetId);
         }
 
-        super.onUpdate(context, appWidgetManager, appWidgetIds);
+//        super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
 
-    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
-                                           int[] appWidgetIds, String recipeName, String ingredients) {
+//    public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
+//                                           int[] appWidgetIds, String recipeName, String ingredients) {
+//
+//        for (int appWidgetId : appWidgetIds) {
+//            updateAppWidget(context, appWidgetManager, appWidgetId);
+//        }
+//    }
 
-        for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
-        }
-    }
-
-    static RemoteViews getRemoteView(Context context, String recipeName, String ingredientsString) {
-
-        Intent intent;
-
-        if (recipeName == null) {
-            intent = new Intent(context, MainActivity.class);
-        } else {
-            intent = new Intent(context, DetailActivity.class);
-            intent.putExtra(recipeNameKey, recipeName);
-            intent.putExtra(ingredientsKey, ingredientsString);
-        }
-
-        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-        remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
-        remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
-
-        remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
-
-        return remoteViews;
-    }
+//    static RemoteViews getRemoteView(Context context, String recipeName, String ingredientsString) {
+//
+//        Intent intent;
+//
+//        if (recipeName == null) {
+//            intent = new Intent(context, MainActivity.class);
+//        } else {
+//            intent = new Intent(context, DetailActivity.class);
+//            intent.putExtra(recipeNameKey, recipeName);
+//            intent.putExtra(ingredientsKey, ingredientsString);
+//        }
+//
+//        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+//        remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
+//        remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
+//
+//        remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
+//
+//        return remoteViews;
+//    }
 
     @Override
     public void onEnabled(Context context) {
@@ -179,11 +170,10 @@ public class BakingAppWidget extends AppWidgetProvider {
             if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 ComponentName appWidget = new ComponentName(context.getPackageName(), BakingAppWidget.class.getName());
-                int [] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
+                int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
             }
         }
     }
 }
-

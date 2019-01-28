@@ -33,7 +33,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = DetailRecipeFragment.class.getSimpleName();
 
@@ -163,31 +163,19 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         editor.putString(preferenceIngredients, ingredientsString);
         editor.apply();
 
-//        WidgetRemoteViewsService widgetRemoteViewsService = new WidgetRemoteViewsService();
-//        synchronized (widgetRemoteViewsService) {
-//            widgetRemoteViewsService.notifyAll();
-//        }
-
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-//        appWidgetManager.notifyAll();
-
 
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
-                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName(), BakingAppWidget.class.getName()));
+        Intent widgetIntent = new Intent(context, BakingAppWidget.class);
+        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
-        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-//        appWidgetManager.updateAppWidget(ids, remoteViews);//
-        appWidgetManager.updateAppWidget(new ComponentName(context, BakingAppWidget.class), remoteViews);
-//        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_recipe_name);
-//        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_recipe_ingredients);
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName(), BakingAppWidget.class.getName()));
 
-        //        synchronized (appWidgetManager) {
-//            appWidgetManager.notifyAll();
-//
-//        }
+        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(widgetIntent);
 
-
+//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+//        appWidgetManager.updateAppWidget(new ComponentName(context, BakingAppWidget.class), remoteViews);
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,14 +183,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
                 onRecipeStepClickListener.onRecipeStepSelected(detailRecyclerView.getId());
             }
         });
-
-
-//        onRecipeStepClickListener = new OnRecipeStepClickListener() {
-//            @Override
-//            public void onRecipeStepSelected(int position) {
-//                onRecipeStepSelected(position);
-//            }
-//        };
 
         populateDetailRecipeView(ingredientsString, stepList);
 
