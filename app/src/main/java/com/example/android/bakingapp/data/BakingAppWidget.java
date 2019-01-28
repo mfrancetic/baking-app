@@ -72,16 +72,12 @@ public class BakingAppWidget extends AppWidgetProvider {
             remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
-//            Intent intent = new Intent(context, MainActivity.class);
-//            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-//
-//            remoteViews.setViewVisibility(R.id.widget_recipe_image, View.VISIBLE);
-//            remoteViews.setViewVisibility(R.id.widget_select_recipe, View.VISIBLE);
-//            remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
-//            remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
-//
-//            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
-//
+
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+
+            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
+
 //            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
 //            detailActivityIntent.addCategory(Intent.ACTION_MAIN);
@@ -171,8 +167,18 @@ public class BakingAppWidget extends AppWidgetProvider {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 ComponentName appWidget = new ComponentName(context.getPackageName(), BakingAppWidget.class.getName());
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+
+                if (sharedPreferences != null) {
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_image);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
+                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+//
+//                    onUpdate(context, appWidgetManager, appWidgetIds);
+//                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
+//                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+//                } else {
+//                    appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_image);
+                }
             }
         }
     }

@@ -22,7 +22,7 @@ import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapters.DetailAdapter;
 //import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.data.BakingAppWidget;
-import com.example.android.bakingapp.data.WidgetRemoteViewsService;
+//import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -72,7 +72,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     public static final String recipeNameKey = "recipeName";
 
 
-    WidgetRemoteViewsService widgetRemoteViewsService;
+//    WidgetRemoteViewsService widgetRemoteViewsService;
 
     public static final String stepListKey = "step";
 
@@ -194,6 +194,29 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         super.onSaveInstanceState(outState);
         outState.putString(recipeNameKey, recipeName);
         outState.putParcelable(recipeKey, recipe);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+
+        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+
+        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        getContext().sendBroadcast(widgetIntent);
+    }
+
+    @Override
+    public void onDestroy() {
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+
+
+
+        super.onDestroy();
     }
 
     @Override
