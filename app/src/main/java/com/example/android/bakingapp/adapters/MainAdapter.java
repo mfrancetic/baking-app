@@ -88,7 +88,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         String image = recipe.getImage();
         if (image.isEmpty()) {
-            recipeImageView.setImageResource(R.mipmap.ic_launcher);
+            recipeImageView.setImageResource(R.drawable.cupcake);
         } else {
             Uri recipeImageUri = Uri.parse(image);
 

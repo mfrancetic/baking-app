@@ -8,4 +8,37 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="TextViewStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:textColor">@color/colorTextPrimary</item>
+        <item name="android:textAppearance">?android:textAppearanceListItem</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+    <style name="ImageViewStyle">
+        <item name="android:layout_height">@dimen/image_dimensions</item>
+        <item name="android:layout_width">@dimen/image_dimensions</item>
+        <item name="android:padding">@dimen/image_padding</item>
+    </style>
+
+    <style name="DividerVerticalStyle">
+        <item name="android:layout_width">@dimen/divider_width</item>
+        <item name="android:layout_height">match_parent</item>
+    </style>
+
+    <style name="DividerHorizontalStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/divider_height</item>
+    </style>
+
+    <style name="ButtonStyle">
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:background">@color/colorAccent</item>
+        <item name="android:textColor">@color/colorTextIcons</item>
+        <item name="android:padding">@dimen/button_padding</item>
+        <item name="android:layout_marginRight">@dimen/button_margin</item>
+    </style>
+
 </resources>

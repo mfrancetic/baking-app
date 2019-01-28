@@ -271,13 +271,17 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         if (!twoPane) {
             if (stepId == 0) {
                 previousStepButton.setEnabled(false);
+                previousStepButton.setBackgroundColor(getResources().getColor(R.color.colorDivider));
             } else {
                 previousStepButton.setEnabled(true);
+                previousStepButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
             if (stepId == (stepList.size() - 1)) {
                 nextStepButton.setEnabled(false);
+                nextStepButton.setBackgroundColor(getResources().getColor(R.color.colorDivider));
             } else {
                 nextStepButton.setEnabled(true);
+                nextStepButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
             }
         }
     }

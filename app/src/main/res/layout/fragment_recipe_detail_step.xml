@@ -3,52 +3,56 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryLight">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-    <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/player_view"
-        android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginTop="0dp"
-        android:layout_marginRight="0dp" />
-
-    <TextView
-        android:id="@+id/empty_exo_player_view"
-        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/video_not_available"
-        app:layout_constraintBottom_toBottomOf="@id/player_view"
-        app:layout_constraintLeft_toLeftOf="@id/player_view"
-        app:layout_constraintRight_toRightOf="@id/player_view"
-        android:textAlignment="center"
-        app:layout_constraintTop_toTopOf="@id/player_view" />
+        android:background="@color/colorPrimaryLight">
 
-    <TextView
-        android:id="@+id/recipe_step_instructions"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/player_view"
-        tools:text="Instructions" />
+        <com.google.android.exoplayer2.ui.SimpleExoPlayerView
+            android:id="@+id/player_view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/exo_player_height"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginRight="0dp" />
 
-    <Button
-        android:id="@+id/previous_step_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/previous_step"
-        app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions" />
+        <TextView
+            android:id="@+id/empty_exo_player_view"
+            style="@style/TextViewStyle"
+            android:text="@string/video_not_available"
+            android:textAlignment="center"
+            app:layout_constraintBottom_toBottomOf="@id/player_view"
+            app:layout_constraintLeft_toLeftOf="@id/player_view"
+            app:layout_constraintRight_toRightOf="@id/player_view"
+            app:layout_constraintTop_toTopOf="@id/player_view" />
 
-    <Button
-        android:id="@+id/next_step_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/next_step"
-        app:layout_constraintStart_toEndOf="@id/previous_step_button"
-        app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions" />
+        <TextView
+            android:id="@+id/recipe_step_instructions"
+            style="@style/TextViewStyle"
+            app:layout_constraintTop_toBottomOf="@id/player_view"
+            tools:text="Instructions" />
 
-</android.support.constraint.ConstraintLayout>
+        <Button
+            android:id="@+id/previous_step_button"
+            style="@style/ButtonStyle"
+            android:text="@string/previous_step"
+            android:layout_width="0dp"
+            app:layout_constraintEnd_toStartOf="@id/next_step_button"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginLeft="@dimen/button_margin"
+            app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions" />
+
+        <Button
+            android:id="@+id/next_step_button"
+            style="@style/ButtonStyle"
+            android:text="@string/next_step"
+            android:layout_width="0dp"
+            app:layout_constraintStart_toEndOf="@id/previous_step_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions" />
+
+    </android.support.constraint.ConstraintLayout>
 </ScrollView>

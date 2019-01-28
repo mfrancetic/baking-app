@@ -2,7 +2,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimaryDark">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -10,17 +11,24 @@
 
         <TextView
             android:id="@+id/ingredients_text_view"
+            style="@style/TextViewStyle"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:textColor="@color/colorTextIcons"
             tools:text="Ingredients" />
+
+        <View
+            android:id="@+id/divider_recipe_detail"
+            style="@style/DividerHorizontalStyle"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"
+            android:layout_below="@id/ingredients_text_view"
+            android:background="@android:color/darker_gray" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/detail_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@id/ingredients_text_view"
-            >
-
-        </android.support.v7.widget.RecyclerView>
+            android:background="@color/colorPrimaryLight" />
     </RelativeLayout>
 </ScrollView>

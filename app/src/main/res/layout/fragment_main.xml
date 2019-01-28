@@ -15,15 +15,14 @@
 
         <!-- Empty view is only visible when the list has no items-->
         <TextView
+            style="@style/TextViewStyle"
             android:id="@+id/empty_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_centerInParent="true"
             android:text="@string/no_recipes_found" />
 
         <ProgressBar
-            android:id="@+id/loading_indicator"
             style="@style/Widget.AppCompat.ProgressBar"
+            android:id="@+id/loading_indicator"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true" />
