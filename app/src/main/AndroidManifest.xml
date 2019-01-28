@@ -45,6 +45,8 @@
                 android:resource="@xml/baking_app_widget_info" />
         </receiver>
 
-        <service android:name=".data.WidgetIntentService"/>
+        <service
+            android:name=".data.WidgetRemoteViewsService"
+            android:permission="android.permission.BIND_REMOTEVIEWS" />
     </application>
 </manifest>

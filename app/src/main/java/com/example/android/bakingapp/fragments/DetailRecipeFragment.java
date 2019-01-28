@@ -1,6 +1,7 @@
 package com.example.android.bakingapp.fragments;
 
 import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -14,11 +15,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.adapters.DetailAdapter;
 //import com.example.android.bakingapp.data.WidgetRemoteViewsService;
+import com.example.android.bakingapp.data.BakingAppWidget;
+import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -68,7 +72,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     public static final String recipeNameKey = "recipeName";
 
 
-//    WidgetRemoteViewsService widgetRemoteViewsService;
+    WidgetRemoteViewsService widgetRemoteViewsService;
 
     public static final String stepListKey = "step";
 
@@ -158,8 +162,30 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         editor.putString(preferenceName, recipeName);
         editor.putString(preferenceIngredients, ingredientsString);
         editor.apply();
+
+//        WidgetRemoteViewsService widgetRemoteViewsService = new WidgetRemoteViewsService();
+//        synchronized (widgetRemoteViewsService) {
+//            widgetRemoteViewsService.notifyAll();
+//        }
+
 //        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-//        appWidgetManager.notify();
+//        appWidgetManager.notifyAll();
+
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName(), BakingAppWidget.class.getName()));
+
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+//        appWidgetManager.updateAppWidget(ids, remoteViews);//
+        appWidgetManager.updateAppWidget(new ComponentName(context, BakingAppWidget.class), remoteViews);
+//        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_recipe_name);
+//        appWidgetManager.notifyAppWidgetViewDataChanged(ids, R.id.widget_recipe_ingredients);
+
+        //        synchronized (appWidgetManager) {
+//            appWidgetManager.notifyAll();
+//
+//        }
 
 
 

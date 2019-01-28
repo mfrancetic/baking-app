@@ -3,6 +3,7 @@ package com.example.android.bakingapp.data;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -89,7 +90,7 @@ public class BakingAppWidget extends AppWidgetProvider {
 
 
             remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
-//            remoteViews.setOnClickPendingIntent(R.id.widget_select_recipe, pendingIntent);
+            remoteViews.setOnClickPendingIntent(R.id.widget_select_recipe, pendingIntent);
 
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
@@ -113,9 +114,18 @@ public class BakingAppWidget extends AppWidgetProvider {
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
 
+
 //        if (recipeName != null && ingredientsString != null) {
         for (int appWidgetId : appWidgetIds) {
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+            remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
+            remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
+
             updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
+
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
+            appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
         }
 
         super.onUpdate(context, appWidgetManager, appWidgetIds);
@@ -124,9 +134,9 @@ public class BakingAppWidget extends AppWidgetProvider {
     public static void updateRecipeWidgets(Context context, AppWidgetManager appWidgetManager,
                                            int[] appWidgetIds, String recipeName, String ingredients) {
 
-//        for (int appWidgetId : appWidgetIds) {
-//            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
-//        }
+        for (int appWidgetId : appWidgetIds) {
+            updateAppWidget(context, appWidgetManager, appWidgetId, recipeName, ingredientsString);
+        }
     }
 
     static RemoteViews getRemoteView(Context context, String recipeName, String ingredientsString) {
@@ -163,11 +173,17 @@ public class BakingAppWidget extends AppWidgetProvider {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-
-
-        // ???
-
         super.onReceive(context, intent);
+
+        if (intent.getAction() != null) {
+            if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
+                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+                ComponentName appWidget = new ComponentName(context.getPackageName(), BakingAppWidget.class.getName());
+                int [] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
+                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
+            }
+        }
     }
 }
 
