@@ -213,9 +213,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @Override
     public void onDestroy() {
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-
-
-
+//        sharedPreferences.edit().clear().apply();
         super.onDestroy();
     }
 

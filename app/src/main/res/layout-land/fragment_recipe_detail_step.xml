@@ -18,6 +18,14 @@
             android:layout_marginLeft="0dp"
             android:layout_marginTop="0dp"
             android:layout_marginRight="0dp" />
+        <ImageView
+            android:id="@+id/thumbnail_image_view"
+            style="@style/RecipeImageViewStyle"
+            android:contentDescription="@string/thumbnail_content_description"
+            app:layout_constraintLeft_toLeftOf="@id/player_view"
+            app:layout_constraintRight_toRightOf="@id/player_view"
+            app:layout_constraintTop_toBottomOf="@id/empty_exo_player_view"
+            tools:src="@drawable/cupcake" />
 
         <TextView
             android:id="@+id/empty_exo_player_view"

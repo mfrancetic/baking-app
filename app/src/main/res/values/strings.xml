@@ -15,4 +15,5 @@
     <string name="widget_select_recipe">Select a recipe!</string>
     <string name="image_content_description">Image of the recipe</string>
     <string name="image_step_content_description">Step of the recipe preparation</string>
+    <string name="thumbnail_content_description">Thumbnail of the video</string>
 </resources>

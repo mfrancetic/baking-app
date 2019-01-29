@@ -110,9 +110,7 @@ public class MainFragment extends Fragment {
             }
         });
 
-//        new RecipeAsyncTask(context, new RecipeCallback()
         new RecipeAsyncTask().execute();
-//
         return rootView;
     }
 

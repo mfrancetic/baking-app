@@ -25,6 +25,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -82,6 +83,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private String videoUrl;
 
+    private String thumbnailUrl;
+
     private SimpleExoPlayerView simpleExoPlayerView;
 
     private static Uri videoUri;
@@ -104,6 +107,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     public String recipeName;
 
     public Recipe recipe;
+
+    private ImageView thumbnailImageView;
 
 
     private Context context;
@@ -197,6 +202,9 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
         instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
 
+        thumbnailImageView = rootView.findViewById(R.id.thumbnail_image_view);
+        thumbnailImageView.setVisibility(View.GONE);
+
         context = instructionTextView.getContext();
 
         if (savedInstanceState != null) {
@@ -256,6 +264,23 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         releasePlayer();
 
         videoUrl = stepList.get(stepId).getStepVideoUrl();
+        if (videoUrl.isEmpty()) {
+            thumbnailUrl = stepList.get(stepId).getStepThumbnailUrl();
+        }
+
+        if (thumbnailUrl != null) {
+            if (thumbnailUrl.contains(".mp4")) {
+                videoUrl = thumbnailUrl;
+            } else if (thumbnailUrl.contains(".jpeg") || thumbnailUrl.contains(".jpg") || thumbnailUrl.contains(".png")) {
+                Uri thumbnailUri = Uri.parse(thumbnailUrl);
+
+                com.squareup.picasso.Picasso
+                        .get()
+                        .load(thumbnailUri)
+                        .into(thumbnailImageView);
+                thumbnailImageView.setVisibility(View.VISIBLE);
+            }
+        }
 
         emptyPlayerView.setVisibility(View.GONE);
         initializeMediaSession();
@@ -342,8 +367,10 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         if (videoUrl.isEmpty()) {
             emptyPlayerView.setVisibility(View.VISIBLE);
             simpleExoPlayerView.setVisibility(View.INVISIBLE);
+            thumbnailImageView.setVisibility(View.VISIBLE);
         } else {
             emptyPlayerView.setVisibility(View.GONE);
+            thumbnailImageView.setVisibility(View.GONE);
             simpleExoPlayerView.setVisibility(View.VISIBLE);
             if (exoPlayer == null) {
                 TrackSelector trackSelector = new DefaultTrackSelector();
