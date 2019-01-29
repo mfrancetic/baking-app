@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -163,7 +165,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         editor.putString(preferenceIngredients, ingredientsString);
         editor.apply();
 
-
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
 
         Intent widgetIntent = new Intent(context, BakingAppWidget.class);
@@ -173,9 +174,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
         widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(widgetIntent);
-
-//        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
-//        appWidgetManager.updateAppWidget(new ComponentName(context, BakingAppWidget.class), remoteViews);
 
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -194,6 +192,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         super.onSaveInstanceState(outState);
         outState.putString(recipeNameKey, recipeName);
         outState.putParcelable(recipeKey, recipe);
+        outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
+        outState.putParcelableArrayList(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
     }
 
     @Override
@@ -212,8 +212,22 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     @Override
     public void onDestroy() {
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+//        PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
+//                .clear().apply();
+//        SharedPreferences.Editor editor = sharedPreferences.edit();
+//        editor.clear().apply();
+//
 //        sharedPreferences.edit().clear().apply();
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+//
+//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//
+//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+//
+//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//        getContext().sendBroadcast(widgetIntent);
         super.onDestroy();
     }
 
@@ -243,6 +257,4 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         detailAdapter.setSteps(stepList);
         ingredientsTextView.setText(ingredients);
     }
-
-
 }
