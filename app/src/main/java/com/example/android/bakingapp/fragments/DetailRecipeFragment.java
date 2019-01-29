@@ -14,6 +14,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -57,7 +58,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @BindView(R.id.ingredients_text_view)
     TextView ingredientsTextView;
 
-    SharedPreferences sharedPreferences;
+    public static SharedPreferences sharedPreferences;
 
     public static final String preferenceId = "preferenceId";
 
@@ -84,6 +85,16 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+
+        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+
+        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        getContext().sendBroadcast(widgetIntent);
     }
 
 
@@ -160,6 +171,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().apply();
+
         editor.putInt(preferenceId, recipeId);
         editor.putString(preferenceName, recipeName);
         editor.putString(preferenceIngredients, ingredientsString);
@@ -187,6 +200,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         return rootView;
     }
 
+
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -196,9 +210,19 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         outState.putParcelableArrayList(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
     }
 
+
     @Override
-    public void onPause() {
-        super.onPause();
+    public void onDestroy() {
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().apply();
+
+        Log.i("preferenceId -onDestroy", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
+        Log.i("prefName-onDest", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
+        Log.i("preferenceIngred-onDest", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
+
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
 
         Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
@@ -208,38 +232,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
         widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         getContext().sendBroadcast(widgetIntent);
-    }
 
-    @Override
-    public void onDestroy() {
-//        PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
-//                .clear().apply();
-
-//        sharedPreferences.edit().clear().apply();
-
-//        SharedPreferences.Editor editor = sharedPreferences.edit();
-//        editor.clear().apply();
-//
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-//
-//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
-//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//
-//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-//
-//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//        getContext().sendBroadcast(widgetIntent);
-////
-        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-//
-//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
-//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//
-//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-//
-//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//        getContext().sendBroadcast(widgetIntent);
         super.onDestroy();
     }
 

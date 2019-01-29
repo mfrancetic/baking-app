@@ -27,9 +27,7 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
                 .commit();
     }
 
-
     @Override
     public void onRecipeSelected(Recipe recipe) {
-
     }
 }

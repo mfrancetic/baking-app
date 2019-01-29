@@ -39,7 +39,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private static final String recipeKey = "recipe";
 
-
     private DetailRecipeFragment detailRecipeFragment;
 
     private int stepId;
@@ -90,13 +89,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
                 onRecipeStepClickListener.onRecipeStepSelected(position);
             }
         });
-
-//        recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//
-//            }
-//        });
     }
 
     public void setSteps(List<Step> stepList) {

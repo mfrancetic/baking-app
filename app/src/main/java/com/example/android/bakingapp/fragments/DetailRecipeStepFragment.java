@@ -142,7 +142,6 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
                     exoPlayer.getCurrentPosition(), 1f);
         }
         mediaSession.setPlaybackState(stateBuilder.build());
-        showNotification(stateBuilder.build());
     }
 
 //    @Override
@@ -393,45 +392,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     }
 
 
-    private void showNotification(PlaybackStateCompat state) {
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
-
-        int icon;
-        String play_pause;
-        if (state.getState() == PlaybackStateCompat.STATE_PLAYING) {
-            icon = R.drawable.exo_controls_pause;
-            play_pause = getString(R.string.pause);
-        } else {
-            icon = R.drawable.exo_controls_play;
-            play_pause = getString(R.string.play);
-        }
-
-//        NotificationCompat.Action playPauseAction = new NotificationCompat.Action(
-//                icon, play_pause, MediaButtonReceiver.buildMediaButtonPendingIntent(context,
-//                PlaybackStateCompat.ACTION_PLAY_PAUSE));
-//
-//        PendingIntent contentPendingIntent = PendingIntent.getActivity(
-//                // ckeck Class!
-//                context, 0, new Intent(context, DetailStepActivity.class), 0);
-//
-//        builder.setContentTitle(getString(R.string.recipe_instructions))
-//                .setContentText(getString(R.string.notification_text))
-//                .setContentIntent(contentPendingIntent)
-//                .setSmallIcon(R.drawable.exo_controls_play)
-//                .setVisibility(NotificationCompat.VISIBILITY_PUBLIC)
-//                .addAction(playPauseAction)
-//                .setStyle(new android.support.v4.media.app.NotificationCompat.MediaStyle()
-//                        .setMediaSession(mediaSession.getSessionToken())
-//                        .setShowActionsInCompactView(0, 1));
-//
-//        notificationManager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-//
-//        notificationManager.notify(0, builder.build());
-
-    }
-
     private void releasePlayer() {
-//        notificationManager.cancelAll();
         if (exoPlayer != null) {
             exoPlayer.stop();
             exoPlayer.release();
@@ -537,6 +498,4 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     public void setStepList(List<Step> stepList) {
         this.stepList = stepList;
     }
-
-
 }

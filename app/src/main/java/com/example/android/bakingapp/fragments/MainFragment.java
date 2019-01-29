@@ -217,6 +217,4 @@ public class MainFragment extends Fragment {
         this.recipeList = recipes;
         mainAdapter.setRecipes(recipeList);
     }
-
-
 }

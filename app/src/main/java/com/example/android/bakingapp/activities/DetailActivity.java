@@ -89,19 +89,11 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) DetailRecipeFragment.stepList);
 
             startActivity(intent);
-//            TextView recipeDescriptionTextView = (TextView) findViewById(R.id.recipe_step_description);
-//            recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    startActivity(intent);
-//                }
-//            });
         }
     }
 
 
     @Override
     public void onDetailRecipeStepSelected() {
-
     }
 }
