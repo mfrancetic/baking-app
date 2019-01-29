@@ -113,13 +113,14 @@ public class BakingAppWidget extends AppWidgetProvider {
                 ComponentName appWidget = new ComponentName(context.getPackageName(), BakingAppWidget.class.getName());
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
 
+//                sharedPreferences = context.getSharedPreferences(preferences, Context.MODE_PRIVATE);
 
 //                if (sharedPreferences != null) {
 //                appWidgetManager.updateAppWidget(appWidgetIds, remoteViews);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_image);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
-                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_relative_layout);
+//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_relative_layout);
 //                }
             }
         }

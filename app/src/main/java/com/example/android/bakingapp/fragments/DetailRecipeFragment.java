@@ -214,10 +214,22 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     public void onDestroy() {
 //        PreferenceManager.getDefaultSharedPreferences(getContext()).edit()
 //                .clear().apply();
+
+//        sharedPreferences.edit().clear().apply();
+
 //        SharedPreferences.Editor editor = sharedPreferences.edit();
 //        editor.clear().apply();
 //
-//        sharedPreferences.edit().clear().apply();
+//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+//
+//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//
+//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+//
+//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//        getContext().sendBroadcast(widgetIntent);
+////
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
 //        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
 //
