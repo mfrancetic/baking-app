@@ -22,6 +22,7 @@ import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.adapters.DetailAdapter;
 //import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.data.BakingAppWidget;
@@ -109,6 +110,32 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        if (getContext() != null) {
+            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
+        }
+
+//            if (sharedPreferences != null && recipe != null) {
+//                SharedPreferences.Editor editor = sharedPreferences.edit();
+//                editor.clear().apply();
+//
+//                editor.putString(preferenceName, recipeName);
+//                editor.putString(preferenceIngredients, ingredientsString);
+//                editor.apply();
+//
+//                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+//
+//                Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+//                widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//
+//                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+//
+//                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//                getContext().sendBroadcast(widgetIntent);
+//
+//            }
+//        }
+
+
         if (savedInstanceState != null) {
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
@@ -122,6 +149,28 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
                 stepList = getActivity().getIntent().getParcelableArrayListExtra(stepListKey);
                 ingredientList = getActivity().getIntent().getParcelableArrayListExtra(ingredientListKey);
             }
+        }
+
+        if (recipe == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear().apply();
+
+            editor.putString(preferenceName, recipeName);
+            editor.putString(preferenceIngredients, ingredientsString);
+            editor.apply();
+
+            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+
+            Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+            widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+
+            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+            getContext().sendBroadcast(widgetIntent);
+
+            Intent intent = new Intent(getContext(), MainActivity.class);
+            startActivity(intent);
         }
 
         recipeName = recipe.getName();
@@ -163,9 +212,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
         ingredientsString = stringBuilder.toString();
 
-        if (getContext() != null) {
-            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
-        }
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
