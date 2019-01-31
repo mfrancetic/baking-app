@@ -85,7 +85,7 @@ public class BakingAppWidget extends AppWidgetProvider {
             remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.GONE);
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.GONE);
 
-            remoteViews.setOnClickPendingIntent(R.id.widget_relative_layout, pendingIntent);
+            remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
         }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
 
@@ -123,8 +123,7 @@ public class BakingAppWidget extends AppWidgetProvider {
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
 //                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_relative_layout);
-//                }
+                }
             }
         }
     }
-}
