@@ -267,17 +267,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         Log.i("preferenceIngred-onDest", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
 
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
-
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-//
-//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
-//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//
-//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-//
-//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//        getContext().sendBroadcast(widgetIntent);
-
         super.onDestroy();
     }
 
