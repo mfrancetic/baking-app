@@ -388,101 +388,109 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
                 exoPlayer.setPlayWhenReady(true);
             }
+            int currentOrientation = getResources().getConfiguration().orientation;
+            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                playVideoFullScreen();
+            } else {
+                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+                }
+            }
         }
     }
 
 
-    private void releasePlayer() {
-        if (exoPlayer != null) {
-            exoPlayer.stop();
-            exoPlayer.release();
-            exoPlayer = null;
-        }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        releasePlayer();
-        mediaSession.setActive(false);
-    }
-
-    @Override
-    public void onAttach(Context context) {
-        super.onAttach(context);
-        try {
-            onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
-        } catch (ClassCastException e) {
-            throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onDetailRecipeStepClickListener = null;
-    }
-
-    private class SessionCallback extends MediaSessionCompat.Callback {
-        @Override
-        public void onPlay() {
-            exoPlayer.setPlayWhenReady(true);
+        private void releasePlayer () {
+            if (exoPlayer != null) {
+                exoPlayer.stop();
+                exoPlayer.release();
+                exoPlayer = null;
+            }
         }
 
         @Override
-        public void onPause() {
-            exoPlayer.setPlayWhenReady(false);
+        public void onDestroy () {
+            super.onDestroy();
+            releasePlayer();
+            mediaSession.setActive(false);
         }
-    }
 
-    @Override
-    public void onPause() {
-        super.onPause();
-        releasePlayer();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        releasePlayer();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        initializePlayer(videoUri);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        initializePlayer(videoUri);
-    }
-
-
-    public static class MediaReceiver extends BroadcastReceiver {
         @Override
-        public void onReceive(Context context, Intent intent) {
-            MediaButtonReceiver.handleIntent(mediaSession, intent);
+        public void onAttach (Context context){
+            super.onAttach(context);
+            try {
+                onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
+            } catch (ClassCastException e) {
+                throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
+            }
         }
 
-    }
+        @Override
+        public void onDetach () {
+            super.onDetach();
+            onDetailRecipeStepClickListener = null;
+        }
 
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
+        private class SessionCallback extends MediaSessionCompat.Callback {
+            @Override
+            public void onPlay() {
+                exoPlayer.setPlayWhenReady(true);
+            }
 
-        int currentOrientation = getResources().getConfiguration().orientation;
-        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-            playVideoFullScreen();
-        } else  {
-            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+            @Override
+            public void onPause() {
+                exoPlayer.setPlayWhenReady(false);
+            }
+        }
+
+        @Override
+        public void onPause () {
+            super.onPause();
+            releasePlayer();
+        }
+
+        @Override
+        public void onStop () {
+            super.onStop();
+            releasePlayer();
+        }
+
+        @Override
+        public void onResume () {
+            super.onResume();
+            initializePlayer(videoUri);
+        }
+
+        @Override
+        public void onStart () {
+            super.onStart();
+            initializePlayer(videoUri);
+        }
+
+
+        public static class MediaReceiver extends BroadcastReceiver {
+            @Override
+            public void onReceive(Context context, Intent intent) {
+                MediaButtonReceiver.handleIntent(mediaSession, intent);
+            }
+
+        }
+
+        @Override
+        public void onConfigurationChanged (Configuration newConfig){
+            super.onConfigurationChanged(newConfig);
+
+            int currentOrientation = getResources().getConfiguration().orientation;
+            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                playVideoFullScreen();
+            } else {
+                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 //                getActivity().getWindow().getDecorView().setSystemUiVisibility(
 ////                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 ////                         View.SYSTEM_UI_FLAG_VISIBLE
 //                );
-            }
+                }
 //            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
 //                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 //                getActivity().getWindow().getDecorView().setSystemUiVisibility(
@@ -497,10 +505,10 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //            params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
 //            params.height = 300;
 //            simpleExoPlayerView.setLayoutParams(params);
+            }
         }
-    }
 
-    void playVideoFullScreen() {
+        void playVideoFullScreen () {
 //        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
 //        params.width = params.MATCH_CONSTRAINT_SPREAD;
 //        params.height = params.MATCH_CONSTRAINT_SPREAD;
@@ -516,8 +524,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //        simpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
 //        simpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 //            getActivity().getWindow().getDecorView().setSystemUiVisibility(
 //                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -525,7 +533,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 //                            | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        }
+            }
 
 
 //        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
@@ -535,21 +543,21 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 //        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 //        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-    }
+        }
 
-    public void setStepId(int index) {
-        stepId = index;
-    }
+        public void setStepId ( int index){
+            stepId = index;
+        }
 
-    public void setRecipeName(String name) {
-        recipeName = name;
-    }
+        public void setRecipeName (String name){
+            recipeName = name;
+        }
 
-    public void setRecipe(Recipe recipe) {
-        this.recipe = recipe;
-    }
+        public void setRecipe (Recipe recipe){
+            this.recipe = recipe;
+        }
 
-    public void setStepList(List<Step> stepList) {
-        this.stepList = stepList;
+        public void setStepList (List < Step > stepList) {
+            this.stepList = stepList;
+        }
     }
-}
