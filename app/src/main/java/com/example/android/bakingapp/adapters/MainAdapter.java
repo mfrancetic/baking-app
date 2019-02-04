@@ -36,7 +36,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private MainFragment.OnRecipeClickListener onRecipeClickListener;
 
-    public static final String recipeKey = "recipe";
+    private static final String recipeKey = "recipe";
 
     private static final String stepListKey = "step";
 

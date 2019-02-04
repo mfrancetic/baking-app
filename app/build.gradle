@@ -4,12 +4,13 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.android.bakingapp"
-        minSdkVersion 17
+        minSdkVersion 19
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        testInstrumentationRunner "android.support.test.runner.androidJUnitRunner"
     }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -24,10 +25,8 @@ android {
                     details.useVersion '28.0.0'
                 }
             }
-
         }
     }
-
 }
 
 dependencies {

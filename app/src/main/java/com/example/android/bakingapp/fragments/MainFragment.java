@@ -21,7 +21,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.adapters.MainAdapter;
+import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -67,6 +69,8 @@ public class MainFragment extends Fragment {
 
     int spanCount = 3;
 
+    private SimpleIdlingResource idlingResource;
+
     public interface OnRecipeClickListener {
         void onRecipeSelected(Recipe recipe);
     }
@@ -85,6 +89,11 @@ public class MainFragment extends Fragment {
         Context context = rootView.getContext();
 
         final FragmentActivity fragmentActivity = getActivity();
+
+        idlingResource = (SimpleIdlingResource) ((MainActivity) getActivity()).getIdlingResource();
+        if (idlingResource != null) {
+            idlingResource.setIdleState(false);
+        }
 
 
         if (rootView.findViewById(R.id.constraint_layout_main_tablet_mode) != null) {
@@ -210,6 +219,8 @@ public class MainFragment extends Fragment {
                 loadingIndicator.setVisibility(View.GONE);
                 populateRecipes(recipes);
             }
+            idlingResource.setIdleState(true);
+
         }
     }
 

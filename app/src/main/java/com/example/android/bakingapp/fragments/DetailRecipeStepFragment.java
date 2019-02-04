@@ -475,12 +475,66 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         int currentOrientation = getResources().getConfiguration().orientation;
         if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
             playVideoFullScreen();
+        } else  {
+            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+//                getActivity().getWindow().getDecorView().setSystemUiVisibility(
+////                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+////                         View.SYSTEM_UI_FLAG_VISIBLE
+//                );
+            }
+//            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+//                getActivity().getWindow().getDecorView().setSystemUiVisibility(
+//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                                | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
+
+//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//            params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+//            params.height = 300;
+//            simpleExoPlayerView.setLayoutParams(params);
         }
     }
 
     void playVideoFullScreen() {
-        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//        params.width = params.MATCH_CONSTRAINT_SPREAD;
+//        params.height = params.MATCH_CONSTRAINT_SPREAD;
+//        simpleExoPlayerView.setLayoutParams(params);
+//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//        params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
+//        params.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
+//        simpleExoPlayerView.setLayoutParams(params);
+
+//        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+
+
+//        simpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
+//        simpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
+
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+//            getActivity().getWindow().getDecorView().setSystemUiVisibility(
+//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
+        }
+
+
+//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
+//        params.width = params.matchConstraintMaxWidth;
+//        params.height = params.matchConstraintMaxHeight;
+//        simpleExoPlayerView.setLayoutParams(params);
+//        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 //        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
+//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     public void setStepId(int index) {

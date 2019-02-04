@@ -1,8 +1,10 @@
 package com.example.android.bakingapp.idlingResource;
 
+import android.app.Activity;
 import android.support.annotation.Nullable;
 import android.support.test.espresso.IdlingResource;
 
+import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class SimpleIdlingResource implements IdlingResource {
@@ -33,5 +35,6 @@ public class SimpleIdlingResource implements IdlingResource {
             resourceCallback.onTransitionToIdle();
         }
     }
+
 
 }
