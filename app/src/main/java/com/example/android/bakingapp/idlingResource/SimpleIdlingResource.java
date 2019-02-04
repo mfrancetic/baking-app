@@ -1,9 +1,7 @@
 package com.example.android.bakingapp.idlingResource;
 
-import android.app.Activity;
-import android.support.annotation.Nullable;
+import androidx.annotation.Nullable;
 
-import java.util.Collection;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.test.espresso.IdlingResource;

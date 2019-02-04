@@ -2,12 +2,11 @@ package com.example.android.bakingapp.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;

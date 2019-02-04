@@ -3,20 +3,13 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -37,10 +30,13 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Queue;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 
 public class MainFragment extends Fragment {
 
@@ -52,13 +48,10 @@ public class MainFragment extends Fragment {
 
     MainAdapter mainAdapter;
 
-    @BindView(R.id.main_recycler_view)
     RecyclerView recyclerView;
 
-    @BindView(R.id.loading_indicator)
     ProgressBar loadingIndicator;
 
-    @BindView(R.id.empty_text_view)
     TextView emptyTextView;
 
     ConstraintLayout constraintLayoutTabletMode;
@@ -88,6 +81,9 @@ public class MainFragment extends Fragment {
 
         Context context = rootView.getContext();
 
+        emptyTextView = rootView.findViewById(R.id.empty_text_view);
+        loadingIndicator = rootView.findViewById(R.id.loading_indicator);
+
         final FragmentActivity fragmentActivity = getActivity();
 
         idlingResource = (SimpleIdlingResource) ((MainActivity) getActivity()).getIdlingResource();
@@ -105,7 +101,7 @@ public class MainFragment extends Fragment {
 
         mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
 
-        ButterKnife.bind(this, rootView);
+//        ButterKnife.bind(this, rootView);
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
 

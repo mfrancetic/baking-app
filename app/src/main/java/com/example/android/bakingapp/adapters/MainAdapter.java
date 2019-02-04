@@ -4,8 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+import androidx.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,7 @@ import com.example.android.bakingapp.models.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
@@ -46,9 +45,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.recipe_name_text_view)
         TextView recipeNameTextView;
-        @BindView(R.id.recipe_image_view)
         ImageView recipeImageView;
 
         ViewHolder(@NonNull View itemView) {

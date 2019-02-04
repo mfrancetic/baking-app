@@ -1,37 +1,31 @@
 package com.example.android.bakingapp.fragments;
 
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
-import android.media.session.MediaSession;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
-import android.support.v4.media.session.MediaButtonReceiver;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
+import androidx.core.app.NotificationCompat;
+import androidx.fragment.app.Fragment;
+import androidx.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import androidx.appcompat.app.AppCompatActivity;
+
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.activities.DetailStepActivity;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -48,17 +42,12 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
-
-import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.EventListener {
 

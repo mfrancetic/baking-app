@@ -3,22 +3,15 @@ package com.example.android.bakingapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.annotation.Nullable;
-import android.support.v4.app.FragmentManager;
-import android.support.v7.app.AppCompatActivity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
-import com.example.android.bakingapp.fragments.MainFragment;
-import com.example.android.bakingapp.models.Recipe;
 
 import java.util.ArrayList;
-
-import butterknife.ButterKnife;
 
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {

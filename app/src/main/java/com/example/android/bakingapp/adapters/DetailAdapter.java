@@ -1,26 +1,20 @@
 package com.example.android.bakingapp.adapters;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Adapter;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.activities.DetailStepActivity;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
-import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import butterknife.BindView;
 
 
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
@@ -48,7 +42,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        //        @BindView(R.id.recipe_step_description)
         final TextView recipeDescriptionTextView;
 
         ViewHolder(@NonNull View itemView) {

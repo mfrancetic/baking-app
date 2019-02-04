@@ -7,18 +7,14 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.RemoteViews;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
@@ -34,8 +30,10 @@ import com.example.android.bakingapp.models.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -53,10 +51,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     OnRecipeStepClickListener onRecipeStepClickListener;
 
-    @BindView(R.id.detail_recycler_view)
     RecyclerView detailRecyclerView;
 
-    @BindView(R.id.ingredients_text_view)
     TextView ingredientsTextView;
 
     public static SharedPreferences sharedPreferences;
@@ -192,7 +188,9 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
 
         final FragmentActivity fragmentActivity = getActivity();
-        ButterKnife.bind(this, rootView);
+//        ButterKnife.bind(this, rootView);
+        ingredientsTextView = rootView.findViewById(R.id.ingredients_text_view);
+
 
         detailRecyclerView = rootView.findViewById(R.id.detail_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
