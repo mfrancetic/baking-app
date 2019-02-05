@@ -27,20 +27,22 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Recipe> recipes;
 
-    private List<Step> steps;
+    public static List<Step> steps;
 
-    private List<Ingredient> ingredients;
+    public static  List<Ingredient> ingredients;
+
+    public static Recipe recipe;
 
     private Context context;
 
     private MainFragment.OnRecipeClickListener onRecipeClickListener;
 
-    private static final String recipeKey = "recipe";
+    public static final String recipeKey = "recipe";
 
-    private static final String stepListKey = "step";
+    public static final String stepListKey = "step";
 
 
-    private static final String ingredientListKey = "ingredient";
+    public static final String ingredientListKey = "ingredient";
 
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,7 +75,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, int position) {
 
-        final Recipe recipe = recipes.get(position);
+        recipe = recipes.get(position);
 
         steps = recipe.getStepList();
         ingredients = recipe.getIngredientList();

@@ -15,6 +15,7 @@ import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import static org.junit.Assert.assertNotNull;
+import static org.hamcrest.Matchers.allOf;
 
 import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
