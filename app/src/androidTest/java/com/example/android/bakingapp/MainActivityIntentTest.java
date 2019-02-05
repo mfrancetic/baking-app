@@ -8,6 +8,8 @@ import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 import androidx.test.espresso.intent.Intents;
 
+import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.example.android.bakingapp.adapters.MainAdapter.ingredients;
 import static com.example.android.bakingapp.adapters.MainAdapter.stepListKey;
 import static com.example.android.bakingapp.adapters.MainAdapter.steps;
@@ -35,7 +37,6 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.adapters.MainAdapter;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
-
 
 import org.junit.After;
 import org.junit.Before;
