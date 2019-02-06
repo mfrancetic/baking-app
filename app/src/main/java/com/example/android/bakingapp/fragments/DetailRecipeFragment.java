@@ -259,10 +259,10 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().apply();
-
-        Log.i("preferenceId -onDestroy", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
-        Log.i("prefName-onDest", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
-        Log.i("preferenceIngred-onDest", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
+//
+//        Log.i("preferenceId -onDestroy", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
+//        Log.i("prefName-onDest", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
+//        Log.i("preferenceIngred-onDest", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
 
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();

@@ -226,7 +226,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-         rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
+        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
         if (rootView.findViewById(R.id.previous_step_button) == null) {
             twoPane = true;
@@ -300,7 +300,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         outState.putParcelable(recipeKey, recipe);
     }
 
-   private void generateView() {
+    private void generateView() {
         if (!twoPane) {
             checkIfFirstOrLastButton();
         }
@@ -357,7 +357,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
 
     private void generateButtons() {
-
         if (!twoPane) {
             nextStepButton.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -417,8 +416,16 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             thumbnailImageView.setVisibility(View.GONE);
             simpleExoPlayerView.setVisibility(View.VISIBLE);
             if (exoPlayer == null) {
-                initFullscreenDialog();
-                initFullscreenButton();
+                if (!twoPane) {
+                    initFullscreenDialog();
+                    initFullscreenButton();
+                    int currentOrientation = getResources().getConfiguration().orientation;
+                    if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                        openFullscreenDialog();
+                    } else {
+                        closeFullscreenDialog();
+                    }
+                }
                 TrackSelector trackSelector = new DefaultTrackSelector();
                 LoadControl loadControl = new DefaultLoadControl();
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
@@ -527,7 +534,16 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        int currentOrientation = getResources().getConfiguration().orientation;
+        if (!twoPane) {
+            int currentOrientation = getResources().getConfiguration().orientation;
+            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+                openFullscreenDialog();
+            } else {
+                closeFullscreenDialog();
+            }
+        }
+
+
 //        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
 //            playVideoFullScreen();
 //        } else {
@@ -537,7 +553,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 ////                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 ////                         View.SYSTEM_UI_FLAG_VISIBLE
 //                );
-            }
+    }
 //            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
 //                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 //                getActivity().getWindow().getDecorView().setSystemUiVisibility(

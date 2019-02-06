@@ -12,6 +12,12 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimaryLight">
 
+        <FrameLayout
+            android:id="@+id/player_view_frame"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/exo_player_height"
+            app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.exoplayer2.ui.PlayerView
             android:id="@+id/player_view"
             android:layout_width="match_parent"
@@ -21,12 +27,14 @@
             android:layout_marginTop="0dp"
             android:layout_marginRight="0dp" />
 
+        </FrameLayout>
+
         <ImageView
             android:id="@+id/thumbnail_image_view"
             style="@style/RecipeImageViewStyle"
             android:contentDescription="@string/thumbnail_content_description"
-            app:layout_constraintLeft_toLeftOf="@id/player_view"
-            app:layout_constraintRight_toRightOf="@id/player_view"
+            app:layout_constraintLeft_toLeftOf="@id/player_view_frame"
+            app:layout_constraintRight_toRightOf="@id/player_view_frame"
             app:layout_constraintTop_toBottomOf="@id/empty_exo_player_view"
             tools:src="@drawable/cupcake" />
 
@@ -37,17 +45,18 @@
             android:background="@color/colorPrimaryDark"
             android:textColor="@color/colorTextIcons"
             android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@id/player_view"
-            app:layout_constraintLeft_toLeftOf="@id/player_view"
-            app:layout_constraintRight_toRightOf="@id/player_view"
-            app:layout_constraintTop_toTopOf="@id/player_view" />
+            app:layout_constraintBottom_toBottomOf="@id/player_view_frame"
+            app:layout_constraintLeft_toLeftOf="@id/player_view_frame"
+            app:layout_constraintRight_toRightOf="@id/player_view_frame"
+            app:layout_constraintTop_toTopOf="@id/player_view_frame" />
 
         <TextView
             android:id="@+id/recipe_step_instructions"
             style="@style/TextViewStyle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/player_view"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/player_view_frame"
             tools:text="Instructions" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
