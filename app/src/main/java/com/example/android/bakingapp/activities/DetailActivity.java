@@ -3,9 +3,13 @@ package com.example.android.bakingapp.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.view.View;
+
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
@@ -28,12 +32,17 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
     private static final String stepIdKey = "stepId";
 
+    @BindView(R.id.divider_recipe_detail)
+    @Nullable View dividerRecipe;
+
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
-        if (findViewById(R.id.divider_recipe_detail) != null) {
+        ButterKnife.bind(this);
+
+        if (dividerRecipe != null) {
             twoPane = true;
 
             if (savedInstanceState == null) {

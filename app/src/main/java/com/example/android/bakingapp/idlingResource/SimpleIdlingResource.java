@@ -34,6 +34,4 @@ public class SimpleIdlingResource implements IdlingResource {
             resourceCallback.onTransitionToIdle();
         }
     }
-
-
 }

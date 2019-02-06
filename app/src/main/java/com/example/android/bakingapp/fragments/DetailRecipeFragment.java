@@ -34,6 +34,8 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -51,9 +53,9 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     OnRecipeStepClickListener onRecipeStepClickListener;
 
-    RecyclerView detailRecyclerView;
+    @BindView(R.id.detail_recycler_view) RecyclerView detailRecyclerView;
 
-    TextView ingredientsTextView;
+    @BindView(R.id.ingredients_text_view) TextView ingredientsTextView;
 
     public static SharedPreferences sharedPreferences;
 
@@ -183,16 +185,14 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
+        ButterKnife.bind(this, rootView);
+
         Context context = rootView.getContext();
 
         detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
 
         final FragmentActivity fragmentActivity = getActivity();
-//        ButterKnife.bind(this, rootView);
-        ingredientsTextView = rootView.findViewById(R.id.ingredients_text_view);
 
-
-        detailRecyclerView = rootView.findViewById(R.id.detail_recycler_view);
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
         detailRecyclerView.setLayoutManager(layoutManager);
         detailRecyclerView.setAdapter(detailAdapter);
@@ -209,7 +209,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         }
 
         ingredientsString = stringBuilder.toString();
-
 
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
@@ -256,13 +255,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     @Override
     public void onDestroy() {
-
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().apply();
-//
-//        Log.i("preferenceId -onDestroy", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
-//        Log.i("prefName-onDest", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
-//        Log.i("preferenceIngred-onDest", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
 
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();

@@ -21,7 +21,6 @@ public class QueryUtils {
     private QueryUtils() {
     }
 
-
     public static URL createUrl() {
         URL url = null;
         Uri uri = Uri.parse(BASE_URL);
@@ -103,5 +102,4 @@ public class QueryUtils {
         }
         return output.toString();
     }
-
 }

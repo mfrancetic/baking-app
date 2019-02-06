@@ -51,7 +51,7 @@ public class BakingAppWidget extends AppWidgetProvider {
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
 
-        if (sharedPreferences!= null) {
+        if (sharedPreferences != null) {
             Log.i("prefId -widgetUpdate", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
             Log.i("prefName-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
             Log.i("prefIngred-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
@@ -123,7 +123,7 @@ public class BakingAppWidget extends AppWidgetProvider {
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
 //                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_relative_layout);
-                }
             }
         }
     }
+}

@@ -22,9 +22,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
     @Nullable
     private SimpleIdlingResource idlingResource;
 
-//    public static final String RECIPE_KEY = MainAdapter.recipeKey;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

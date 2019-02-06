@@ -4,6 +4,8 @@ import android.content.Context;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,11 +44,12 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        final TextView recipeDescriptionTextView;
+        @BindView(R.id.recipe_step_description)
+         TextView recipeDescriptionTextView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeDescriptionTextView = itemView.findViewById(R.id.recipe_step_description);
+            ButterKnife.bind(this, itemView);
         }
     }
 
@@ -55,7 +58,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         this.steps = steps;
         this.onRecipeStepClickListener = onRecipeStepClickListener;
     }
-
 
     @NonNull
     @Override

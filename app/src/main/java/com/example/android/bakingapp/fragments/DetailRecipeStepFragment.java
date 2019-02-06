@@ -22,6 +22,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,9 +78,12 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private int stepId;
 
-    private TextView instructionTextView;
+    @BindView(R.id.recipe_step_instructions)
+    TextView instructionTextView;
 
-    private SimpleExoPlayer exoPlayer;
+    SimpleExoPlayer exoPlayer;
+
+   @BindView (R.id.player_view_frame) FrameLayout playerViewFrame;
 
     private String videoUrl;
 
@@ -92,11 +97,16 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     private PlaybackStateCompat.Builder stateBuilder;
     private NotificationManager notificationManager;
 
-    private Button previousStepButton;
+    @BindView(R.id.previous_step_button)
+    @Nullable
+    Button previousStepButton;
 
-    private Button nextStepButton;
+    @BindView(R.id.next_step_button)
+    @Nullable
+    Button nextStepButton;
 
-    private TextView emptyPlayerView;
+    @BindView(R.id.empty_exo_player_view)
+    TextView emptyPlayerView;
 
     private static final String recipeNameKey = "recipeName";
 
@@ -107,7 +117,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     public Recipe recipe;
 
-    private ImageView thumbnailImageView;
+    @BindView(R.id.thumbnail_image_view)
+    ImageView thumbnailImageView;
 
     private boolean exoPlayerIsFullScreen = false;
 
@@ -118,16 +129,17 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private View rootView;
 
-
     private Context context;
 
     private boolean twoPane;
 
     private Dialog fullScreenDialog;
 
-    private ImageView fullScreenIcon;
+    @BindView(R.id.exo_fullscreen_icon)
+    ImageView fullScreenIcon;
 
-    private FrameLayout fullScreenButton;
+    @BindView(R.id.exo_fullscreen_button)
+    FrameLayout fullScreenButton;
 
     private int resumeWindow;
 
@@ -173,26 +185,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     }
 
-//    @Override
-//    public void onConfigurationChanged(Configuration newConfig) {
-//        super.onConfigurationChanged(newConfig);
-//
-//        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//            params.width = params.MATCH_PARENT;
-//            params.height = params.MATCH_PARENT;
-//            simpleExoPlayerView.setLayoutParams(params);
-//            DetailRecipeStepFragment.this.getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN | View.SYSTEM_UI_FLAG_IMMERSIVE);
-//        } else if (newConfig.orientation == Configuration.ORIENTATION_PORTRAIT) {
-//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//            params.width = params.MATCH_PARENT;
-//            params.height = 600;
-//            simpleExoPlayerView.setLayoutParams(params);
-//            DetailRecipeStepFragment.this.getActivity().getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN);
-//        }
-//    }
-
-
     @Override
     public void onPlayerError(ExoPlaybackException error) {
 
@@ -228,25 +220,16 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
         rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
-        if (rootView.findViewById(R.id.previous_step_button) == null) {
+        ButterKnife.bind(this, rootView);
+
+        if (previousStepButton == null) {
             twoPane = true;
         } else {
             twoPane = false;
-            nextStepButton = rootView.findViewById(R.id.next_step_button);
-            previousStepButton = rootView.findViewById(R.id.previous_step_button);
         }
 
         simpleExoPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
 
-        emptyPlayerView = rootView.findViewById(R.id.empty_exo_player_view);
-
-        fullScreenIcon = rootView.findViewById(R.id.exo_fullscreen_icon);
-
-        fullScreenButton = rootView.findViewById(R.id.exo_fullscreen_button);
-
-        instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
-
-        thumbnailImageView = rootView.findViewById(R.id.thumbnail_image_view);
         thumbnailImageView.setVisibility(View.GONE);
 
         context = instructionTextView.getContext();
@@ -357,7 +340,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
 
     private void generateButtons() {
-        if (!twoPane) {
+        if (!twoPane && nextStepButton != null && previousStepButton != null) {
             nextStepButton.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -442,14 +425,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
                 exoPlayer.setPlayWhenReady(true);
             }
-//            int currentOrientation = getResources().getConfiguration().orientation;
-//            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//                playVideoFullScreen();
-//            } else {
-//                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-//                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-//                }
-//            }
         }
     }
 
@@ -534,7 +509,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
 
-        if (!twoPane) {
+        if (!twoPane && !videoUrl.isEmpty()) {
             int currentOrientation = getResources().getConfiguration().orientation;
             if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
                 openFullscreenDialog();
@@ -542,70 +517,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                 closeFullscreenDialog();
             }
         }
-
-
-//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-//            playVideoFullScreen();
-//        } else {
-//            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-//                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-//                getActivity().getWindow().getDecorView().setSystemUiVisibility(
-////                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-////                         View.SYSTEM_UI_FLAG_VISIBLE
-//                );
-    }
-//            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-//                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-//                getActivity().getWindow().getDecorView().setSystemUiVisibility(
-//                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                                | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                                | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                                | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                                | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                                | View.SYSTEM_UI_FLAG_IMMERSIVE);
-
-//            ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//            params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
-//            params.height = 300;
-//            simpleExoPlayerView.setLayoutParams(params);
-//        }
-//    }
-
-    void playVideoFullScreen() {
-//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//        params.width = params.MATCH_CONSTRAINT_SPREAD;
-//        params.height = params.MATCH_CONSTRAINT_SPREAD;
-//        simpleExoPlayerView.setLayoutParams(params);
-//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//        params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
-//        params.height = ConstraintLayout.LayoutParams.MATCH_CONSTRAINT_SPREAD;
-//        simpleExoPlayerView.setLayoutParams(params);
-
-//        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
-
-
-//        simpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
-//        simpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
-
-        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
-//            getActivity().getWindow().getDecorView().setSystemUiVisibility(
-//                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-//                            | View.SYSTEM_UI_FLAG_FULLSCREEN
-//                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-        }
-
-
-//        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
-//        params.width = params.matchConstraintMaxWidth;
-//        params.height = params.matchConstraintMaxHeight;
-//        simpleExoPlayerView.setLayoutParams(params);
-//        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
-//        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
-//        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
     public void setStepId(int index) {
@@ -644,18 +555,15 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         fullScreenDialog.show();
     }
 
-
     private void closeFullscreenDialog() {
-
         ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
-        ((FrameLayout) rootView.findViewById(R.id.player_view_frame)).addView(simpleExoPlayerView);
+        playerViewFrame.addView(simpleExoPlayerView);
         exoPlayerIsFullScreen = false;
         fullScreenDialog.dismiss();
         fullScreenIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_fullscreen_expand));
     }
 
     private void initFullscreenButton() {
-
         PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
         fullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
         fullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);

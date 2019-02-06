@@ -3,9 +3,11 @@ package com.example.android.bakingapp.fragments;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +38,8 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class MainFragment extends Fragment {
@@ -48,13 +52,17 @@ public class MainFragment extends Fragment {
 
     MainAdapter mainAdapter;
 
+    @BindView(R.id.main_recycler_view)
     RecyclerView recyclerView;
 
+    @BindView(R.id.loading_indicator)
     ProgressBar loadingIndicator;
 
+    @BindView(R.id.empty_text_view)
     TextView emptyTextView;
 
-    ConstraintLayout constraintLayoutTabletMode;
+    @BindView(R.id.constraint_layout_main_tablet_mode)
+    @Nullable ConstraintLayout constraintLayoutTabletMode;
 
     private boolean twoPane;
 
@@ -79,10 +87,9 @@ public class MainFragment extends Fragment {
         recipeList = new ArrayList<>();
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        Context context = rootView.getContext();
+        ButterKnife.bind(this, rootView);
 
-        emptyTextView = rootView.findViewById(R.id.empty_text_view);
-        loadingIndicator = rootView.findViewById(R.id.loading_indicator);
+        Context context = rootView.getContext();
 
         final FragmentActivity fragmentActivity = getActivity();
 
@@ -91,8 +98,7 @@ public class MainFragment extends Fragment {
             idlingResource.setIdleState(false);
         }
 
-
-        if (rootView.findViewById(R.id.constraint_layout_main_tablet_mode) != null) {
+        if (constraintLayoutTabletMode != null) {
             twoPane = true;
             layoutManager = new GridLayoutManager(context, spanCount);
         } else {
@@ -100,10 +106,6 @@ public class MainFragment extends Fragment {
         }
 
         mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
-
-//        ButterKnife.bind(this, rootView);
-
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.main_recycler_view);
 
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);

@@ -22,6 +22,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import androidx.recyclerview.widget.RecyclerView;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
@@ -44,16 +46,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     public static final String ingredientListKey = "ingredient";
 
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        TextView recipeNameTextView;
-        ImageView recipeImageView;
+        @BindView(R.id.recipe_name_text_view) TextView recipeNameTextView;
+        @BindView(R.id.recipe_image_view) ImageView recipeImageView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
-            recipeNameTextView = itemView.findViewById(R.id.recipe_name_text_view);
-            recipeImageView = itemView.findViewById(R.id.recipe_image_view);
+            ButterKnife.bind(this, itemView);
         }
     }
 
