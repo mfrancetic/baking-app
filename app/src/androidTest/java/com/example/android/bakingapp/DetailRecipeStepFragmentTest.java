@@ -62,12 +62,6 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
-import com.example.android.bakingapp.utils.QueryUtils;
-
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -91,8 +85,9 @@ public class DetailRecipeStepFragmentTest {
 
     private List<Ingredient> ingredientList = new ArrayList<>();
 
-
     private List<Step> stepList = new ArrayList<>();
+
+    private int stepId;
 
     @Rule
     public IntentsTestRule<DetailActivity> intentsTestRule =
@@ -119,11 +114,26 @@ public class DetailRecipeStepFragmentTest {
 
     @Before
     public void openDetailActivity() {
-        Fragment fragment = new DetailRecipeFragment();
-        intentsTestRule.getActivity()
-                .getSupportFragmentManager().beginTransaction()
-                .replace(R.id.detail_fragment_container, fragment)
-                .commit();
+
+        if (!DetailActivity.twoPane) {
+            Fragment fragment = new DetailRecipeFragment();
+            intentsTestRule.getActivity()
+                    .getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment)
+                    .commit();
+        } else {
+            Fragment fragment = new DetailRecipeFragment();
+            intentsTestRule.getActivity()
+                    .getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_fragment_container, fragment)
+                    .commit();
+
+            Fragment stepFragment = new DetailRecipeStepFragment();
+            intentsTestRule.getActivity()
+                    .getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.detail_step_fragment_container, stepFragment)
+                    .commit();
+        }
     }
 
 
@@ -138,10 +148,14 @@ public class DetailRecipeStepFragmentTest {
 
         onView(withId(R.id.detail_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
-        intending(allOf(hasExtra(
-                recipeKey, recipe),
-                hasExtra(ingredientListKey, ingredientList),
-                hasExtra(DetailRecipeFragment.stepListKey, stepList)))
-                .respondWith(result);
+        if (DetailActivity.twoPane) {
+            onView(withId(R.id.constraint_layout_step_tablet_mode)).check(matches(isDisplayed()));
+        } else {
+            intending(allOf(hasExtra(
+                    recipeKey, recipe),
+                    hasExtra(ingredientListKey, ingredientList),
+                    hasExtra(DetailRecipeFragment.stepListKey, stepList)))
+                    .respondWith(result);
+        }
     }
 }

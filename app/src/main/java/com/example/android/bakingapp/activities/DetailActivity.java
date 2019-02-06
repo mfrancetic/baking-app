@@ -16,7 +16,7 @@ import java.util.ArrayList;
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
 
-    private boolean twoPane;
+    public static boolean twoPane;
 
     private static final String recipeKey = "recipe";
 

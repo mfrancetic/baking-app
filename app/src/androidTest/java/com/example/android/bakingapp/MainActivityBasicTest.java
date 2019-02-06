@@ -47,15 +47,8 @@ public class MainActivityBasicTest {
     @Test
     public void openMainActivity_displaysRecipeList() {
         onView(withId(R.id.main_recycler_view)).check(matches(isDisplayed()));
-    }
 
-    @Test
-    public void clickRecyclerViewItem_displaysDetailActivity() {
-
-        onView(withId(R.id.main_recycler_view)).perform(RecyclerViewActions.
-                actionOnItemAtPosition(0, click()));
-//        getInstrumentation().waitForIdleSync();
-
+        onView(withText("Nutella Pie")).check(matches(isDisplayed()));
     }
 
     @After
