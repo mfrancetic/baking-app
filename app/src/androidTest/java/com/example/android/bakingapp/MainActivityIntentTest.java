@@ -6,23 +6,12 @@ import android.app.Instrumentation;
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.intent.Intents;
-
-import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static com.example.android.bakingapp.adapters.MainAdapter.ingredients;
-import static com.example.android.bakingapp.adapters.MainAdapter.stepListKey;
 import static com.example.android.bakingapp.adapters.MainAdapter.steps;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientListKey;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-
-import static androidx.test.InstrumentationRegistry.getTargetContext;
-import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -33,7 +22,6 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
 import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.adapters.MainAdapter;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;

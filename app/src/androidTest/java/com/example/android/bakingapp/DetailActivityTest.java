@@ -1,45 +1,19 @@
 package com.example.android.bakingapp;
 
-import android.app.Activity;
 import android.app.Instrumentation;
-import android.appwidget.AppWidgetManager;
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Parcelable;
 
 import androidx.fragment.app.Fragment;
-import androidx.test.espresso.IdlingRegistry;
-import androidx.test.espresso.IdlingResource;
 import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.espresso.intent.Intents;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
-import static androidx.test.espresso.matcher.ViewMatchers.hasDescendant;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.withChild;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
-import static com.example.android.bakingapp.adapters.MainAdapter.ingredients;
-import static com.example.android.bakingapp.adapters.MainAdapter.stepListKey;
-import static com.example.android.bakingapp.adapters.MainAdapter.steps;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientListKey;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeNameKey;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.sharedPreferences;
 import static org.hamcrest.Matchers.allOf;
 
-import androidx.test.filters.LargeTest;
-import androidx.test.rule.ActivityTestRule;
-
-import static androidx.test.InstrumentationRegistry.getTargetContext;
-import static androidx.test.espresso.intent.Intents.intended;
 import static androidx.test.espresso.intent.Intents.intending;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
@@ -50,13 +24,8 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
-import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.hamcrest.Matchers.any;
 
 import com.example.android.bakingapp.activities.DetailActivity;
-import com.example.android.bakingapp.activities.MainActivity;
-import com.example.android.bakingapp.adapters.MainAdapter;
-import com.example.android.bakingapp.data.BakingAppWidget;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 import com.example.android.bakingapp.models.Ingredient;
@@ -67,15 +36,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 
 @RunWith(AndroidJUnit4.class)
-public class DetailRecipeStepFragmentTest {
-
-    private IdlingResource idlingResource;
+public class DetailActivityTest {
 
     private Instrumentation.ActivityResult result;
 
@@ -87,7 +53,23 @@ public class DetailRecipeStepFragmentTest {
 
     private List<Step> stepList = new ArrayList<>();
 
-    private int stepId;
+    private int stepId = 0;
+
+    private int ingredientQuantity = 2;
+
+    private String ingredientMeasure = "CUP";
+
+    private String ingredientName = "Graham Cracker crumbs";
+
+    private String stepDescription = "Recipe Introduction";
+
+    private String stepVideoUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4";
+
+    private String recipeName;
+
+    private int recipeId;
+
+    private int servings;
 
     @Rule
     public IntentsTestRule<DetailActivity> intentsTestRule =
@@ -95,14 +77,14 @@ public class DetailRecipeStepFragmentTest {
                 @Override
                 protected Intent getActivityIntent() {
 
-                    Ingredient ingredient = new Ingredient(2, "CUP", "Graham Cracker crumbs");
-                    Step step = new Step(0, "Recipe Introduction", "Recipe Introduction",
-                            "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4", null);
+                    Ingredient ingredient = new Ingredient(ingredientQuantity, ingredientMeasure, ingredientName);
+                    Step step = new Step(stepId, stepDescription, stepDescription,
+                            stepVideoUrl, null);
 
                     ingredientList.add(ingredient);
                     stepList.add(step);
 
-                    recipe = new Recipe(1, "Nutella Pie", ingredientList, stepList, 8, null);
+                    recipe = new Recipe(recipeId, recipeName, ingredientList, stepList, servings, null);
 
                     intent = new Intent();
                     intent.putExtra(recipeKey, recipe);
@@ -136,15 +118,14 @@ public class DetailRecipeStepFragmentTest {
         }
     }
 
-
     @Test
     public void openDetailActivity_checkIngredientSteps() {
 
         onView(withId(R.id.detail_recycler_view)).check(matches(isDisplayed()));
 
-        onView(withText("0 Recipe Introduction")).check(matches(isDisplayed()));
+        onView(withText(stepId + " " + stepDescription)).check(matches(isDisplayed()));
 
-        onView(withText("2 CUP Graham Cracker crumbs" + "\n")).check(matches(isDisplayed()));
+        onView(withText(ingredientQuantity + " " + ingredientMeasure + " " + ingredientName + "\n")).check(matches(isDisplayed()));
 
         onView(withId(R.id.detail_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 

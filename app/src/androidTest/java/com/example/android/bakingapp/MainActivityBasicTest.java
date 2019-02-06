@@ -2,23 +2,17 @@ package com.example.android.bakingapp;
 
 import androidx.test.espresso.IdlingRegistry;
 import androidx.test.espresso.IdlingResource;
-import androidx.test.espresso.contrib.RecyclerViewActions;
-import androidx.test.filters.LargeTest;
 import androidx.test.rule.ActivityTestRule;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
+
 import static androidx.test.espresso.Espresso.onView;
-import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
-import static androidx.test.espresso.matcher.ViewMatchers.isEnabled;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentation;
-import static org.junit.Assert.assertNotNull;
-import static org.hamcrest.Matchers.allOf;
 
 import com.example.android.bakingapp.activities.MainActivity;
-import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
 
 
 import org.junit.After;
@@ -32,6 +26,8 @@ public class MainActivityBasicTest {
 
     private IdlingResource idlingResource;
 
+    private String recipeName = "Nutella Pie";
+
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class);
@@ -41,14 +37,12 @@ public class MainActivityBasicTest {
         idlingResource = activityTestRule.getActivity().getIdlingResource();
         IdlingRegistry.getInstance().register(idlingResource);
         getInstrumentation().waitForIdleSync();
-
     }
 
     @Test
     public void openMainActivity_displaysRecipeList() {
         onView(withId(R.id.main_recycler_view)).check(matches(isDisplayed()));
-
-        onView(withText("Nutella Pie")).check(matches(isDisplayed()));
+        onView(withText(recipeName)).check(matches(isDisplayed()));
     }
 
     @After
