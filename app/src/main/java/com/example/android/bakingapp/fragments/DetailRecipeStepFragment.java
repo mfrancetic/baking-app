@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.fragments;
 
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -8,20 +9,25 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.core.app.NotificationCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.media.session.MediaButtonReceiver;
+
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -33,6 +39,8 @@ import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
 import com.google.android.exoplayer2.LoadControl;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
@@ -42,14 +50,16 @@ import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
 import com.google.android.exoplayer2.trackselection.TrackSelector;
-import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
+import com.google.android.exoplayer2.ui.PlaybackControlView;
+import com.google.android.exoplayer2.ui.PlayerControlView;
+import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.EventListener {
+public class DetailRecipeStepFragment extends Fragment implements Player.EventListener {
 
     private static final String LOG_TAG = DetailRecipeStepFragment.class.getSimpleName();
 
@@ -74,7 +84,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private String thumbnailUrl;
 
-    private SimpleExoPlayerView simpleExoPlayerView;
+    private PlayerView simpleExoPlayerView;
 
     private static Uri videoUri;
 
@@ -99,15 +109,35 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     private ImageView thumbnailImageView;
 
+    private boolean exoPlayerIsFullScreen = false;
+
+
+    private final String STATE_RESUME_WINDOW = "resumeWindow";
+    private final String STATE_RESUME_POSITION = "resumePosition";
+    private final String STATE_PLAYER_FULLSCREEN = "playerFullscreen";
+
+    private View rootView;
+
 
     private Context context;
 
     private boolean twoPane;
 
+    private Dialog fullScreenDialog;
+
+    private ImageView fullScreenIcon;
+
+    private FrameLayout fullScreenButton;
+
+    private int resumeWindow;
+
+    private long resumePosition;
+
+
     OnDetailRecipeStepClickListener onDetailRecipeStepClickListener;
 
     @Override
-    public void onTimelineChanged(Timeline timeline, Object manifest) {
+    public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
     }
 
@@ -123,14 +153,24 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
     @Override
     public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-        if ((playbackState == ExoPlayer.STATE_READY) && playWhenReady) {
+        if ((playbackState == Player.STATE_READY) && playWhenReady) {
             stateBuilder.setState(PlaybackStateCompat.STATE_PLAYING,
                     exoPlayer.getCurrentPosition(), 1f);
-        } else if ((playbackState == ExoPlayer.STATE_READY)) {
+        } else if ((playbackState == Player.STATE_READY)) {
             stateBuilder.setState(PlaybackStateCompat.STATE_PAUSED,
                     exoPlayer.getCurrentPosition(), 1f);
         }
         mediaSession.setPlaybackState(stateBuilder.build());
+    }
+
+    @Override
+    public void onRepeatModeChanged(int repeatMode) {
+
+    }
+
+    @Override
+    public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
     }
 
 //    @Override
@@ -159,7 +199,17 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
     }
 
     @Override
-    public void onPositionDiscontinuity() {
+    public void onPositionDiscontinuity(int reason) {
+
+    }
+
+    @Override
+    public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+    }
+
+    @Override
+    public void onSeekProcessed() {
 
     }
 
@@ -171,10 +221,12 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         super();
     }
 
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
+
+         rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
         if (rootView.findViewById(R.id.previous_step_button) == null) {
             twoPane = true;
@@ -184,9 +236,13 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             previousStepButton = rootView.findViewById(R.id.previous_step_button);
         }
 
-        simpleExoPlayerView = rootView.findViewById(R.id.player_view);
+        simpleExoPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
 
         emptyPlayerView = rootView.findViewById(R.id.empty_exo_player_view);
+
+        fullScreenIcon = rootView.findViewById(R.id.exo_fullscreen_icon);
+
+        fullScreenButton = rootView.findViewById(R.id.exo_fullscreen_button);
 
         instructionTextView = rootView.findViewById(R.id.recipe_step_instructions);
 
@@ -244,7 +300,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         outState.putParcelable(recipeKey, recipe);
     }
 
-    void generateView() {
+   private void generateView() {
         if (!twoPane) {
             checkIfFirstOrLastButton();
         }
@@ -280,7 +336,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
         instructionTextView.setText(description);
     }
 
-    void checkIfFirstOrLastButton() {
+    private void checkIfFirstOrLastButton() {
         if (!twoPane) {
             if (stepId == 0) {
                 previousStepButton.setEnabled(false);
@@ -361,6 +417,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
             thumbnailImageView.setVisibility(View.GONE);
             simpleExoPlayerView.setVisibility(View.VISIBLE);
             if (exoPlayer == null) {
+                initFullscreenDialog();
+                initFullscreenButton();
                 TrackSelector trackSelector = new DefaultTrackSelector();
                 LoadControl loadControl = new DefaultLoadControl();
                 exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
@@ -377,109 +435,109 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 
                 exoPlayer.setPlayWhenReady(true);
             }
-            int currentOrientation = getResources().getConfiguration().orientation;
-            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                playVideoFullScreen();
-            } else {
-                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
-                }
-            }
+//            int currentOrientation = getResources().getConfiguration().orientation;
+//            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+//                playVideoFullScreen();
+//            } else {
+//                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+//                }
+//            }
         }
     }
 
 
-        private void releasePlayer () {
-            if (exoPlayer != null) {
-                exoPlayer.stop();
-                exoPlayer.release();
-                exoPlayer = null;
-            }
+    private void releasePlayer() {
+        if (exoPlayer != null) {
+            exoPlayer.stop();
+            exoPlayer.release();
+            exoPlayer = null;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        releasePlayer();
+        mediaSession.setActive(false);
+    }
+
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        try {
+            onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
+        } catch (ClassCastException e) {
+            throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
+        }
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        onDetailRecipeStepClickListener = null;
+    }
+
+    private class SessionCallback extends MediaSessionCompat.Callback {
+        @Override
+        public void onPlay() {
+            exoPlayer.setPlayWhenReady(true);
         }
 
         @Override
-        public void onDestroy () {
-            super.onDestroy();
-            releasePlayer();
-            mediaSession.setActive(false);
+        public void onPause() {
+            exoPlayer.setPlayWhenReady(false);
         }
+    }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        releasePlayer();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        releasePlayer();
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        initializePlayer(videoUri);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        initializePlayer(videoUri);
+    }
+
+
+    public static class MediaReceiver extends BroadcastReceiver {
         @Override
-        public void onAttach (Context context){
-            super.onAttach(context);
-            try {
-                onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
-            } catch (ClassCastException e) {
-                throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
-            }
+        public void onReceive(Context context, Intent intent) {
+            MediaButtonReceiver.handleIntent(mediaSession, intent);
         }
 
-        @Override
-        public void onDetach () {
-            super.onDetach();
-            onDetailRecipeStepClickListener = null;
-        }
+    }
 
-        private class SessionCallback extends MediaSessionCompat.Callback {
-            @Override
-            public void onPlay() {
-                exoPlayer.setPlayWhenReady(true);
-            }
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
 
-            @Override
-            public void onPause() {
-                exoPlayer.setPlayWhenReady(false);
-            }
-        }
-
-        @Override
-        public void onPause () {
-            super.onPause();
-            releasePlayer();
-        }
-
-        @Override
-        public void onStop () {
-            super.onStop();
-            releasePlayer();
-        }
-
-        @Override
-        public void onResume () {
-            super.onResume();
-            initializePlayer(videoUri);
-        }
-
-        @Override
-        public void onStart () {
-            super.onStart();
-            initializePlayer(videoUri);
-        }
-
-
-        public static class MediaReceiver extends BroadcastReceiver {
-            @Override
-            public void onReceive(Context context, Intent intent) {
-                MediaButtonReceiver.handleIntent(mediaSession, intent);
-            }
-
-        }
-
-        @Override
-        public void onConfigurationChanged (Configuration newConfig){
-            super.onConfigurationChanged(newConfig);
-
-            int currentOrientation = getResources().getConfiguration().orientation;
-            if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
-                playVideoFullScreen();
-            } else {
-                if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                    ((AppCompatActivity) getActivity()).getSupportActionBar().show();
+        int currentOrientation = getResources().getConfiguration().orientation;
+//        if (currentOrientation == Configuration.ORIENTATION_LANDSCAPE) {
+//            playVideoFullScreen();
+//        } else {
+//            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+//                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 //                getActivity().getWindow().getDecorView().setSystemUiVisibility(
 ////                        View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 ////                         View.SYSTEM_UI_FLAG_VISIBLE
 //                );
-                }
+            }
 //            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
 //                ((AppCompatActivity) getActivity()).getSupportActionBar().show();
 //                getActivity().getWindow().getDecorView().setSystemUiVisibility(
@@ -494,10 +552,10 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //            params.width = ConstraintLayout.LayoutParams.MATCH_PARENT;
 //            params.height = 300;
 //            simpleExoPlayerView.setLayoutParams(params);
-            }
-        }
+//        }
+//    }
 
-        void playVideoFullScreen () {
+    void playVideoFullScreen() {
 //        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
 //        params.width = params.MATCH_CONSTRAINT_SPREAD;
 //        params.height = params.MATCH_CONSTRAINT_SPREAD;
@@ -513,8 +571,8 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //        simpleExoPlayerView.getLayoutParams().height = ViewGroup.LayoutParams.MATCH_PARENT;
 //        simpleExoPlayerView.getLayoutParams().width = ViewGroup.LayoutParams.MATCH_PARENT;
 
-            if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
-                ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
+        if (((AppCompatActivity) getActivity()).getSupportActionBar() != null) {
+            ((AppCompatActivity) getActivity()).getSupportActionBar().hide();
 //            getActivity().getWindow().getDecorView().setSystemUiVisibility(
 //                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
 //                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
@@ -522,7 +580,7 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
 //                            | View.SYSTEM_UI_FLAG_FULLSCREEN
 //                            | View.SYSTEM_UI_FLAG_IMMERSIVE);
-            }
+        }
 
 
 //        ConstraintLayout.LayoutParams params = (ConstraintLayout.LayoutParams) simpleExoPlayerView.getLayoutParams();
@@ -532,21 +590,67 @@ public class DetailRecipeStepFragment extends Fragment implements ExoPlayer.Even
 //        simpleExoPlayerView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 //        simpleExoPlayerView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_FULLSCREEN);
 //        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION | View.SYSTEM_UI_FLAG_FULLSCREEN);
-        }
-
-        public void setStepId ( int index){
-            stepId = index;
-        }
-
-        public void setRecipeName (String name){
-            recipeName = name;
-        }
-
-        public void setRecipe (Recipe recipe){
-            this.recipe = recipe;
-        }
-
-        public void setStepList (List < Step > stepList) {
-            this.stepList = stepList;
-        }
     }
+
+    public void setStepId(int index) {
+        stepId = index;
+    }
+
+    public void setRecipeName(String name) {
+        recipeName = name;
+    }
+
+    public void setRecipe(Recipe recipe) {
+        this.recipe = recipe;
+    }
+
+    public void setStepList(List<Step> stepList) {
+        this.stepList = stepList;
+    }
+
+    private void initFullscreenDialog() {
+
+        fullScreenDialog = new Dialog(getContext(), android.R.style.Theme_Black_NoTitleBar_Fullscreen) {
+            public void onBackPressed() {
+                if (exoPlayerIsFullScreen)
+                    closeFullscreenDialog();
+                super.onBackPressed();
+            }
+        };
+    }
+
+    private void openFullscreenDialog() {
+
+        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        fullScreenDialog.addContentView(simpleExoPlayerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+        fullScreenIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_fullscreen_exit));
+        exoPlayerIsFullScreen = true;
+        fullScreenDialog.show();
+    }
+
+
+    private void closeFullscreenDialog() {
+
+        ((ViewGroup) simpleExoPlayerView.getParent()).removeView(simpleExoPlayerView);
+        ((FrameLayout) rootView.findViewById(R.id.player_view_frame)).addView(simpleExoPlayerView);
+        exoPlayerIsFullScreen = false;
+        fullScreenDialog.dismiss();
+        fullScreenIcon.setImageDrawable(ContextCompat.getDrawable(getContext(), R.drawable.ic_fullscreen_expand));
+    }
+
+    private void initFullscreenButton() {
+
+        PlayerControlView controlView = simpleExoPlayerView.findViewById(R.id.exo_controller);
+        fullScreenIcon = controlView.findViewById(R.id.exo_fullscreen_icon);
+        fullScreenButton = controlView.findViewById(R.id.exo_fullscreen_button);
+        fullScreenButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (!exoPlayerIsFullScreen)
+                    openFullscreenDialog();
+                else
+                    closeFullscreenDialog();
+            }
+        });
+    }
+}
