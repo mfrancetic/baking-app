@@ -22,6 +22,8 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import androidx.appcompat.app.AppCompatActivity;
+import butterknife.BindColor;
+import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -105,12 +107,18 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Nullable
     Button nextStepButton;
 
+    @BindColor(R.color.colorAccent) int colorAccent;
+
+    @BindColor(R.color.colorDivider) int colorDivider;
+
     @BindView(R.id.empty_exo_player_view)
     TextView emptyPlayerView;
 
     private static final String recipeNameKey = "recipeName";
 
     private static final String recipeKey = "recipe";
+
+    @BindString(R.string.app_name) String appName;
 
 
     public String recipeName;
@@ -320,20 +328,20 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     }
 
     private void checkIfFirstOrLastButton() {
-        if (!twoPane) {
+        if (!twoPane && previousStepButton!= null && nextStepButton != null) {
             if (stepId == 0) {
                 previousStepButton.setEnabled(false);
-                previousStepButton.setBackgroundColor(getResources().getColor(R.color.colorDivider));
+                previousStepButton.setBackgroundColor(colorDivider);
             } else {
                 previousStepButton.setEnabled(true);
-                previousStepButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                previousStepButton.setBackgroundColor(colorAccent);
             }
             if (stepId == (stepList.size() - 1)) {
                 nextStepButton.setEnabled(false);
-                nextStepButton.setBackgroundColor(getResources().getColor(R.color.colorDivider));
+                nextStepButton.setBackgroundColor(colorDivider);
             } else {
                 nextStepButton.setEnabled(true);
-                nextStepButton.setBackgroundColor(getResources().getColor(R.color.colorAccent));
+                nextStepButton.setBackgroundColor(colorAccent);
             }
         }
     }
@@ -416,7 +424,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
                 exoPlayer.addListener(this);
 
-                String userAgent = Util.getUserAgent(context, getString(R.string.app_name));
+                String userAgent = Util.getUserAgent(context, appName);
 
                 MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
                         (context, userAgent), new DefaultExtractorsFactory(), null, null);

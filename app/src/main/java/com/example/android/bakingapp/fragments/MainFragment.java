@@ -106,14 +106,12 @@ public class MainFragment extends Fragment {
         }
 
         mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
-
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
 
         recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
             }
         });
 

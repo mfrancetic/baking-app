@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.data;
 
+import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
@@ -11,7 +12,10 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
+import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailActivity;
@@ -24,6 +28,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.crypto.spec.DESedeKeySpec;
+
+import butterknife.BindColor;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceId;
@@ -50,12 +58,12 @@ public class BakingAppWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-
-        if (sharedPreferences != null) {
-            Log.i("prefId -widgetUpdate", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
-            Log.i("prefName-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
-            Log.i("prefIngred-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
-        }
+//
+//        if (sharedPreferences != null) {
+//            Log.i("prefId -widgetUpdate", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
+//            Log.i("prefName-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
+//            Log.i("prefIngred-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
+//        }
 
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
@@ -108,6 +116,7 @@ public class BakingAppWidget extends AppWidgetProvider {
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
     }
+
 
     @Override
     public void onReceive(Context context, Intent intent) {

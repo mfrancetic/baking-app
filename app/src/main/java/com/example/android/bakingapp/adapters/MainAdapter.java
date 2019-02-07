@@ -76,7 +76,6 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, int position) {
 
         recipe = recipes.get(position);
-
         steps = recipe.getStepList();
         ingredients = recipe.getIngredientList();
 

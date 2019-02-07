@@ -8,6 +8,7 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
+import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,7 +34,8 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
     private static final String stepIdKey = "stepId";
 
     @BindView(R.id.divider_recipe_detail)
-    @Nullable View dividerRecipe;
+    @Nullable
+    View dividerRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
         }
     }
 
-
     public void onRecipeStepSelected(int position) {
         if (twoPane) {
             FragmentManager fragmentManager = getSupportFragmentManager();
@@ -93,7 +94,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             startActivity(intent);
         }
     }
-
 
     @Override
     public void onDetailRecipeStepSelected() {
