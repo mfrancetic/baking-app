@@ -36,18 +36,28 @@ public class DetailStepActivity extends AppCompatActivity implements DetailRecip
 
     }
 
+//    @Override
+//    public void onBackPressed() {
+//        int count = getFragmentManager().getBackStackEntryCount();
+//        if (count == 0) {
+//            super.onBackPressed();
+//            Intent intent = new Intent(DetailStepActivity.this, DetailActivity.class);
+//            intent.putExtra(recipeNameKey, recipeName);
+//            intent.putExtra(recipeKey, recipe);
+//            startActivity(intent);
+//            finish();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//    }
+
+
     @Override
     public void onBackPressed() {
-        int count = getFragmentManager().getBackStackEntryCount();
-        if (count == 0) {
-            super.onBackPressed();
-            Intent intent = new Intent(DetailStepActivity.this, DetailActivity.class);
-            intent.putExtra(recipeNameKey, recipeName);
-            intent.putExtra(recipeKey, recipe);
-            startActivity(intent);
-            finish();
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
+            getSupportFragmentManager().popBackStack();
         } else {
-            getFragmentManager().popBackStack();
+            super.onBackPressed();
         }
     }
 }

@@ -69,4 +69,15 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
         }
         return idlingResource;
     }
+
+//    @Override
+//    public void onBackPressed() {
+//        int count = getFragmentManager().getBackStackEntryCount();
+//        if (count == 0) {
+//            super.onBackPressed();
+//            finish();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
+//    }
 }

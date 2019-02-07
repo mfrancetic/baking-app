@@ -18,6 +18,8 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
 import java.util.ArrayList;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepId;
 
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
@@ -54,11 +56,13 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
                 DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_fragment_container, detailRecipeFragment)
+
                         .commit();
 
                 DetailRecipeStepFragment detailRecipeStepFragment = new DetailRecipeStepFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
+
                         .commit();
             }
         } else {
@@ -69,6 +73,7 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_fragment_container, detailRecipeFragment)
+//                    .addToBackStack("DetailFragment")
                     .commit();
         }
     }
@@ -99,5 +104,24 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
     @Override
     public void onDetailRecipeStepSelected() {
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (getSupportFragmentManager().getBackStackEntryCount() !=0) {
+            getSupportFragmentManager().popBackStack();
+        } else {
+            super.onBackPressed();
+        }
+
+//        int count = getFragmentManager().getBackStackEntryCount();
+//        if (count == 0) {
+//            super.onBackPressed();
+//            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
+//            startActivity(intent);
+//            finish();
+//        } else {
+//            getFragmentManager().popBackStack();
+//        }
     }
 }
