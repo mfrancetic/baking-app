@@ -164,10 +164,10 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     private Dialog fullScreenDialog;
 
     @BindView(R.id.exo_fullscreen_icon)
-    ImageView fullScreenIcon;
+    @Nullable ImageView fullScreenIcon;
 
     @BindView(R.id.exo_fullscreen_button)
-    FrameLayout fullScreenButton;
+    @Nullable FrameLayout fullScreenButton;
 
     private int resumeWindow;
 
@@ -251,6 +251,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
+
         ButterKnife.bind(this, rootView);
 
         if (previousStepButton == null) {
@@ -279,16 +281,21 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                 recipeName = intent.getStringExtra(recipeNameKey);
             }
         }
-//
-//        if (recipe == null) {
-//            SharedPreferences.Editor editor = sharedPreferences.edit();
+
+        if (recipe == null) {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
 //            editor.clear().apply();
-//
+
+            recipeName = sharedPreferences.getString(preferenceName, null);
+            ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
+            stepId = sharedPreferences.getInt(preferenceStepId, 0);
+            recipe = DetailRecipeFragment.recipe;
+
 //            editor.putString(preferenceName, recipeName);
 //            editor.putString(preferenceIngredients, ingredientsString);
 //            editor.putInt(preferenceStepId, stepId);
-//            editor.apply();
-//
+            editor.apply();
+
 //            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
 //
 //            Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
@@ -301,17 +308,13 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 //
 //            Intent intent = new Intent(getContext(), MainActivity.class);
 //            startActivity(intent);
-//        }
-
-        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
-
+        }
 
         simpleExoPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
 
         thumbnailImageView.setVisibility(View.GONE);
 
         context = instructionTextView.getContext();
-
 
         if (stepList == null) {
             stepList = recipe.getStepList();
