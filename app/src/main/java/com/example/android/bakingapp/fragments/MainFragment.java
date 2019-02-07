@@ -64,7 +64,7 @@ public class MainFragment extends Fragment {
     TextView emptyTextView;
 
     @BindView(R.id.main_scroll_view)
-    NestedScrollView mainScrollView;
+    @Nullable NestedScrollView mainScrollView;
 
     /**
      * Key of the scroll position X

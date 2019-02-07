@@ -39,6 +39,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeStepFragment.stepIdKey;
+
 public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = DetailRecipeFragment.class.getSimpleName();
@@ -57,9 +59,11 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     OnRecipeStepClickListener onRecipeStepClickListener;
 
-    @BindView(R.id.detail_recycler_view) RecyclerView detailRecyclerView;
+    @BindView(R.id.detail_recycler_view)
+    RecyclerView detailRecyclerView;
 
-    @BindView(R.id.ingredients_text_view) TextView ingredientsTextView;
+    @BindView(R.id.ingredients_text_view)
+    TextView ingredientsTextView;
 
     public static SharedPreferences sharedPreferences;
 
@@ -84,10 +88,10 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static final String stepListKey = "step";
 
-
     public static final String ingredientListKey = "ingredient";
 
     @BindView(R.id.detail_scroll_view)
+    @Nullable
     ScrollView detailScrollView;
 
     /**
@@ -280,6 +284,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         super.onSaveInstanceState(outState);
         outState.putString(recipeNameKey, recipeName);
         outState.putParcelable(recipeKey, recipe);
+        outState.putInt(stepIdKey, DetailRecipeStepFragment.stepId);
         outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
         outState.putParcelableArrayList(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
         scrollX = detailScrollView.getScrollX();

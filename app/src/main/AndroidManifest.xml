@@ -31,7 +31,6 @@
         </activity>
         <activity
             android:name=".activities.DetailStepActivity"
-            android:configChanges="orientation"
             android:parentActivityName=".activities.DetailActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

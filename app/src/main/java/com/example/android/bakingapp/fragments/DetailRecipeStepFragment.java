@@ -83,7 +83,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private static final String stepListKey = "stepList";
 
-    private static final String stepIdKey = "stepId";
+    public static final String stepIdKey = "stepId";
 
     private List<Step> stepList;
 
@@ -91,7 +91,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private Step step;
 
-    private int stepId;
+    public static int stepId;
 
     @BindView(R.id.recipe_step_instructions)
     TextView instructionTextView;
@@ -288,7 +288,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
             recipeName = sharedPreferences.getString(preferenceName, null);
             ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
-            stepId = sharedPreferences.getInt(preferenceStepId, 0);
+//            stepId = sharedPreferences.getInt(preferenceStepId, 0);
             recipe = DetailRecipeFragment.recipe;
 
 //            editor.putString(preferenceName, recipeName);
