@@ -15,6 +15,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
@@ -30,6 +31,7 @@ import com.example.android.bakingapp.models.Step;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -84,6 +86,29 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
 
     public static final String ingredientListKey = "ingredient";
+
+    @BindView(R.id.detail_scroll_view)
+    ScrollView detailScrollView;
+
+    /**
+     * Key of the scroll position X
+     */
+    private static final String SCROLL_POSITION_X = "scrollPositionX";
+
+    /**
+     * Key of the scroll position Y
+     */
+    private static final String SCROLL_POSITION_Y = "scrollPositionY";
+
+    /**
+     * Scroll position X
+     */
+    private int scrollX;
+
+    /**
+     * Scroll position Y
+     */
+    private int scrollY;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
@@ -142,6 +167,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
             recipe = savedInstanceState.getParcelable(recipeKey);
             stepList = savedInstanceState.getParcelableArrayList(stepListKey);
             ingredientList = savedInstanceState.getParcelableArrayList(ingredientListKey);
+            scrollX = savedInstanceState.getInt(SCROLL_POSITION_X);
+            scrollY = savedInstanceState.getInt(SCROLL_POSITION_Y);
         } else {
             Intent intent = getActivity().getIntent();
             if (intent != null && intent.getParcelableExtra(recipeKey) != null) {
@@ -255,6 +282,11 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         outState.putParcelable(recipeKey, recipe);
         outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
         outState.putParcelableArrayList(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
+        scrollX = detailScrollView.getScrollX();
+        scrollY = detailScrollView.getScrollY();
+        outState.putInt(SCROLL_POSITION_X, scrollX);
+        outState.putInt(SCROLL_POSITION_Y, scrollY);
+
     }
 
 
@@ -289,6 +321,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     }
 
     public void populateDetailRecipeView(String ingredients, List<Step> stepList) {
+        detailScrollView.scrollTo(scrollX, scrollY);
         this.stepList = stepList;
         detailAdapter.setSteps(stepList);
         ingredientsTextView.setText(ingredients);

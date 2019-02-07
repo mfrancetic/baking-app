@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,6 +34,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -61,8 +63,34 @@ public class MainFragment extends Fragment {
     @BindView(R.id.empty_text_view)
     TextView emptyTextView;
 
+    @BindView(R.id.main_scroll_view)
+    NestedScrollView mainScrollView;
+
+    /**
+     * Key of the scroll position X
+     */
+    private static final String SCROLL_POSITION_X = "scrollPositionX";
+
+    /**
+     * Key of the scroll position Y
+     */
+    private static final String SCROLL_POSITION_Y = "scrollPositionY";
+
+    /**
+     * Scroll position X
+     */
+    private int scrollX;
+
+    /**
+     * Scroll position Y
+     */
+    private int scrollY;
+
+    private final static String recipeListKey = "recipeList";
+
     @BindView(R.id.constraint_layout_main_tablet_mode)
-    @Nullable ConstraintLayout constraintLayoutTabletMode;
+    @Nullable
+    ConstraintLayout constraintLayoutTabletMode;
 
     private boolean twoPane;
 
@@ -115,7 +143,13 @@ public class MainFragment extends Fragment {
             }
         });
 
-        new RecipeAsyncTask().execute();
+        if (savedInstanceState != null) {
+            scrollX = savedInstanceState.getInt(SCROLL_POSITION_X);
+            scrollY = savedInstanceState.getInt(SCROLL_POSITION_Y);
+            recipeList = savedInstanceState.getParcelableArrayList(recipeListKey);
+        } else {
+            new RecipeAsyncTask().execute();
+        }
         return rootView;
     }
 
@@ -216,12 +250,23 @@ public class MainFragment extends Fragment {
                 populateRecipes(recipes);
             }
             idlingResource.setIdleState(true);
-
         }
     }
 
     private void populateRecipes(List<Recipe> recipes) {
         this.recipeList = recipes;
         mainAdapter.setRecipes(recipeList);
+        mainScrollView.scrollTo(scrollX, scrollY);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle savedInstanceState) {
+        savedInstanceState.putParcelableArrayList(recipeListKey, (ArrayList<? extends Parcelable>) recipeList);
+        scrollX = mainScrollView.getScrollX();
+        scrollY = mainScrollView.getScrollY();
+        savedInstanceState.putInt(SCROLL_POSITION_X, scrollX);
+        savedInstanceState.putInt(SCROLL_POSITION_Y, scrollY);
+        super.onSaveInstanceState(savedInstanceState);
+
     }
 }

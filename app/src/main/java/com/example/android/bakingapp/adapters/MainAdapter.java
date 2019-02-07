@@ -4,7 +4,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Parcelable;
+
 import androidx.annotation.NonNull;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +33,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     public static List<Step> currentSteps;
 
-    public static  List<Ingredient> currentIngredients;
+    public static List<Ingredient> currentIngredients;
 
     public static Recipe currentRecipe;
 
@@ -48,8 +50,10 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.recipe_name_text_view) TextView recipeNameTextView;
-        @BindView(R.id.recipe_image_view) ImageView recipeImageView;
+        @BindView(R.id.recipe_name_text_view)
+        TextView recipeNameTextView;
+        @BindView(R.id.recipe_image_view)
+        ImageView recipeImageView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -100,14 +104,12 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         recipeNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                int recipeId = v.getId();
+            public void onClick(View v) {
                 currentRecipe = recipes.get(position);
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
                 openRecipeIntent.putExtra(recipeKey, currentRecipe);
-                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<?extends Parcelable>) currentIngredients);
-                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<?extends Parcelable>)currentSteps);
+                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<? extends Parcelable>) currentIngredients);
+                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) currentSteps);
                 context.startActivity(openRecipeIntent);
             }
         });
