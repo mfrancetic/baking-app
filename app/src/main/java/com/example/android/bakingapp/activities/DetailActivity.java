@@ -18,6 +18,8 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
 import java.util.ArrayList;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepId;
+
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
 
@@ -46,7 +48,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
         if (dividerRecipe != null) {
             twoPane = true;
-
             if (savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
 
@@ -84,13 +85,14 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_step_fragment_container, newDetailRecipeStepFragment)
                     .commit();
+
         } else {
             final Intent intent = new Intent(this, DetailStepActivity.class);
             intent.putExtra(stepIdKey, position);
             intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
             intent.putExtra(recipeKey, DetailRecipeFragment.recipe);
+            intent.putExtra(stepIdKey, stepId);
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) DetailRecipeFragment.stepList);
-
             startActivity(intent);
         }
     }

@@ -47,6 +47,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static final String recipeKey = "recipe";
 
+    public static final String stepId = "stepId";
+
     List<Ingredient> ingredientList;
 
     DetailAdapter detailAdapter;
@@ -62,6 +64,8 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     public static final String preferenceId = "preferenceId";
 
     public static final String preferenceName = "preferenceName";
+
+    public static final String preferenceStepId = "stepId";
 
     public static final String preferenceIngredients = "preferenceIngredients";
 
@@ -133,7 +137,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 //            }
 //        }
 
-
         if (savedInstanceState != null) {
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
@@ -171,7 +174,9 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
             startActivity(intent);
         }
 
-        recipeName = recipe.getName();
+        if (recipe != null && recipeName == null) {
+            recipeName = recipe.getName();
+        }
 
         if (getActivity() != null) {
             getActivity().setTitle(recipeName);

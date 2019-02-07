@@ -2,9 +2,12 @@ package com.example.android.bakingapp.fragments;
 
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.appwidget.AppWidgetManager;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -36,6 +39,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.activities.MainActivity;
+import com.example.android.bakingapp.data.BakingAppWidget;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
 import com.google.android.exoplayer2.DefaultLoadControl;
@@ -63,7 +68,15 @@ import com.google.android.exoplayer2.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-public class DetailRecipeStepFragment extends Fragment implements Player.EventListener {
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceId;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceStepId;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
+
+public class DetailRecipeStepFragment extends Fragment implements Player.EventListener,
+        SharedPreferences.OnSharedPreferenceChangeListener {
 
     private static final String LOG_TAG = DetailRecipeStepFragment.class.getSimpleName();
 
@@ -85,7 +98,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     SimpleExoPlayer exoPlayer;
 
-   @BindView (R.id.player_view_frame) FrameLayout playerViewFrame;
+    @BindView(R.id.player_view_frame)
+    FrameLayout playerViewFrame;
 
     private String videoUrl;
 
@@ -107,9 +121,11 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Nullable
     Button nextStepButton;
 
-    @BindColor(R.color.colorAccent) int colorAccent;
+    @BindColor(R.color.colorAccent)
+    int colorAccent;
 
-    @BindColor(R.color.colorDivider) int colorDivider;
+    @BindColor(R.color.colorDivider)
+    int colorDivider;
 
     @BindView(R.id.empty_exo_player_view)
     TextView emptyPlayerView;
@@ -118,7 +134,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private static final String recipeKey = "recipe";
 
-    @BindString(R.string.app_name) String appName;
+    @BindString(R.string.app_name)
+    String appName;
 
 
     public String recipeName;
@@ -127,6 +144,9 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     @BindView(R.id.thumbnail_image_view)
     ImageView thumbnailImageView;
+
+    public static SharedPreferences sharedPreferences;
+
 
     private boolean exoPlayerIsFullScreen = false;
 
@@ -213,6 +233,11 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     }
 
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+
+    }
+
     public interface OnDetailRecipeStepClickListener {
         void onDetailRecipeStepSelected();
     }
@@ -226,8 +251,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
-
         ButterKnife.bind(this, rootView);
 
         if (previousStepButton == null) {
@@ -236,20 +259,16 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             twoPane = false;
         }
 
-        simpleExoPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
-
-        thumbnailImageView.setVisibility(View.GONE);
-
-        context = instructionTextView.getContext();
+        if (getContext() != null) {
+            sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
+        }
 
         if (savedInstanceState != null) {
             savedInstanceState.getInt(stepIdKey, stepId);
             savedInstanceState.getParcelableArrayList(stepListKey);
             savedInstanceState.getString(recipeNameKey);
             savedInstanceState.getParcelable(recipeKey);
-        }
-
-        if (getActivity() != null) {
+        } else if (getActivity() != null) {
             Intent intent = getActivity().getIntent();
             if (intent != null) {
                 recipe = intent.getParcelableExtra(recipeKey);
@@ -260,6 +279,39 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                 recipeName = intent.getStringExtra(recipeNameKey);
             }
         }
+//
+//        if (recipe == null) {
+//            SharedPreferences.Editor editor = sharedPreferences.edit();
+//            editor.clear().apply();
+//
+//            editor.putString(preferenceName, recipeName);
+//            editor.putString(preferenceIngredients, ingredientsString);
+//            editor.putInt(preferenceStepId, stepId);
+//            editor.apply();
+//
+//            AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
+//
+//            Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
+//            widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+//
+//            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
+//
+//            widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+//            getContext().sendBroadcast(widgetIntent);
+//
+//            Intent intent = new Intent(getContext(), MainActivity.class);
+//            startActivity(intent);
+//        }
+
+        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
+
+
+        simpleExoPlayerView = (PlayerView) rootView.findViewById(R.id.player_view);
+
+        thumbnailImageView.setVisibility(View.GONE);
+
+        context = instructionTextView.getContext();
+
 
         if (stepList == null) {
             stepList = recipe.getStepList();
@@ -273,6 +325,27 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             getActivity().setTitle(recipeName);
         }
 
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
+
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().apply();
+
+        editor.putString(preferenceName, recipeName);
+        editor.putString(preferenceIngredients, ingredientsString);
+        editor.putInt(preferenceStepId, stepId);
+        editor.apply();
+
+        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
+
+        Intent widgetIntent = new Intent(context, BakingAppWidget.class);
+        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+
+        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName(), BakingAppWidget.class.getName()));
+
+        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
+        context.sendBroadcast(widgetIntent);
+
+
         generateView();
 
         if (!twoPane) {
@@ -280,6 +353,15 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             generateButtons();
         }
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.clear().apply();
+
+        sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
+        super.onDestroyView();
     }
 
     @Override
@@ -328,7 +410,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     }
 
     private void checkIfFirstOrLastButton() {
-        if (!twoPane && previousStepButton!= null && nextStepButton != null) {
+        if (!twoPane && previousStepButton != null && nextStepButton != null) {
             if (stepId == 0) {
                 previousStepButton.setEnabled(false);
                 previousStepButton.setBackgroundColor(colorDivider);
@@ -388,7 +470,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                                 | PlaybackStateCompat.ACTION_PLAY_PAUSE);
 
         mediaSession.setPlaybackState(stateBuilder.build());
-
 
         mediaSession.setCallback(new SessionCallback());
 

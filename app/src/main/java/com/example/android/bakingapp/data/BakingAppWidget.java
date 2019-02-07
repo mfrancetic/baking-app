@@ -37,6 +37,7 @@ import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingre
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceId;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceStepId;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
@@ -53,6 +54,8 @@ public class BakingAppWidget extends AppWidgetProvider {
     private static final String recipeNameKey = "recipeName";
 
     private static final String ingredientsKey = "ingredients";
+
+    private static final String stepIdKey = "stepId";
 
     private static RemoteViews remoteViews;
 
@@ -73,6 +76,7 @@ public class BakingAppWidget extends AppWidgetProvider {
 
             String recipeName = sharedPreferences.getString(preferenceName, null);
             String ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
+            int stepId = sharedPreferences.getInt(preferenceStepId, 0);
             remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
             remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
             remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
@@ -82,6 +86,7 @@ public class BakingAppWidget extends AppWidgetProvider {
             intent.putExtra(recipeNameKey, recipeName);
             intent.putExtra(recipeKey, recipe);
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) stepList);
+            intent.putExtra(stepIdKey, stepId);
             intent.putExtra(ingredientsKey, ingredientsString);
 
             remoteViews.setOnClickPendingIntent(R.id.widget_relative_layout, pendingIntent);

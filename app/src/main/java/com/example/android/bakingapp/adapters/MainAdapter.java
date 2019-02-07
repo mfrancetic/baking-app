@@ -29,11 +29,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Recipe> recipes;
 
-    public static List<Step> steps;
+    public static List<Step> currentSteps;
 
-    public static  List<Ingredient> ingredients;
+    public static  List<Ingredient> currentIngredients;
 
-    public static Recipe recipe;
+    public static Recipe currentRecipe;
 
     private Context context;
 
@@ -73,18 +73,18 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     @Override
-    public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, final int position) {
 
-        recipe = recipes.get(position);
-        steps = recipe.getStepList();
-        ingredients = recipe.getIngredientList();
+        currentRecipe = recipes.get(position);
+        currentSteps = currentRecipe.getStepList();
+        currentIngredients = currentRecipe.getIngredientList();
 
         TextView recipeNameTextView = viewHolder.recipeNameTextView;
-        recipeNameTextView.setText(recipe.getName());
+        recipeNameTextView.setText(currentRecipe.getName());
 
         ImageView recipeImageView = viewHolder.recipeImageView;
 
-        String image = recipe.getImage();
+        String image = currentRecipe.getImage();
         if (image.isEmpty()) {
             recipeImageView.setImageResource(R.drawable.cupcake);
         } else {
@@ -100,11 +100,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
         recipeNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
+                int recipeId = v.getId();
+                currentRecipe = recipes.get(position);
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
-                openRecipeIntent.putExtra(recipeKey, recipe);
-                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<?extends Parcelable>) ingredients);
-                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<?extends Parcelable>)steps);
+                openRecipeIntent.putExtra(recipeKey, currentRecipe);
+                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<?extends Parcelable>) currentIngredients);
+                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<?extends Parcelable>)currentSteps);
                 context.startActivity(openRecipeIntent);
             }
         });
