@@ -9,7 +9,10 @@
         style="@style/RecipeImageViewStyle"
         android:id="@+id/recipe_image_view"
         android:contentDescription="@string/image_content_description"
-        android:src="@drawable/cupcake" />
+        android:src="@drawable/cupcake"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
 
     <TextView
         style="@style/TextViewStyle"

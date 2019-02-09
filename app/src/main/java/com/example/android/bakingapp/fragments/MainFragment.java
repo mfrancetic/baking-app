@@ -137,6 +137,9 @@ public class MainFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
 
+        recyclerView.setFocusable(false);
+        mainScrollView.requestFocus();
+
         recyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

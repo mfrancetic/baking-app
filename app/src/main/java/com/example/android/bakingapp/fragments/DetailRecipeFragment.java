@@ -233,6 +233,9 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         detailRecyclerView.setLayoutManager(layoutManager);
         detailRecyclerView.setAdapter(detailAdapter);
 
+        detailRecyclerView.setFocusable(false);
+        detailScrollView.requestFocus();
+
         StringBuilder stringBuilder = new StringBuilder();
 
         for (int i = 0; i < ingredientList.size(); i++) {

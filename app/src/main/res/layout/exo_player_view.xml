@@ -18,7 +18,6 @@
         android:layout_gravity="center">
 
         <!-- Video surface will be inserted as the first child of the content frame. -->
-
         <View
             android:id="@id/exo_shutter"
             android:layout_width="match_parent"
@@ -29,13 +28,14 @@
             android:id="@id/exo_artwork"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scaleType="fitXY" />
+            android:scaleType="fitXY"
+            android:contentDescription="@string/exo_artwork_content_description"
+            />
 
         <com.google.android.exoplayer2.ui.SubtitleView
             android:id="@id/exo_subtitles"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />
-
     </com.google.android.exoplayer2.ui.AspectRatioFrameLayout>
 
     <View
@@ -52,5 +52,4 @@
         android:id="@id/exo_overlay"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
-
 </merge>

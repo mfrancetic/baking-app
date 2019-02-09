@@ -23,7 +23,7 @@
             android:id="@+id/divider_recipe_detail"
             style="@style/DividerHorizontalStyle"
             android:layout_width="match_parent"
-            android:layout_height="3dp"
+            android:layout_height="@dimen/divider_detail_height"
             android:layout_below="@id/ingredients_text_view"
             android:background="@android:color/darker_gray" />
 
