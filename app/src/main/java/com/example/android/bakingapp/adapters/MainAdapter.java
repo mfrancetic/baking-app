@@ -31,11 +31,11 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Recipe> recipes;
 
-    public static List<Step> currentSteps;
+    public static List<Step> steps;
 
-    public static List<Ingredient> currentIngredients;
+    public static List<Ingredient> ingredients;
 
-    public static Recipe currentRecipe;
+    public static Recipe recipe;
 
     private Context context;
 
@@ -45,11 +45,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     public static final String stepListKey = "step";
 
-
     public static final String ingredientListKey = "ingredient";
 
     class ViewHolder extends RecyclerView.ViewHolder {
-
         @BindView(R.id.recipe_name_text_view)
         TextView recipeNameTextView;
         @BindView(R.id.recipe_image_view)
@@ -78,48 +76,59 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, final int position) {
+        /* Get the recipe, step list and ingredient list of the recipe */
+        recipe = recipes.get(position);
+        steps = recipe.getStepList();
+        ingredients = recipe.getIngredientList();
 
-        currentRecipe = recipes.get(position);
-        currentSteps = currentRecipe.getStepList();
-        currentIngredients = currentRecipe.getIngredientList();
-
+        /* Set the recipe name to the TextView */
         TextView recipeNameTextView = viewHolder.recipeNameTextView;
-        recipeNameTextView.setText(currentRecipe.getName());
+        recipeNameTextView.setText(recipe.getName());
 
+        /* Set the recipe image to the ImageView */
         ImageView recipeImageView = viewHolder.recipeImageView;
-
-        String image = currentRecipe.getImage();
+        String image = recipe.getImage();
+        /* If there is no image, then set the image of the cupcake. Otherwise, set the image of the recipe */
         if (image.isEmpty()) {
             recipeImageView.setImageResource(R.drawable.cupcake);
         } else {
             Uri recipeImageUri = Uri.parse(image);
-
             com.squareup.picasso.Picasso
                     .get()
                     .load(recipeImageUri)
                     .into(recipeImageView);
         }
 
+        /* Get the context from the recipeNameTextView */
         final Context context = recipeNameTextView.getContext();
 
+        /* Set an OnClickListener to the recipeNameTextView */
         recipeNameTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                currentRecipe = recipes.get(position);
+                /* When clicking on the recipe, launch an intent that opens the details of the selected
+                * recipe in the DetailActivity */
+                recipe = recipes.get(position);
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
-                openRecipeIntent.putExtra(recipeKey, currentRecipe);
-                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<? extends Parcelable>) currentIngredients);
-                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) currentSteps);
+                openRecipeIntent.putExtra(recipeKey, recipe);
+                openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<? extends Parcelable>) ingredients);
+                openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) steps);
                 context.startActivity(openRecipeIntent);
             }
         });
     }
 
+    /**
+     * Sets the list of recipes and notifies the adapter the dataset has changed
+     */
     public void setRecipes(List<Recipe> recipeList) {
         this.recipes = recipeList;
         notifyDataSetChanged();
     }
 
+    /**
+     * Returns the number of recipes in the list
+     */
     @Override
     public int getItemCount() {
         if (recipes == null) {

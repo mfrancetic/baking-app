@@ -13,11 +13,9 @@ import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientListKey;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
 import static org.hamcrest.Matchers.allOf;
-
 import static androidx.test.espresso.intent.Intents.intending;
 
 import androidx.test.espresso.intent.rule.IntentsTestRule;
-
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import static androidx.test.espresso.Espresso.onView;
@@ -31,6 +29,7 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
+
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,7 +38,9 @@ import org.junit.runner.RunWith;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Test for opening and displaying the DetailActivity
+ */
 @RunWith(AndroidJUnit4.class)
 public class DetailActivityTest {
 
@@ -71,21 +72,23 @@ public class DetailActivityTest {
 
     private int servings;
 
+    /**
+     * IntentsTestRule for the DetailActivity
+     */
     @Rule
     public IntentsTestRule<DetailActivity> intentsTestRule =
             new IntentsTestRule<DetailActivity>(DetailActivity.class) {
+                /** Provides data for the intent that opens the DetailActivity */
                 @Override
                 protected Intent getActivityIntent() {
-
                     Ingredient ingredient = new Ingredient(ingredientQuantity, ingredientMeasure, ingredientName);
                     Step step = new Step(stepId, stepDescription, stepDescription,
                             stepVideoUrl, null);
-
                     ingredientList.add(ingredient);
                     stepList.add(step);
-
                     recipe = new Recipe(recipeId, recipeName, ingredientList, stepList, servings, null);
 
+                    /* Create an intent with the recipe, ingredient and step list */
                     intent = new Intent();
                     intent.putExtra(recipeKey, recipe);
                     intent.putExtra(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
@@ -94,16 +97,20 @@ public class DetailActivityTest {
                 }
             };
 
+    /**
+     * Replace the fragments and open the DetailActivity
+     */
     @Before
     public void openDetailActivity() {
-
         if (!DetailActivity.twoPane) {
+            /* In phone mode, replace the detail fragment */
             Fragment fragment = new DetailRecipeFragment();
             intentsTestRule.getActivity()
                     .getSupportFragmentManager().beginTransaction()
                     .replace(R.id.detail_fragment_container, fragment)
                     .commit();
         } else {
+            /* In tablet mode, replace both the detail and detail_step fragment */
             Fragment fragment = new DetailRecipeFragment();
             intentsTestRule.getActivity()
                     .getSupportFragmentManager().beginTransaction()
@@ -118,20 +125,21 @@ public class DetailActivityTest {
         }
     }
 
+    /**
+     * Test if opening the DetailActivity displays the ingredients and recipe steps
+     */
     @Test
     public void openDetailActivity_checkIngredientSteps() {
-
         onView(withId(R.id.detail_recycler_view)).check(matches(isDisplayed()));
-
         onView(withText(stepId + " " + stepDescription)).check(matches(isDisplayed()));
-
         onView(withText(ingredientQuantity + " " + ingredientMeasure + " " + ingredientName + "\n")).check(matches(isDisplayed()));
-
         onView(withId(R.id.detail_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         if (DetailActivity.twoPane) {
+            /* In tablet mode, check if the layout for the tablet mode is displayed */
             onView(withId(R.id.constraint_layout_step_tablet_mode)).check(matches(isDisplayed()));
         } else {
+            /* In phone mode, check if all the correct data is passed to the intent */
             intending(allOf(hasExtra(
                     recipeKey, recipe),
                     hasExtra(ingredientListKey, ingredientList),

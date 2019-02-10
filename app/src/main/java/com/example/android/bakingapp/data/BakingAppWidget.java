@@ -1,47 +1,26 @@
 package com.example.android.bakingapp.data;
 
-import android.app.Activity;
 import android.app.PendingIntent;
 import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
 import android.os.Parcelable;
-import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.RemoteViews;
-import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailActivity;
 import com.example.android.bakingapp.activities.MainActivity;
-import com.example.android.bakingapp.fragments.DetailRecipeFragment;
-import com.example.android.bakingapp.models.Ingredient;
-import com.example.android.bakingapp.models.Recipe;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import javax.crypto.spec.DESedeKeySpec;
-
-import butterknife.BindColor;
-import butterknife.BindView;
-import butterknife.ButterKnife;
-
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceId;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceStepId;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferences;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeKey;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.sharedPreferences;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepList;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepListKey;
@@ -61,34 +40,36 @@ public class BakingAppWidget extends AppWidgetProvider {
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
-//
-//        if (sharedPreferences != null) {
-//            Log.i("prefId -widgetUpdate", String.valueOf(sharedPreferences.getInt(preferenceId, 0)));
-//            Log.i("prefName-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceName, "default")));
-//            Log.i("prefIngred-widgetUpdate", String.valueOf(sharedPreferences.getString(preferenceIngredients, "default")));
-//        }
 
+        /* Create a new RemoteViews variable with the baking_app_widget layout */
         remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
         if (sharedPreferences != null) {
+            /* If there are sharedPreferences available, create an intent to launch the detail activity */
             Intent intent = new Intent(context, DetailActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
 
+            /* Get the recipe name, ingredients and step id from the sharedPreferences */
             String recipeName = sharedPreferences.getString(preferenceName, null);
             String ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
             int stepId = sharedPreferences.getInt(preferenceStepId, 0);
+
+            /* Set the recipe name and ingredients to the appropriate TextViews and hide the recipe
+            * image */
             remoteViews.setTextViewText(R.id.widget_recipe_name, recipeName);
             remoteViews.setTextViewText(R.id.widget_recipe_ingredients, ingredientsString);
             remoteViews.setViewVisibility(R.id.widget_recipe_image, View.GONE);
             remoteViews.setViewVisibility(R.id.widget_recipe_name, View.VISIBLE);
             remoteViews.setViewVisibility(R.id.widget_recipe_ingredients, View.VISIBLE);
 
+            /* Put the recipe, recipe name, step list, step id and ingredients to the intent */
             intent.putExtra(recipeNameKey, recipeName);
             intent.putExtra(recipeKey, recipe);
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) stepList);
             intent.putExtra(stepIdKey, stepId);
             intent.putExtra(ingredientsKey, ingredientsString);
 
+            /* Set an OnClickPendingIntent to the widget */
             remoteViews.setOnClickPendingIntent(R.id.widget_relative_layout, pendingIntent);
         } else {
             Intent intent = new Intent(context, MainActivity.class);
@@ -101,12 +82,11 @@ public class BakingAppWidget extends AppWidgetProvider {
             remoteViews.setOnClickPendingIntent(R.id.widget_recipe_image, pendingIntent);
         }
         appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-
     }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        // There may be multiple widgets active, so update all of them
+        /* In case there are multiple widgets active, update all of them */
         for (int appWidgetId : appWidgetIds) {
             updateAppWidget(context, appWidgetManager, appWidgetId);
         }
@@ -114,29 +94,25 @@ public class BakingAppWidget extends AppWidgetProvider {
 
     @Override
     public void onEnabled(Context context) {
-        // Enter relevant functionality for when the first widget is created
     }
 
     @Override
     public void onDisabled(Context context) {
-        // Enter relevant functionality for when the last widget is disabled
     }
-
 
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
+        /* If there is an action, update the app widget and notify it that the data has changed */
         if (intent.getAction() != null) {
             if (intent.getAction().equals(AppWidgetManager.ACTION_APPWIDGET_UPDATE)) {
                 AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
                 ComponentName appWidget = new ComponentName(context.getPackageName(), BakingAppWidget.class.getName());
                 int[] appWidgetIds = appWidgetManager.getAppWidgetIds(appWidget);
-
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_image);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_name);
                 appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_recipe_ingredients);
-//                appWidgetManager.notifyAppWidgetViewDataChanged(appWidgetIds, R.id.widget_relative_layout);
             }
         }
     }

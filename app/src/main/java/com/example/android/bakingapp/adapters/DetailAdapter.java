@@ -18,7 +18,9 @@ import com.example.android.bakingapp.models.Step;
 
 import java.util.List;
 
-
+/**
+ * DetailAdapter for the RecyclerView in the DetailRecipeFragment
+ */
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
     private List<Step> steps;
@@ -41,11 +43,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
-
     class ViewHolder extends RecyclerView.ViewHolder {
 
         @BindView(R.id.recipe_step_description)
-         TextView recipeDescriptionTextView;
+        TextView recipeDescriptionTextView;
 
         ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -73,11 +74,10 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
-
         String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();
-
         recipeDescriptionTextView.setText(recipeDescription);
 
+        /* Set the onClickListener to the recipe description view */
         viewHolder.recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,11 +86,17 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         });
     }
 
+    /**
+     * Sets the list of steps and notifies the adapter the dataset has changed
+     */
     public void setSteps(List<Step> stepList) {
         this.steps = stepList;
         notifyDataSetChanged();
     }
 
+    /**
+     * Returns the number of recipe steps
+     */
     @Override
     public int getItemCount() {
         if (steps == null) {

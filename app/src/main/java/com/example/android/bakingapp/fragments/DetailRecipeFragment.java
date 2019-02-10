@@ -11,7 +11,6 @@ import android.os.Parcelable;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +20,7 @@ import android.widget.TextView;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.MainActivity;
 import com.example.android.bakingapp.adapters.DetailAdapter;
-//import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.data.BakingAppWidget;
-//import com.example.android.bakingapp.data.WidgetRemoteViewsService;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -31,7 +28,6 @@ import com.example.android.bakingapp.models.Step;
 import java.util.ArrayList;
 import java.util.List;
 
-import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -42,8 +38,6 @@ import butterknife.ButterKnife;
 import static com.example.android.bakingapp.fragments.DetailRecipeStepFragment.stepIdKey;
 
 public class DetailRecipeFragment extends Fragment implements SharedPreferences.OnSharedPreferenceChangeListener {
-
-    private static final String LOG_TAG = DetailRecipeFragment.class.getSimpleName();
 
     public static Recipe recipe;
 
@@ -67,7 +61,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static SharedPreferences sharedPreferences;
 
-    public static final String preferenceId = "preferenceId";
+    static final String preferenceId = "preferenceId";
 
     public static final String preferenceName = "preferenceName";
 
@@ -75,16 +69,13 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static final String preferenceIngredients = "preferenceIngredients";
 
-    public static final String preferences = "preferences";
+    static final String preferences = "preferences";
 
     public static String recipeName;
 
-    public static String ingredientsString;
+    static String ingredientsString;
 
-    public static final String recipeNameKey = "recipeName";
-
-
-//    WidgetRemoteViewsService widgetRemoteViewsService;
+    static final String recipeNameKey = "recipeName";
 
     public static final String stepListKey = "step";
 
@@ -94,41 +85,21 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @Nullable
     ScrollView detailScrollView;
 
-    /**
-     * Key of the scroll position X
-     */
     private static final String SCROLL_POSITION_X = "scrollPositionX";
 
-    /**
-     * Key of the scroll position Y
-     */
     private static final String SCROLL_POSITION_Y = "scrollPositionY";
 
-    /**
-     * Scroll position X
-     */
     private int scrollX;
 
-    /**
-     * Scroll position Y
-     */
     private int scrollY;
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-
-//        AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-//
-//        Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
-//        widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//
-//        int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-//
-//        widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//        getContext().sendBroadcast(widgetIntent);
     }
 
-
+    /**
+     * Inteface for the RecipeStepClickListener
+     */
     public interface OnRecipeStepClickListener {
         void onRecipeStepSelected(int position);
     }
@@ -141,32 +112,14 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
+        /* If the context exists, get the sharedPreferences */
         if (getContext() != null) {
             sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
         }
 
-//            if (sharedPreferences != null && recipe != null) {
-//                SharedPreferences.Editor editor = sharedPreferences.edit();
-//                editor.clear().apply();
-//
-//                editor.putString(preferenceName, recipeName);
-//                editor.putString(preferenceIngredients, ingredientsString);
-//                editor.apply();
-//
-//                AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-//
-//                Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
-//                widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-//
-//                int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-//
-//                widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
-//                getContext().sendBroadcast(widgetIntent);
-//
-//            }
-//        }
-
         if (savedInstanceState != null) {
+            /* If there is a savedInstanceState, get the recipe name, recipe, step list, ingredient list,
+             * scrollX and scrollY position */
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
             stepList = savedInstanceState.getParcelableArrayList(stepListKey);
@@ -174,70 +127,85 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
             scrollX = savedInstanceState.getInt(SCROLL_POSITION_X);
             scrollY = savedInstanceState.getInt(SCROLL_POSITION_Y);
         } else {
-            Intent intent = getActivity().getIntent();
-            if (intent != null && intent.getParcelableExtra(recipeKey) != null) {
-                recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
-                recipeName = recipe.getName();
-                stepList = getActivity().getIntent().getParcelableArrayListExtra(stepListKey);
-                ingredientList = getActivity().getIntent().getParcelableArrayListExtra(ingredientListKey);
+            if (getActivity() != null) {
+                /* If there is no savedInstanceState, get the intent and the recipe, recipe name, step
+                 * list and ingredient list from it */
+                Intent intent = getActivity().getIntent();
+                if (intent != null && intent.getParcelableExtra(recipeKey) != null) {
+                    recipe = getActivity().getIntent().getParcelableExtra(recipeKey);
+                    recipeName = recipe.getName();
+                    stepList = getActivity().getIntent().getParcelableArrayListExtra(stepListKey);
+                    ingredientList = getActivity().getIntent().getParcelableArrayListExtra(ingredientListKey);
+                }
             }
         }
 
+        /* If there is no recipe, put the recipeName, ingredientsString in the shared preferences */
         if (recipe == null) {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear().apply();
-
             editor.putString(preferenceName, recipeName);
             editor.putString(preferenceIngredients, ingredientsString);
             editor.apply();
 
+            /* Update the app widget */
             AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(getContext());
-
             Intent widgetIntent = new Intent(getContext(), BakingAppWidget.class);
             widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
-            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(), BakingAppWidget.class.getName()));
-
+            /* Send a broadcast for all the app widget ids */
+            int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(getContext().getPackageName(),
+                    BakingAppWidget.class.getName()));
             widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
             getContext().sendBroadcast(widgetIntent);
 
+            /* Launch a new intent that opens the MainActivity */
             Intent intent = new Intent(getContext(), MainActivity.class);
             startActivity(intent);
         }
 
+        /* If the recipe exists, but the recipe name doesn't, get the name from the recipe */
         if (recipe != null && recipeName == null) {
             recipeName = recipe.getName();
         }
 
+        /* Set the title of the activity to the recipe name */
         if (getActivity() != null) {
             getActivity().setTitle(recipeName);
         }
 
+        /* Get the step list, ingredient list and recipe id */
         stepList = recipe.getStepList();
-
         ingredientList = recipe.getIngredientList();
-
         int recipeId = recipe.getId();
 
+        /* Inflate the fragment_recipe_detail */
         View rootView = inflater.inflate(R.layout.fragment_recipe_detail, container, false);
 
+        /* Bind the views with their ID's using the Butterknife library */
         ButterKnife.bind(this, rootView);
 
+        /* Get the context of the rootView */
         Context context = rootView.getContext();
 
+        /* Create a new DetailAdapter and get the fragment activity */
         detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
-
         final FragmentActivity fragmentActivity = getActivity();
 
+        /* Create a new LinearLayoutManager and set it to the RecyclerView, as well as the
+         * detailAdapter */
         LinearLayoutManager layoutManager = new LinearLayoutManager(fragmentActivity);
         detailRecyclerView.setLayoutManager(layoutManager);
         detailRecyclerView.setAdapter(detailAdapter);
 
+        /* Make detailRecyclerView not focusable and request focus from the detailScrollView */
         detailRecyclerView.setFocusable(false);
-        detailScrollView.requestFocus();
+        if (detailScrollView != null) {
+            detailScrollView.requestFocus();
+        }
 
+        /* Create a new string from the quantity, measure and name of the ingredient */
         StringBuilder stringBuilder = new StringBuilder();
-
         for (int i = 0; i < ingredientList.size(); i++) {
             int quantityInt = ingredientList.get(i).getIngredientQuantity();
             String quantity = String.valueOf(quantityInt);
@@ -246,29 +214,30 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
             String ingredientLine = quantity + " " + measure + " " + ingredient + "\n";
             stringBuilder.append(ingredientLine);
         }
-
         ingredientsString = stringBuilder.toString();
 
+        /* Register the OnSharedPreferenceChangeListener */
         sharedPreferences.registerOnSharedPreferenceChangeListener(this);
 
+        /* Clear and then add the preference id, name and ingredients */
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().apply();
-
         editor.putInt(preferenceId, recipeId);
         editor.putString(preferenceName, recipeName);
         editor.putString(preferenceIngredients, ingredientsString);
         editor.apply();
 
+        /* Update the app widget */
         AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
-
         Intent widgetIntent = new Intent(context, BakingAppWidget.class);
         widgetIntent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
 
+        /* Send the broadcast to update all the app widget id's */
         int[] ids = appWidgetManager.getAppWidgetIds(new ComponentName(context.getPackageName(), BakingAppWidget.class.getName()));
-
         widgetIntent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, ids);
         context.sendBroadcast(widgetIntent);
 
+        /* Set an OnClickListener to the detailRecyclerView */
         detailRecyclerView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -276,12 +245,14 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
             }
         });
 
+        /* Populate the DetailRecipeView */
         populateDetailRecipeView(ingredientsString, stepList);
-
         return rootView;
     }
 
-
+    /**
+     * Store the values under their keys to the savedInstanceState bundle
+     */
     @Override
     public void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
@@ -290,19 +261,21 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         outState.putInt(stepIdKey, DetailRecipeStepFragment.stepId);
         outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
         outState.putParcelableArrayList(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
-        scrollX = detailScrollView.getScrollX();
-        scrollY = detailScrollView.getScrollY();
-        outState.putInt(SCROLL_POSITION_X, scrollX);
-        outState.putInt(SCROLL_POSITION_Y, scrollY);
-
+        if (detailScrollView != null) {
+            scrollX = detailScrollView.getScrollX();
+            scrollY = detailScrollView.getScrollY();
+            outState.putInt(SCROLL_POSITION_X, scrollX);
+            outState.putInt(SCROLL_POSITION_Y, scrollY);
+        }
     }
 
-
+    /**
+     * OnDestroy, clear the sharedPreferences and unregister the OnSharedPreferenceChangeListener
+     */
     @Override
     public void onDestroy() {
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.clear().apply();
-
         sharedPreferences.unregisterOnSharedPreferenceChangeListener(this);
         super.onDestroy();
     }
@@ -313,8 +286,9 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     }
 
     @Override
-    public void onAttach(Context context) {
+    public void onAttach(@NonNull Context context) {
         super.onAttach(context);
+        /* Check if the onRecipeStepClickListener exists; if not, throw a RuntimeException */
         try {
             onRecipeStepClickListener = (OnRecipeStepClickListener) context;
         } catch (ClassCastException e) {
@@ -328,8 +302,13 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         onRecipeStepClickListener = null;
     }
 
-    public void populateDetailRecipeView(String ingredients, List<Step> stepList) {
-        detailScrollView.scrollTo(scrollX, scrollY);
+    /**
+     * Populate the DetailRecipeView and scroll to the X and Y coordinates of the ScrollView
+     */
+    private void populateDetailRecipeView(String ingredients, List<Step> stepList) {
+        if (detailScrollView != null) {
+            detailScrollView.scrollTo(scrollX, scrollY);
+        }
         this.stepList = stepList;
         detailAdapter.setSteps(stepList);
         ingredientsTextView.setText(ingredients);

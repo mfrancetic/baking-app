@@ -32,6 +32,18 @@ public class Step implements Parcelable {
         stepThumbnailUrl = in.readString();
     }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(stepId);
+        parcel.writeString(stepShortDescription);
+        parcel.writeString(stepDescription);
+        parcel.writeString(stepVideoUrl);
+        parcel.writeString(stepThumbnailUrl);
+    }
+
+    /**
+     * Creates and returns a new Step object, as well as a new Step Array
+     */
     public static final Creator<Step> CREATOR = new Parcelable.Creator<Step>() {
         @Override
         public Step createFromParcel(Parcel in) {
@@ -44,57 +56,43 @@ public class Step implements Parcelable {
         }
     };
 
+    /**
+     * Returns the id of the step
+     */
     public int getStepId() {
         return stepId;
     }
 
+    /**
+     * Returns the short description of the step
+     */
     public String getStepShortDescription() {
         return stepShortDescription;
     }
 
+    /**
+     * Returns the description of the step
+     */
     public String getStepDescription() {
         return stepDescription;
     }
 
+    /**
+     * Returns the videoUrl of the step
+     */
     public String getStepVideoUrl() {
         return stepVideoUrl;
     }
 
+    /**
+     * Returns the thumbnailUrl of the step
+     */
     public String getStepThumbnailUrl() {
         return stepThumbnailUrl;
-    }
-
-    public void setStepId(int stepId) {
-        this.stepId = stepId;
-    }
-
-    public void setStepShortDescription(String stepShortDescription) {
-        this.stepShortDescription = stepShortDescription;
-    }
-
-    public void setStepDescription(String stepDescription) {
-        this.stepDescription = stepDescription;
-    }
-
-    public void setStepVideoUrl(String stepVideoUrl) {
-        this.stepVideoUrl = stepVideoUrl;
-    }
-
-    public void setStepThumbnailUrl(String stepThumbnailUrl) {
-        this.stepThumbnailUrl = stepThumbnailUrl;
     }
 
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeInt(stepId);
-        parcel.writeString(stepShortDescription);
-        parcel.writeString(stepDescription);
-        parcel.writeString(stepVideoUrl);
-        parcel.writeString(stepThumbnailUrl);
     }
 }

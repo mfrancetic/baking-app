@@ -11,7 +11,6 @@ public class Ingredient implements Parcelable {
 
     private String ingredientName;
 
-
     public Ingredient(int ingredientQuantity, String ingredientMeasure, String ingredientName) {
         this.ingredientQuantity = ingredientQuantity;
         this.ingredientMeasure = ingredientMeasure;
@@ -24,6 +23,16 @@ public class Ingredient implements Parcelable {
         ingredientName = in.readString();
     }
 
+    @Override
+    public void writeToParcel(Parcel parcel, int flags) {
+        parcel.writeInt(ingredientQuantity);
+        parcel.writeString(ingredientMeasure);
+        parcel.writeString(ingredientName);
+    }
+
+    /**
+     * Creates and returns a new Ingredient object, as well as a new Ingredient Array
+     */
     public static final Creator<Ingredient> CREATOR = new Parcelable.Creator<Ingredient>() {
         @Override
         public Ingredient createFromParcel(Parcel in) {
@@ -36,39 +45,29 @@ public class Ingredient implements Parcelable {
         }
     };
 
+    /**
+     * Returns the quantity of the ingredient
+     */
     public int getIngredientQuantity() {
         return ingredientQuantity;
     }
 
+    /**
+     * Returns the measure of the ingredient
+     */
     public String getIngredientMeasure() {
         return ingredientMeasure;
     }
 
+    /**
+     * Returns the name of the ingredient
+     */
     public String getIngredientName() {
         return ingredientName;
-    }
-
-    public void setIngredientMeasure(String ingredientMeasure) {
-        this.ingredientMeasure = ingredientMeasure;
-    }
-
-    public void setIngredientName(String ingredientName) {
-        this.ingredientName = ingredientName;
-    }
-
-    public void setIngredientQuantity(int ingredientQuantity) {
-        this.ingredientQuantity = ingredientQuantity;
     }
 
     @Override
     public int describeContents() {
         return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeInt(ingredientQuantity);
-        parcel.writeString(ingredientMeasure);
-        parcel.writeString(ingredientName);
     }
 }

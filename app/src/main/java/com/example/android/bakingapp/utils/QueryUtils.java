@@ -16,15 +16,23 @@ public class QueryUtils {
 
     private static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
 
+    /**
+     * Tag for the log messages
+     */
     private static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
+    /**
+     * Create a private constructor QueryUtils
+     */
     private QueryUtils() {
     }
 
+    /**
+     * Create a URL for the recipes
+     */
     public static URL createUrl() {
         URL url = null;
         Uri uri = Uri.parse(BASE_URL);
-
         Uri.Builder uriBuilder = uri.buildUpon();
         uriBuilder.build();
         try {
@@ -35,8 +43,11 @@ public class QueryUtils {
         return url;
     }
 
-    public static String makeHttpRequest(URL url) throws IOException {
 
+    /**
+     * Make an HTTP request to the given URL and return a String as the response.
+     */
+    public static String makeHttpRequest(URL url) throws IOException {
         /* Define the read time out, connect time out, success response code and request method */
         int READ_TIME_OUT = 10000;
         int CONNECT_TIME_OUT = 15000;

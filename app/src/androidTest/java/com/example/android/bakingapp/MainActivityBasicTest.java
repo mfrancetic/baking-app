@@ -14,13 +14,15 @@ import static androidx.test.platform.app.InstrumentationRegistry.getInstrumentat
 
 import com.example.android.bakingapp.activities.MainActivity;
 
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+/**
+ * Test for opening and displaying the MainActivity
+ */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityBasicTest {
 
@@ -28,10 +30,16 @@ public class MainActivityBasicTest {
 
     private String recipeName = "Nutella Pie";
 
+    /**
+     * ActivityTestRule for the MailActivity
+     */
     @Rule
     public ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
+    /**
+     * Register the idling resources
+     */
     @Before
     public void registerIdlingResource() {
         idlingResource = activityTestRule.getActivity().getIdlingResource();
@@ -39,12 +47,18 @@ public class MainActivityBasicTest {
         getInstrumentation().waitForIdleSync();
     }
 
+    /**
+     * Test if opening the MainActivity displays the recipe list
+     */
     @Test
     public void openMainActivity_displaysRecipeList() {
         onView(withId(R.id.main_recycler_view)).check(matches(isDisplayed()));
         onView(withText(recipeName)).check(matches(isDisplayed()));
     }
 
+    /**
+     * Unregister the idling resources after the test
+     */
     @After
     public void unregisterIdlingResource() {
         if (idlingResource != null) {

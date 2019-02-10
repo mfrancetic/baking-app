@@ -8,7 +8,6 @@ import android.view.View;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
-import butterknife.BindBool;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -18,13 +17,14 @@ import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
 import java.util.ArrayList;
 
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipe;
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.recipeName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepId;
 
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
 
+    /**
+     * Boolean that checks if the app is in the tablet or phone mode
+     */
     public static boolean twoPane;
 
     private static final String recipeKey = "recipe";
@@ -46,42 +46,45 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
 
+        /* Bind the views with their ID's using the ButterKnife library */
         ButterKnife.bind(this);
 
+        /* If the divider doesn't exist, apply the code for the phone mode; otherwise, apply the code
+         * for the tablet mode */
         if (dividerRecipe != null) {
+            /* In tablet mode, replace both the detail and detail_step fragment */
             twoPane = true;
             if (savedInstanceState == null) {
                 FragmentManager fragmentManager = getSupportFragmentManager();
-
                 DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_fragment_container, detailRecipeFragment)
-
                         .commit();
 
                 DetailRecipeStepFragment detailRecipeStepFragment = new DetailRecipeStepFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
-
                         .commit();
             }
         } else {
+            /* In phone mode, replace the detail fragment */
             twoPane = false;
-
             FragmentManager fragmentManager = getSupportFragmentManager();
-
             DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_fragment_container, detailRecipeFragment)
-//                    .addToBackStack("DetailFragment")
                     .commit();
         }
     }
 
+    /**
+     * The method handles clicking on a recipe step in the RecyclerView, depending if it is in the
+     * tablet or phone mode
+     */
     public void onRecipeStepSelected(int position) {
         if (twoPane) {
+            /* In tablet mode, replace the detail_step fragment with the correct recipe step */
             FragmentManager fragmentManager = getSupportFragmentManager();
-
             DetailRecipeStepFragment newDetailRecipeStepFragment = new DetailRecipeStepFragment();
             newDetailRecipeStepFragment.setStepId(position);
             newDetailRecipeStepFragment.setRecipeName(DetailRecipeFragment.recipeName);
@@ -90,8 +93,9 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_step_fragment_container, newDetailRecipeStepFragment)
                     .commit();
-
         } else {
+            /* In phone mode, launch the intent that opens the DetailStepActivity, with the data
+             * for the selected recipe step */
             final Intent intent = new Intent(this, DetailStepActivity.class);
             intent.putExtra(stepIdKey, position);
             intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
@@ -102,26 +106,22 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
         }
     }
 
+    /**
+     * Handles selecting the recipe step
+     */
     @Override
     public void onDetailRecipeStepSelected() {
     }
 
+    /**
+     * Handles clicking on the Back button, which then leads to the previous activity
+     */
     @Override
     public void onBackPressed() {
-        if (getSupportFragmentManager().getBackStackEntryCount() !=0) {
+        if (getSupportFragmentManager().getBackStackEntryCount() != 0) {
             getSupportFragmentManager().popBackStack();
         } else {
             super.onBackPressed();
         }
-
-//        int count = getFragmentManager().getBackStackEntryCount();
-//        if (count == 0) {
-//            super.onBackPressed();
-//            Intent intent = new Intent(DetailActivity.this, MainActivity.class);
-//            startActivity(intent);
-//            finish();
-//        } else {
-//            getFragmentManager().popBackStack();
-//        }
     }
 }
