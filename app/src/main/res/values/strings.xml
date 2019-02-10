@@ -1,11 +1,20 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">BakingApp</string>
+    <!-- Name of the app -->
+    <string name="app_name" translatable="false">BakingApp</string>
+    <!-- No recipes found message in the MainActivity -->
     <string name="no_recipes_found">No recipes found</string>
+    <!-- Text for the previous step button in the DetailStepActivity -->
     <string name="previous_step">Previous step</string>
+    <!-- Text for the next step button in the DetailStepActivity -->
     <string name="next_step">Next step</string>
+    <!-- No video available message in the DetailStepActivity -->
     <string name="video_not_available">Video not available</string>
+    <!-- Content description of the recipe image in the MainActivity -->
     <string name="image_content_description">Image of the recipe</string>
+    <!-- Content description of the recipe step in the DetailStepActivity -->
     <string name="image_step_content_description">Step of the recipe preparation</string>
+    <!-- Content description of the video thumbnail in the DetailStepActivity -->
     <string name="thumbnail_content_description">Thumbnail of the video</string>
+    <!-- Content description of the exo artwork in the DetailStepActivity -->
     <string name="exo_artwork_content_description" tools:ignore="UnusedResources">Player artwork</string>
 </resources>

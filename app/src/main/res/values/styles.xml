@@ -1,5 +1,4 @@
 <resources>
-
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Customize your theme here. -->
@@ -8,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Style for the TextViews -->
     <style name="TextViewStyle">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
@@ -16,28 +16,33 @@
         <item name="android:padding">8dp</item>
     </style>
 
+    <!-- Style for the recipe ImageView -->
     <style name="RecipeImageViewStyle">
         <item name="android:layout_height">@dimen/image_dimensions</item>
         <item name="android:layout_width">@dimen/image_dimensions</item>
         <item name="android:padding">@dimen/image_padding</item>
     </style>
 
+    <!-- Style for the recipe step ImageView -->
     <style name="StepImageViewStyle">
         <item name="android:layout_height">@dimen/image_step_dimensions</item>
         <item name="android:layout_width">@dimen/image_step_dimensions</item>
         <item name="android:padding">@dimen/image_padding</item>
     </style>
 
+    <!-- Style for the vertical divider in the tablet mode -->
     <style name="DividerVerticalStyle">
         <item name="android:layout_width">@dimen/divider_width</item>
         <item name="android:layout_height">match_parent</item>
     </style>
 
+    <!-- Style for the horizontal divider in the DetailActivity -->
     <style name="DividerHorizontalStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/divider_height</item>
     </style>
 
+    <!-- Style for the previous and next buttons in the DetailStepActivity -->
     <style name="ButtonStyle">
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_width">wrap_content</item>
@@ -48,5 +53,4 @@
         <item name="android:layout_marginRight">@dimen/button_margin</item>
         <item name="android:layout_marginBottom">@dimen/button_margin</item>
     </style>
-
 </resources>

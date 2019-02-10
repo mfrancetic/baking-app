@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Primary color of the app -->
     <color name="colorPrimary">#4CAF50</color>
-    <color name="colorPrimaryDark">#388E3C</color>
-    <color name="colorAccent">#CDDC39</color>
-    <color name="colorTextPrimary">#212121</color>
-    <color name="colorDivider">#BDBDBD</color>
-    <color name="colorTextIcons">#FFFFFF</color>
+    <!-- Primary light color of the app -->
     <color name="colorPrimaryLight">#C8E6C9</color>
+    <!-- Primary dark color of the app -->
+    <color name="colorPrimaryDark">#388E3C</color>
+    <!-- Color accent of the app -->
+    <color name="colorAccent">#CDDC39</color>
+    <!-- Primary text color of the app -->
+    <color name="colorTextPrimary">#212121</color>
+    <!-- Divider color in the tablet mode -->
+    <color name="colorDivider">#BDBDBD</color>
+    <!-- Color of the text icons -->
+    <color name="colorTextIcons">#FFFFFF</color>
 </resources>

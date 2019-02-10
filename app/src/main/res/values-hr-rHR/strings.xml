@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_recipes_found">Nema pronađenih recepata</string>
+    <string name="previous_step">Prethodni korak</string>
+    <string name="next_step">Sljedeći korak</string>
+    <string name="video_not_available">Video nije dostupan</string>
+    <string name="image_content_description">Slika recepta</string>
+    <string name="image_step_content_description">Korak pripreme recepta</string>
+    <string name="thumbnail_content_description">Mali prikaz videa</string>
+    <string name="exo_artwork_content_description">Prikaz programa za videozapise</string>
+</resources>

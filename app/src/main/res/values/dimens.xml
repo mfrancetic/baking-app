@@ -1,17 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Dimensions of the recipe image in the MainActivity -->
     <dimen name="image_dimensions">60dp</dimen>
+    <!-- Dimensions of the step image in the DetailActivity -->
     <dimen name="image_step_dimensions">40dp</dimen>
+    <!-- Dimensions of the recipe and step image -->
     <dimen name="image_padding">8dp</dimen>
+    <!-- Width of the divider in table mode -->
     <dimen name="divider_width">1dp</dimen>
+    <!-- Width of the container in the DetailActivity -->
     <dimen name="detail_container_width">400dp</dimen>
+    <!-- Height of the ExoPlayer -->
     <dimen name="exo_player_height">300dp</dimen>
+    <!-- Padding of the buttons in the DetailStepActivity -->
     <dimen name="button_padding">10dp</dimen>
+    <!-- Height of the divider between the ingredients and steps in the DetailActivity -->
     <dimen name="divider_height">1dp</dimen>
+    <!-- Margin of the buttons in the DetailStepActivity -->
     <dimen name="button_margin">50dp</dimen>
+    <!-- Dimension of the ExoPlayer icon -->
     <dimen name="exo_icon_dimensions" tools:ignore="UnusedResources">18dp</dimen>
+    <!-- Dimension of the ExoPlayer time bar -->
     <dimen name="exo_time_bar_dimen" tools:ignore="UnusedResources">32dp</dimen>
+    <!-- Height of the divider in the DetailActivity -->
     <dimen name="divider_detail_height" tools:ignore="UnusedResources">3dp</dimen>
+    <!-- Padding of the ExoPlayer -->
     <dimen name="exo_padding" tools:ignore="UnusedResources">4dp</dimen>
+    <!-- Text size of the ExoPlayer -->
     <dimen name="exo_text_size" tools:ignore="UnusedResources">14sp</dimen>
+    <!-- Dimensions of the app widget -->
+    <dimen name="widget_dimensions">330dp</dimen>
 </resources>
