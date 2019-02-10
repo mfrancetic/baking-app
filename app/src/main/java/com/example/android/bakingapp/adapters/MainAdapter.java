@@ -39,23 +39,19 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     public static List<Step> currentSteps;
 
-    public static List<Ingredient> currentIngredients;
+    private static List<Ingredient> currentIngredients;
 
     public static Recipe currentRecipe;
 
-    public static final String recipeNameKey = "recipeName";
+    private static final String recipeNameKey = "recipeName";
 
     public static String currentRecipeName;
 
-    private Context context;
+    private static final String recipeKey = "recipe";
 
-    private MainFragment.OnRecipeClickListener onRecipeClickListener;
+    private static final String stepListKey = "step";
 
-    public static final String recipeKey = "recipe";
-
-    public static final String stepListKey = "step";
-
-    public static final String ingredientListKey = "ingredient";
+    private static final String ingredientListKey = "ingredient";
 
     class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.recipe_name_text_view)
@@ -70,9 +66,9 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     }
 
     public MainAdapter(Context context, List<Recipe> recipes, MainFragment.OnRecipeClickListener onRecipeClickListener) {
-        this.context = context;
+        Context context1 = context;
         this.recipes = recipes;
-        this.onRecipeClickListener = onRecipeClickListener;
+        MainFragment.OnRecipeClickListener onRecipeClickListener1 = onRecipeClickListener;
     }
 
     @NonNull
@@ -100,7 +96,7 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         String image = recipe.getImage();
         /* If there is no image, then set the image of the cupcake. Otherwise, set the image of the recipe */
         if (image.isEmpty()) {
-            recipeImageView.setImageResource(R.drawable.cupcake);
+            recipeImageView.setImageResource(R.mipmap.ic_launcher);
         } else {
             Uri recipeImageUri = Uri.parse(image);
             com.squareup.picasso.Picasso

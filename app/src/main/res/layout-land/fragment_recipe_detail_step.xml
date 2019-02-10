@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/colorPrimaryLight">
+    >
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -34,7 +34,7 @@
             app:layout_constraintLeft_toLeftOf="@id/player_view_frame"
             app:layout_constraintRight_toRightOf="@id/player_view_frame"
             app:layout_constraintTop_toBottomOf="@id/empty_exo_player_view"
-            tools:src="@drawable/cupcake" />
+            tools:src="@mipmap/ic_launcher" />
 
         <TextView
             android:id="@+id/empty_exo_player_view"
@@ -67,7 +67,8 @@
             android:text="@string/previous_step"
             app:layout_constraintEnd_toStartOf="@id/next_step_button"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions" />
+            app:layout_constraintTop_toBottomOf="@id/recipe_step_instructions"
+            tools:ignore="RtlHardcoded" />
 
         <Button
             android:id="@+id/next_step_button"

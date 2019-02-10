@@ -46,7 +46,7 @@ public class MainActivityIntentTest {
      * IntentsTestRule for the MainActivity
      */
     @Rule
-    public IntentsTestRule<MainActivity> intentsTestRule =
+    public final IntentsTestRule<MainActivity> intentsTestRule =
             new IntentsTestRule<>(MainActivity.class);
 
     /**

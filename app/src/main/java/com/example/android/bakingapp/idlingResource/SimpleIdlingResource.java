@@ -2,6 +2,7 @@ package com.example.android.bakingapp.idlingResource;
 
 import androidx.annotation.Nullable;
 
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import androidx.test.espresso.IdlingResource;
@@ -12,7 +13,7 @@ public class SimpleIdlingResource implements IdlingResource {
     private volatile IdlingResource.ResourceCallback resourceCallback;
 
     /* Idleness is controlled with this boolean. */
-    private AtomicBoolean isIdleNow = new AtomicBoolean(true);
+    private final AtomicBoolean isIdleNow = new AtomicBoolean(true);
 
     @Override
     public String getName() {
@@ -36,7 +37,7 @@ public class SimpleIdlingResource implements IdlingResource {
     public void setIdleState(boolean isIdleNow) {
         this.isIdleNow.set(isIdleNow);
         if (isIdleNow && resourceCallback != null) {
-            resourceCallback.onTransitionToIdle();
+            Objects.requireNonNull(resourceCallback).onTransitionToIdle();
         }
     }
 }

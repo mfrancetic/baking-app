@@ -45,13 +45,11 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static final String recipeKey = "recipe";
 
-    public static final String stepId = "stepId";
+    private List<Ingredient> ingredientList;
 
-    List<Ingredient> ingredientList;
+    private DetailAdapter detailAdapter;
 
-    DetailAdapter detailAdapter;
-
-    OnRecipeStepClickListener onRecipeStepClickListener;
+    private OnRecipeStepClickListener onRecipeStepClickListener;
 
     @BindView(R.id.detail_recycler_view)
     RecyclerView detailRecyclerView;
@@ -61,7 +59,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     public static SharedPreferences sharedPreferences;
 
-    static final String preferenceId = "preferenceId";
+    private static final String preferenceId = "preferenceId";
 
     public static final String preferenceName = "preferenceName";
 
@@ -75,7 +73,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     static String ingredientsString;
 
-    static final String recipeNameKey = "recipeName";
+    private static final String recipeNameKey = "recipeName";
 
     public static final String stepListKey = "step";
 
@@ -281,11 +279,6 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
     public void onAttach(@NonNull Context context) {
         super.onAttach(context);
         /* Check if the onRecipeStepClickListener exists; if not, throw a RuntimeException */
@@ -309,7 +302,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         if (detailScrollView != null) {
             detailScrollView.scrollTo(scrollX, scrollY);
         }
-        this.stepList = stepList;
+        DetailRecipeFragment.stepList = stepList;
         detailAdapter.setSteps(stepList);
         ingredientsTextView.setText(ingredients);
     }

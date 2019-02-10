@@ -28,13 +28,11 @@ public class MainActivityBasicTest {
 
     private IdlingResource idlingResource;
 
-    private String recipeName = "Nutella Pie";
-
     /**
      * ActivityTestRule for the MailActivity
      */
     @Rule
-    public ActivityTestRule<MainActivity> activityTestRule =
+    public final ActivityTestRule<MainActivity> activityTestRule =
             new ActivityTestRule<>(MainActivity.class);
 
     /**
@@ -53,6 +51,7 @@ public class MainActivityBasicTest {
     @Test
     public void openMainActivity_displaysRecipeList() {
         onView(withId(R.id.main_recycler_view)).check(matches(isDisplayed()));
+        String recipeName = "Nutella Pie";
         onView(withText(recipeName)).check(matches(isDisplayed()));
     }
 

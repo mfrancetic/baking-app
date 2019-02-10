@@ -1,5 +1,6 @@
 package com.example.android.bakingapp.fragments;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -82,16 +83,9 @@ public class MainFragment extends Fragment {
     @Nullable
     ConstraintLayout constraintLayoutTabletMode;
 
-    private boolean twoPane;
-
-    private LinearLayoutManager layoutManager;
-
-    private int spanCount = 3;
-
     private SimpleIdlingResource idlingResource;
 
     public interface OnRecipeClickListener {
-        void onRecipeSelected(Recipe recipe);
     }
 
     public MainFragment() {
@@ -119,8 +113,9 @@ public class MainFragment extends Fragment {
         /* Get the idlingResource */
         getIdlingResource();
 
+        LinearLayoutManager layoutManager;
         if (constraintLayoutTabletMode != null) {
-            twoPane = true;
+            int spanCount = 3;
             layoutManager = new GridLayoutManager(context, spanCount);
         } else {
             layoutManager = new LinearLayoutManager(fragmentActivity);
@@ -192,6 +187,7 @@ public class MainFragment extends Fragment {
      * parses the JSON String in order to create a new Recipe object.
      * Returns a list of recipes.
      */
+    @SuppressLint("StaticFieldLeak")
     private class RecipeAsyncTask extends AsyncTask<String, Void, List<Recipe>> {
 
         @Override

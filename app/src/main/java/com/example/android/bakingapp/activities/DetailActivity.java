@@ -12,14 +12,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.example.android.bakingapp.R;
-import com.example.android.bakingapp.adapters.DetailAdapter;
 import com.example.android.bakingapp.adapters.MainAdapter;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
 import java.util.ArrayList;
-
-import static com.example.android.bakingapp.fragments.DetailRecipeFragment.stepId;
 
 public class DetailActivity extends AppCompatActivity implements DetailRecipeFragment.OnRecipeStepClickListener,
         DetailRecipeStepFragment.OnDetailRecipeStepClickListener {
@@ -34,8 +31,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
     private static final String recipeNameKey = "recipeName";
 
     private static final String stepListKey = "step";
-
-    private static final String ingredientListKey = "ingredient";
 
     private static final String stepIdKey = "stepId";
 
@@ -109,13 +104,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) DetailRecipeFragment.stepList);
             startActivity(intent);
         }
-    }
-
-    /**
-     * Handles selecting the recipe step
-     */
-    @Override
-    public void onDetailRecipeStepSelected() {
     }
 
     /**

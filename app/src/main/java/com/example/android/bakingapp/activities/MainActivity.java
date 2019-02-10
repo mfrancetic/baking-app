@@ -10,7 +10,6 @@ import android.os.Bundle;
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.fragments.MainFragment;
 import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
-import com.example.android.bakingapp.models.Recipe;
 
 import androidx.fragment.app.FragmentManager;
 import androidx.test.espresso.IdlingResource;
@@ -31,13 +30,6 @@ public class MainActivity extends AppCompatActivity implements MainFragment.OnRe
         fragmentManager.beginTransaction()
                 .replace(R.id.main_fragment_container, mainFragment)
                 .commit();
-    }
-
-    /**
-     * Handles selecting on the recipe
-     */
-    @Override
-    public void onRecipeSelected(Recipe recipe) {
     }
 
     /**

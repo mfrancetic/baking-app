@@ -25,13 +25,6 @@ public class DetailStepActivity extends AppCompatActivity implements DetailRecip
     }
 
     /**
-     * Handles selecting the recipe step
-     */
-    @Override
-    public void onDetailRecipeStepSelected() {
-    }
-
-    /**
      * Handles clicking on the Back button, which then leads to the previous activity
      */
     @Override

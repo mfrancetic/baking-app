@@ -25,23 +25,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     private List<Step> steps;
 
-    private Context context;
-
-    private static final String stepIdKey = "stepId";
-
-    private static final String stepListKey = "stepList";
-
-    private String recipeName;
-
-    private static final String recipeNameKey = "recipeName";
-
-    private static final String recipeKey = "recipe";
-
-    private DetailRecipeFragment detailRecipeFragment;
-
-    private int stepId;
-
-    private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
+    private final DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -55,7 +39,7 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
     }
 
     public DetailAdapter(Context context, List<Step> steps, DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener) {
-        this.context = context;
+        Context context1 = context;
         this.steps = steps;
         this.onRecipeStepClickListener = onRecipeStepClickListener;
     }

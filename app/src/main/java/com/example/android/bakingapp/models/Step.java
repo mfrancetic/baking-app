@@ -5,15 +5,15 @@ import android.os.Parcelable;
 
 public class Step implements Parcelable {
 
-    private int stepId;
+    private final int stepId;
 
-    private String stepShortDescription;
+    private final String stepShortDescription;
 
-    private String stepDescription;
+    private final String stepDescription;
 
-    private String stepVideoUrl;
+    private final String stepVideoUrl;
 
-    private String stepThumbnailUrl;
+    private final String stepThumbnailUrl;
 
     public Step(int stepId, String stepShortDescription, String stepDescription,
                 String stepVideoUrl, String stepThumbnailUrl) {

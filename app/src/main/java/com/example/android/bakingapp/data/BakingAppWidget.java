@@ -36,13 +36,11 @@ public class BakingAppWidget extends AppWidgetProvider {
 
     private static final String stepIdKey = "stepId";
 
-    private static RemoteViews remoteViews;
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
+    private static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                        int appWidgetId) {
 
         /* Create a new RemoteViews variable with the baking_app_widget layout */
-        remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
+        RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.baking_app_widget);
 
         if (sharedPreferences != null) {
             /* If there are sharedPreferences available, create an intent to launch the detail activity */

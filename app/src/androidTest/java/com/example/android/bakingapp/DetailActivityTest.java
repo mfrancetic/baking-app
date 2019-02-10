@@ -1,5 +1,6 @@
 package com.example.android.bakingapp;
 
+import android.app.Activity;
 import android.app.Instrumentation;
 import android.content.Intent;
 import android.os.Parcelable;
@@ -8,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
+import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
 import static androidx.test.espresso.matcher.ViewMatchers.withText;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientListKey;
@@ -22,6 +24,7 @@ import static androidx.test.espresso.Espresso.onView;
 import static androidx.test.espresso.action.ViewActions.click;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.hasExtra;
 import static androidx.test.espresso.matcher.ViewMatchers.withId;
+import static org.hamcrest.core.IsNot.not;
 
 import com.example.android.bakingapp.activities.DetailActivity;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
@@ -46,50 +49,44 @@ public class DetailActivityTest {
 
     private Instrumentation.ActivityResult result;
 
-    private Intent intent;
-
     private Recipe recipe;
 
-    private List<Ingredient> ingredientList = new ArrayList<>();
+    private final List<Ingredient> ingredientList = new ArrayList<>();
 
-    private List<Step> stepList = new ArrayList<>();
+    private final List<Step> stepList = new ArrayList<>();
 
-    private int stepId = 0;
+    private final int stepId = 0;
 
-    private int ingredientQuantity = 2;
+    private final int ingredientQuantity = 2;
 
-    private String ingredientMeasure = "CUP";
+    private final String ingredientMeasure = "CUP";
 
-    private String ingredientName = "Graham Cracker crumbs";
+    private final String ingredientName = "Graham Cracker crumbs";
 
-    private String stepDescription = "Recipe Introduction";
-
-    private String stepVideoUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4";
-
-    private String recipeName;
-
-    private int recipeId;
-
-    private int servings;
+    private final String stepDescription = "Recipe Introduction";
 
     /**
      * IntentsTestRule for the DetailActivity
      */
     @Rule
-    public IntentsTestRule<DetailActivity> intentsTestRule =
+    public final IntentsTestRule<DetailActivity> intentsTestRule =
             new IntentsTestRule<DetailActivity>(DetailActivity.class) {
                 /** Provides data for the intent that opens the DetailActivity */
                 @Override
                 protected Intent getActivityIntent() {
                     Ingredient ingredient = new Ingredient(ingredientQuantity, ingredientMeasure, ingredientName);
+                    String stepVideoUrl = "https://d17h27t6h515a5.cloudfront.net/topher/2017/April/58ffd974_-intro-creampie/-intro-creampie.mp4";
                     Step step = new Step(stepId, stepDescription, stepDescription,
                             stepVideoUrl, null);
                     ingredientList.add(ingredient);
                     stepList.add(step);
+                    int recipeId = 0;
+                    int servings = 8;
+                    String recipeName = "Cheesecake";
                     recipe = new Recipe(recipeId, recipeName, ingredientList, stepList, servings, null);
 
                     /* Create an intent with the recipe, ingredient and step list */
-                    intent = new Intent();
+                    Intent intent = new Intent();
                     intent.putExtra(recipeKey, recipe);
                     intent.putExtra(ingredientListKey, (ArrayList<? extends Parcelable>) ingredientList);
                     intent.putExtra(DetailRecipeFragment.stepListKey, (ArrayList<? extends Parcelable>) stepList);
@@ -102,6 +99,8 @@ public class DetailActivityTest {
      */
     @Before
     public void openDetailActivity() {
+        intending(not(isInternal())).respondWith(result = new Instrumentation.ActivityResult(Activity.RESULT_OK, null));
+
         if (!DetailActivity.twoPane) {
             /* In phone mode, replace the detail fragment */
             Fragment fragment = new DetailRecipeFragment();

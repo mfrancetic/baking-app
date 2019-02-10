@@ -27,7 +27,6 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,19 +80,14 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private List<Step> stepList;
 
-    DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
-
-
-    private String description;
-
-    private Step step;
+    private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
     static int stepId;
 
     @BindView(R.id.recipe_step_instructions)
     TextView instructionTextView;
 
-    SimpleExoPlayer exoPlayer;
+    private SimpleExoPlayer exoPlayer;
 
     @BindView(R.id.player_view_frame)
     FrameLayout playerViewFrame;
@@ -135,9 +129,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private String recipeName;
 
-    public Recipe recipe;
-
-    private DetailAdapter detailAdapter;
+    private Recipe recipe;
 
     @BindView(R.id.thumbnail_image_view)
     ImageView thumbnailImageView;
@@ -145,8 +137,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     private static SharedPreferences sharedPreferences;
 
     private boolean exoPlayerIsFullScreen = false;
-
-    private View rootView;
 
     private Context context;
 
@@ -230,7 +220,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     }
 
     public interface OnDetailRecipeStepClickListener {
-        void onDetailRecipeStepSelected();
     }
 
     public DetailRecipeStepFragment() {
@@ -241,18 +230,14 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_recipe_detail_step, container, false);
 
         /* Bind the views with their ID's using the Butterknife library */
         ButterKnife.bind(this, rootView);
 
         /* If the previousStepButton exists, set the boolean twoPane to true (since it is the
          * tablet mode); otherwise, set it to false*/
-        if (previousStepButton == null) {
-            twoPane = true;
-        } else {
-            twoPane = false;
-        }
+        twoPane = previousStepButton == null;
 
         if (getContext() != null) {
             sharedPreferences = getContext().getSharedPreferences(preferences, Context.MODE_PRIVATE);
@@ -291,7 +276,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
         thumbnailImageView.setVisibility(View.GONE);
 
-        detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
+        DetailAdapter detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
 
         /* Get the context from the instructionTextView */
         context = instructionTextView.getContext();
@@ -402,7 +387,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             }
         }
 
-        /* Hide the emptyPlayerView and initialize the media sessio */
+        /* Hide the emptyPlayerView and initialize the media session */
         emptyPlayerView.setVisibility(View.GONE);
 
         initializeMediaSession();
@@ -412,7 +397,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         initializePlayer(videoUri);
 
         /* Set the step description to the instructionTextView */
-        description = stepList.get(stepId).getStepDescription();
+        String description = stepList.get(stepId).getStepDescription();
         instructionTextView.setText(description);
     }
 

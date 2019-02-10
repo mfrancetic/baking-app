@@ -1,20 +1,11 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">BakingApp</string>
     <string name="no_recipes_found">No recipes found</string>
-    <string name="pause">Pause</string>
-    <string name="play">Play</string>
-    <string name="notification_text">Press play to see the instructions</string>
-    <string name="recipe_instructions">Recipe Instructions</string>
     <string name="previous_step">Previous step</string>
     <string name="next_step">Next step</string>
-    <string name="no_previous_step">No previous steps</string>
-    <string name="no_next_step">No next step</string>
     <string name="video_not_available">Video not available</string>
-    <string name="appwidget_text">EXAMPLE</string>
-    <string name="add_widget">Add widget</string>
-    <string name="widget_select_recipe">Select a recipe!</string>
     <string name="image_content_description">Image of the recipe</string>
     <string name="image_step_content_description">Step of the recipe preparation</string>
     <string name="thumbnail_content_description">Thumbnail of the video</string>
-    <string name="exo_artwork_content_description">Player artwork</string>
+    <string name="exo_artwork_content_description" tools:ignore="UnusedResources">Player artwork</string>
 </resources>

@@ -14,7 +14,7 @@
         android:background="@color/colorPrimaryLight"
         android:contentDescription="@string/image_content_description"
         android:padding="@dimen/button_padding"
-        android:src="@drawable/cupcake" />
+        android:src="@mipmap/ic_launcher" />
 
     <TextView
         android:id="@+id/widget_recipe_name"
