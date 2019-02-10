@@ -15,7 +15,6 @@ import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
 import com.example.android.bakingapp.activities.DetailActivity;
-import com.example.android.bakingapp.fragments.MainFragment;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -65,10 +64,8 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
         }
     }
 
-    public MainAdapter(Context context, List<Recipe> recipes, MainFragment.OnRecipeClickListener onRecipeClickListener) {
-        Context context1 = context;
+    public MainAdapter(List<Recipe> recipes) {
         this.recipes = recipes;
-        MainFragment.OnRecipeClickListener onRecipeClickListener1 = onRecipeClickListener;
     }
 
     @NonNull

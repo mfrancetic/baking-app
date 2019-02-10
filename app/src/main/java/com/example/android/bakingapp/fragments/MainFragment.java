@@ -52,8 +52,6 @@ public class MainFragment extends Fragment {
 
     private List<Recipe> recipeList;
 
-    private OnRecipeClickListener onRecipeClickListener;
-
     private MainAdapter mainAdapter;
 
     @BindView(R.id.main_recycler_view)
@@ -84,9 +82,6 @@ public class MainFragment extends Fragment {
     ConstraintLayout constraintLayoutTabletMode;
 
     private SimpleIdlingResource idlingResource;
-
-    public interface OnRecipeClickListener {
-    }
 
     public MainFragment() {
         super();
@@ -122,7 +117,7 @@ public class MainFragment extends Fragment {
         }
 
         /* Create a new MainAdapter, set the mainAdapter and the LayoutManager to the recyclerView */
-        mainAdapter = new MainAdapter(context, recipeList, onRecipeClickListener);
+        mainAdapter = new MainAdapter(recipeList);
         recyclerView.setLayoutManager(layoutManager);
         recyclerView.setAdapter(mainAdapter);
 
@@ -150,25 +145,6 @@ public class MainFragment extends Fragment {
             mainAdapter.notifyDataSetChanged();
         }
         return rootView;
-    }
-
-    /**
-     * OnAttach, check if the onRecipeClickListener is implemented
-     */
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            onRecipeClickListener = (OnRecipeClickListener) context;
-        } catch (ClassCastException e) {
-            throw new RuntimeException(context.toString() + "must implement OnRecipeClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onRecipeClickListener = null;
     }
 
     /**

@@ -14,7 +14,7 @@ import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
 import androidx.fragment.app.FragmentManager;
 import androidx.test.espresso.IdlingResource;
 
-public class MainActivity extends AppCompatActivity implements MainFragment.OnRecipeClickListener {
+public class MainActivity extends AppCompatActivity {
 
     @Nullable
     private SimpleIdlingResource idlingResource;

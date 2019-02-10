@@ -64,6 +64,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.ingredientsString;
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.onRecipeStepClickListener;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceIngredients;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceName;
 import static com.example.android.bakingapp.fragments.DetailRecipeFragment.preferenceStepId;
@@ -79,8 +80,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     static final String stepIdKey = "stepId";
 
     private List<Step> stepList;
-
-    private DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
     static int stepId;
 
@@ -151,8 +150,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @BindView(R.id.exo_fullscreen_button)
     @Nullable
     FrameLayout fullScreenButton;
-
-    private OnDetailRecipeStepClickListener onDetailRecipeStepClickListener;
 
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
@@ -276,7 +273,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
         thumbnailImageView.setVisibility(View.GONE);
 
-        DetailAdapter detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
+        DetailAdapter detailAdapter = new DetailAdapter(stepList, onRecipeStepClickListener);
 
         /* Get the context from the instructionTextView */
         context = instructionTextView.getContext();
@@ -549,22 +546,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         super.onDestroy();
         releasePlayer();
         mediaSession.setActive(false);
-    }
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        try {
-            onDetailRecipeStepClickListener = (OnDetailRecipeStepClickListener) context;
-        } catch (ClassCastException e) {
-            throw new RuntimeException(context.toString() + " must implement OnDetailRecipeStepClickListener");
-        }
-    }
-
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        onDetailRecipeStepClickListener = null;
     }
 
     private class SessionCallback extends MediaSessionCompat.Callback {

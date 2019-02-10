@@ -18,14 +18,14 @@ import com.example.android.bakingapp.models.Step;
 
 import java.util.List;
 
+import static com.example.android.bakingapp.fragments.DetailRecipeFragment.onRecipeStepClickListener;
+
 /**
  * DetailAdapter for the RecyclerView in the DetailRecipeFragment
  */
 public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder> {
 
     private List<Step> steps;
-
-    private final DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
@@ -38,10 +38,9 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         }
     }
 
-    public DetailAdapter(Context context, List<Step> steps, DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener) {
-        Context context1 = context;
+    public DetailAdapter(List<Step> steps, DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener) {
         this.steps = steps;
-        this.onRecipeStepClickListener = onRecipeStepClickListener;
+        DetailRecipeFragment.onRecipeStepClickListener = onRecipeStepClickListener;
     }
 
     @NonNull

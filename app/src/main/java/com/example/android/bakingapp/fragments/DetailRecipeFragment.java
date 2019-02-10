@@ -49,7 +49,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
 
     private DetailAdapter detailAdapter;
 
-    private OnRecipeStepClickListener onRecipeStepClickListener;
+    public static OnRecipeStepClickListener onRecipeStepClickListener;
 
     @BindView(R.id.detail_recycler_view)
     RecyclerView detailRecyclerView;
@@ -187,7 +187,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         Context context = rootView.getContext();
 
         /* Create a new DetailAdapter and get the fragment activity */
-        detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
+        detailAdapter = new DetailAdapter(stepList, onRecipeStepClickListener);
         final FragmentActivity fragmentActivity = getActivity();
 
         /* Create a new LinearLayoutManager and set it to the RecyclerView, as well as the
