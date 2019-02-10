@@ -27,6 +27,7 @@ import butterknife.BindString;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +37,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.adapters.DetailAdapter;
 import com.example.android.bakingapp.data.BakingAppWidget;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
@@ -78,6 +80,9 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     static final String stepIdKey = "stepId";
 
     private List<Step> stepList;
+
+    DetailRecipeFragment.OnRecipeStepClickListener onRecipeStepClickListener;
+
 
     private String description;
 
@@ -131,6 +136,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     private String recipeName;
 
     public Recipe recipe;
+
+    private DetailAdapter detailAdapter;
 
     @BindView(R.id.thumbnail_image_view)
     ImageView thumbnailImageView;
@@ -264,9 +271,9 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                 recipe = intent.getParcelableExtra(recipeKey);
                 if (!twoPane) {
                     stepId = intent.getIntExtra(stepIdKey, 0);
+                    stepList = intent.getParcelableArrayListExtra(stepListKey);
+                    recipeName = intent.getStringExtra(recipeNameKey);
                 }
-                stepList = intent.getParcelableArrayListExtra(stepListKey);
-                recipeName = intent.getStringExtra(recipeNameKey);
             }
         }
 
@@ -283,13 +290,18 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         simpleExoPlayerView = rootView.findViewById(R.id.player_view);
         thumbnailImageView.setVisibility(View.GONE);
 
+        detailAdapter = new DetailAdapter(context, stepList, onRecipeStepClickListener);
+
         /* Get the context from the instructionTextView */
         context = instructionTextView.getContext();
 
         /* Get the stepList and recipeName */
         if (stepList == null) {
+            stepList = new ArrayList<>();
             stepList = recipe.getStepList();
+            detailAdapter.notifyDataSetChanged();
         }
+
         if (recipeName == null) {
             recipeName = recipe.getName();
         }
@@ -365,6 +377,9 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         }
 
         releasePlayer();
+
+        Log.d(LOG_TAG, "stepId - Fragment is" + stepId);
+        Log.d(LOG_TAG, "stepList length is - " + stepList.size());
 
         /* Get the videoUrl. If it is empty, get the thumbnailUrl */
         videoUrl = stepList.get(stepId).getStepVideoUrl();

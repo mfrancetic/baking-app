@@ -31,11 +31,21 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
 
     private List<Recipe> recipes;
 
+    public static List<Step> steps;
+
+    public static List<Ingredient> ingredients;
+
+    public static Recipe recipe;
+
     public static List<Step> currentSteps;
 
     public static List<Ingredient> currentIngredients;
 
     public static Recipe currentRecipe;
+
+    public static final String recipeNameKey = "recipeName";
+
+    public static String currentRecipeName;
 
     private Context context;
 
@@ -77,17 +87,17 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MainAdapter.ViewHolder viewHolder, final int position) {
         /* Get the recipe, step list and ingredient list of the recipe */
-        currentRecipe = recipes.get(position);
-        currentSteps = currentRecipe.getStepList();
-        currentIngredients = currentRecipe.getIngredientList();
+        recipe = recipes.get(position);
+        steps = recipe.getStepList();
+        ingredients = recipe.getIngredientList();
 
         /* Set the recipe name to the TextView */
         TextView recipeNameTextView = viewHolder.recipeNameTextView;
-        recipeNameTextView.setText(currentRecipe.getName());
+        recipeNameTextView.setText(recipe.getName());
 
         /* Set the recipe image to the ImageView */
         ImageView recipeImageView = viewHolder.recipeImageView;
-        String image = currentRecipe.getImage();
+        String image = recipe.getImage();
         /* If there is no image, then set the image of the cupcake. Otherwise, set the image of the recipe */
         if (image.isEmpty()) {
             recipeImageView.setImageResource(R.drawable.cupcake);
@@ -107,10 +117,14 @@ public class MainAdapter extends RecyclerView.Adapter<MainAdapter.ViewHolder> {
             @Override
             public void onClick(View v) {
                 /* When clicking on the recipe, launch an intent that opens the details of the selected
-                * recipe in the DetailActivity */
+                 * recipe in the DetailActivity */
                 currentRecipe = recipes.get(position);
+                currentSteps = currentRecipe.getStepList();
+                currentIngredients = currentRecipe.getIngredientList();
+                currentRecipeName = currentRecipe.getName();
                 Intent openRecipeIntent = new Intent(context, DetailActivity.class);
                 openRecipeIntent.putExtra(recipeKey, currentRecipe);
+                openRecipeIntent.putExtra(recipeNameKey, currentRecipeName);
                 openRecipeIntent.putParcelableArrayListExtra(ingredientListKey, (ArrayList<? extends Parcelable>) currentIngredients);
                 openRecipeIntent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) currentSteps);
                 context.startActivity(openRecipeIntent);

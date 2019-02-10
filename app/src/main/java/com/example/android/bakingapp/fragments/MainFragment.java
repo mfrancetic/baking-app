@@ -152,6 +152,7 @@ public class MainFragment extends Fragment {
         } else {
             /* If the savedInstanceState doesn't exist, execute a new RecipeAsyncTask */
             new RecipeAsyncTask().execute();
+            mainAdapter.notifyDataSetChanged();
         }
         return rootView;
     }
@@ -302,6 +303,7 @@ public class MainFragment extends Fragment {
     private void populateRecipes(List<Recipe> recipes) {
         this.recipeList = recipes;
         mainAdapter.setRecipes(recipeList);
+        mainAdapter.notifyDataSetChanged();
         if (mainScrollView != null) {
             /* Scroll to the X and Y position of the mainScrollView*/
             mainScrollView.scrollTo(scrollX, scrollY);

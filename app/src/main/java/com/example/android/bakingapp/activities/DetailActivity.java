@@ -12,6 +12,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 import com.example.android.bakingapp.R;
+import com.example.android.bakingapp.adapters.DetailAdapter;
+import com.example.android.bakingapp.adapters.MainAdapter;
 import com.example.android.bakingapp.fragments.DetailRecipeFragment;
 import com.example.android.bakingapp.fragments.DetailRecipeStepFragment;
 
@@ -62,6 +64,10 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
                         .commit();
 
                 DetailRecipeStepFragment detailRecipeStepFragment = new DetailRecipeStepFragment();
+                detailRecipeStepFragment.setRecipeName(MainAdapter.currentRecipeName);
+                detailRecipeStepFragment.setRecipe(MainAdapter.currentRecipe);
+                detailRecipeStepFragment.setStepList(MainAdapter.currentSteps);
+                detailRecipeStepFragment.setStepId(0);
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
                         .commit();
@@ -86,10 +92,10 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             /* In tablet mode, replace the detail_step fragment with the correct recipe step */
             FragmentManager fragmentManager = getSupportFragmentManager();
             DetailRecipeStepFragment newDetailRecipeStepFragment = new DetailRecipeStepFragment();
-            newDetailRecipeStepFragment.setStepId(position);
             newDetailRecipeStepFragment.setRecipeName(DetailRecipeFragment.recipeName);
             newDetailRecipeStepFragment.setRecipe(DetailRecipeFragment.recipe);
             newDetailRecipeStepFragment.setStepList(DetailRecipeFragment.stepList);
+            newDetailRecipeStepFragment.setStepId(position);
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_step_fragment_container, newDetailRecipeStepFragment)
                     .commit();
