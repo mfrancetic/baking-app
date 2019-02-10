@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.media.session.MediaButtonReceiver;
 
@@ -148,6 +149,18 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
     @Nullable
     FrameLayout fullScreenButton;
 
+    @BindView(R.id.detail_scroll_view)
+    @Nullable
+    NestedScrollView detailScrollView;
+
+    private static final String SCROLL_POSITION_X = "scrollPositionX";
+
+    private static final String SCROLL_POSITION_Y = "scrollPositionY";
+
+    private int scrollX;
+
+    private int scrollY;
+
     @Override
     public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
@@ -243,6 +256,8 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             stepList = savedInstanceState.getParcelableArrayList(stepListKey);
             recipeName = savedInstanceState.getString(recipeNameKey);
             recipe = savedInstanceState.getParcelable(recipeKey);
+            scrollX = savedInstanceState.getInt(SCROLL_POSITION_X);
+            scrollY = savedInstanceState.getInt(SCROLL_POSITION_Y);
             /* If the savedInstanceState doesn't exist, get the values from the intent */
         } else if (getActivity() != null) {
             Intent intent = getActivity().getIntent();
@@ -274,6 +289,10 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
         /* Get the context from the instructionTextView */
         context = instructionTextView.getContext();
+
+        if (detailScrollView != null) {
+            detailScrollView.requestFocus();
+        }
 
         /* Get the stepList and recipeName */
         if (stepList == null) {
@@ -345,6 +364,12 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         outState.putParcelableArrayList(stepListKey, (ArrayList<? extends Parcelable>) stepList);
         outState.putString(recipeNameKey, recipeName);
         outState.putParcelable(recipeKey, recipe);
+        if (detailScrollView != null) {
+            scrollX = detailScrollView.getScrollX();
+            scrollY = detailScrollView.getScrollY();
+        }
+        outState.putInt(SCROLL_POSITION_X, scrollX);
+        outState.putInt(SCROLL_POSITION_Y, scrollY);
     }
 
     /**
@@ -393,6 +418,11 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
         /* Set the step description to the instructionTextView */
         String description = stepList.get(stepId).getStepDescription();
         instructionTextView.setText(description);
+
+        if (detailScrollView != null) {
+            /* Scroll to the X and Y position of the detailScrollView*/
+            detailScrollView.scrollTo(scrollX, scrollY);
+        }
     }
 
     /**
