@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import androidx.fragment.app.Fragment;
 import androidx.test.espresso.contrib.RecyclerViewActions;
 
+import static androidx.test.espresso.action.ViewActions.scrollTo;
 import static androidx.test.espresso.assertion.ViewAssertions.matches;
 import static androidx.test.espresso.intent.matcher.IntentMatchers.isInternal;
 import static androidx.test.espresso.matcher.ViewMatchers.isDisplayed;
@@ -132,7 +133,7 @@ public class DetailActivityTest {
         onView(withId(R.id.detail_recycler_view)).check(matches(isDisplayed()));
         onView(withText(stepId + " " + stepDescription)).check(matches(isDisplayed()));
         onView(withText(ingredientQuantity + " " + ingredientMeasure + " " + ingredientName + "\n")).check(matches(isDisplayed()));
-        onView(withId(R.id.detail_recycler_view)).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
+        onView(withId(R.id.detail_recycler_view)).perform(scrollTo()).perform(RecyclerViewActions.actionOnItemAtPosition(0, click()));
 
         if (DetailActivity.twoPane) {
             /* In tablet mode, check if the layout for the tablet mode is displayed */

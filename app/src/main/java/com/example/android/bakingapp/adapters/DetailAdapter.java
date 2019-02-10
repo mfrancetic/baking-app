@@ -63,6 +63,13 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
         viewHolder.recipeDescriptionTextView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (onRecipeStepClickListener == null) {
+                    onRecipeStepClickListener = new DetailRecipeFragment.OnRecipeStepClickListener() {
+                        @Override
+                        public void onRecipeStepSelected(int position) {
+                        }
+                    };
+                }
                 onRecipeStepClickListener.onRecipeStepSelected(position);
             }
         });
