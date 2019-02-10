@@ -7,5 +7,5 @@
     <string name="image_content_description">Slika recepta</string>
     <string name="image_step_content_description">Korak pripreme recepta</string>
     <string name="thumbnail_content_description">Mali prikaz videa</string>
-    <string name="exo_artwork_content_description">Prikaz programa za videozapise</string>
+    <string name="exo_artwork_content_description">Prikaz programa za videozapi</string>
 </resources>

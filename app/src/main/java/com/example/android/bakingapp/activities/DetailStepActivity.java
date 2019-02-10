@@ -16,9 +16,17 @@ public class DetailStepActivity extends AppCompatActivity implements DetailRecip
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail_step);
 
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.addOnBackStackChangedListener(new FragmentManager.OnBackStackChangedListener() {
+            @Override
+            public void onBackStackChanged() {
+                if (getFragmentManager().getBackStackEntryCount() == 0) finish();
+            }
+        });
+
         /* Replace the detail_step fragment */
         DetailRecipeStepFragment detailRecipeStepFragment = new DetailRecipeStepFragment();
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.detail_step_fragment_container, detailRecipeStepFragment)
                 .commit();

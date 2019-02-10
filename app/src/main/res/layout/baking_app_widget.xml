@@ -40,5 +40,4 @@
         android:background="@color/colorPrimaryLight"
         android:textColor="@color/colorTextPrimary"
         tools:text="Ingredients" />
-
 </RelativeLayout>

@@ -34,6 +34,8 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
 
     private static final String stepIdKey = "stepId";
 
+    private FragmentManager fragmentManager;
+
     @BindView(R.id.divider_recipe_detail)
     @Nullable
     View dividerRecipe;
@@ -42,6 +44,8 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe_detail);
+
+        fragmentManager = getSupportFragmentManager();
 
         /* Bind the views with their ID's using the ButterKnife library */
         ButterKnife.bind(this);
@@ -52,7 +56,7 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             /* In tablet mode, replace both the detail and detail_step fragment */
             twoPane = true;
             if (savedInstanceState == null) {
-                FragmentManager fragmentManager = getSupportFragmentManager();
+                fragmentManager = getSupportFragmentManager();
                 DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
                 fragmentManager.beginTransaction()
                         .replace(R.id.detail_fragment_container, detailRecipeFragment)
@@ -70,7 +74,7 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
         } else {
             /* In phone mode, replace the detail fragment */
             twoPane = false;
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             DetailRecipeFragment detailRecipeFragment = new DetailRecipeFragment();
             fragmentManager.beginTransaction()
                     .replace(R.id.detail_fragment_container, detailRecipeFragment)
@@ -85,7 +89,7 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
     public void onRecipeStepSelected(int position) {
         if (twoPane) {
             /* In tablet mode, replace the detail_step fragment with the correct recipe step */
-            FragmentManager fragmentManager = getSupportFragmentManager();
+            fragmentManager = getSupportFragmentManager();
             DetailRecipeStepFragment newDetailRecipeStepFragment = new DetailRecipeStepFragment();
             newDetailRecipeStepFragment.setRecipeName(DetailRecipeFragment.recipeName);
             newDetailRecipeStepFragment.setRecipe(DetailRecipeFragment.recipe);
