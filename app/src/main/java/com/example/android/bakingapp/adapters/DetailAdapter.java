@@ -71,7 +71,6 @@ public class DetailAdapter extends RecyclerView.Adapter<DetailAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull final DetailAdapter.ViewHolder viewHolder, final int position) {
-
         final Step step = steps.get(position);
         TextView recipeDescriptionTextView = viewHolder.recipeDescriptionTextView;
         String recipeDescription = step.getStepId() + " " + step.getStepShortDescription();

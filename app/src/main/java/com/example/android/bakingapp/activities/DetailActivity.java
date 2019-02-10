@@ -100,7 +100,6 @@ public class DetailActivity extends AppCompatActivity implements DetailRecipeFra
             intent.putExtra(stepIdKey, position);
             intent.putExtra(recipeNameKey, DetailRecipeFragment.recipeName);
             intent.putExtra(recipeKey, DetailRecipeFragment.recipe);
-            intent.putExtra(stepIdKey, stepId);
             intent.putParcelableArrayListExtra(stepListKey, (ArrayList<? extends Parcelable>) DetailRecipeFragment.stepList);
             startActivity(intent);
         }

@@ -137,7 +137,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
     private static SharedPreferences sharedPreferences;
 
-
     private boolean exoPlayerIsFullScreen = false;
 
     private View rootView;
