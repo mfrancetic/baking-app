@@ -40,21 +40,18 @@ import com.example.android.bakingapp.adapters.DetailAdapter;
 import com.example.android.bakingapp.data.BakingAppWidget;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
-import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.ExoPlaybackException;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
 import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.Player;
 import com.google.android.exoplayer2.SimpleExoPlayer;
 import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
+import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
 import com.google.android.exoplayer2.source.TrackGroupArray;
-import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
 import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.PlayerControlView;
 import com.google.android.exoplayer2.ui.PlayerView;
 import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
@@ -504,23 +501,20 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
                     }
                 }
 
-                /* Create a new DefaultTrackSelector and loadControl*/
-                TrackSelector trackSelector = new DefaultTrackSelector();
-                LoadControl loadControl = new DefaultLoadControl();
-
                 /* Create a new exoPlayer and set it to the simpleExoPlayerView */
-                exoPlayer = ExoPlayerFactory.newSimpleInstance(context, trackSelector, loadControl);
+                exoPlayer = ExoPlayerFactory.newSimpleInstance(context);
                 simpleExoPlayerView.setPlayer(exoPlayer);
 
                 /* Add the listener to the exoPlayer */
                 exoPlayer.addListener(this);
 
                 String userAgent = Util.getUserAgent(context, appName);
+                ExtractorsFactory extractorsFactory = new DefaultExtractorsFactory();
 
                 /* Create a new mediaSource, and prepare the exoPlayer, setting it to play when
                  * ready */
-                MediaSource mediaSource = new ExtractorMediaSource(recipeStepUri, new DefaultDataSourceFactory
-                        (context, userAgent), new DefaultExtractorsFactory(), null, null);
+                MediaSource mediaSource = new ExtractorMediaSource.Factory(new DefaultDataSourceFactory(context, userAgent))
+                        .setExtractorsFactory(extractorsFactory).createMediaSource(recipeStepUri);
                 exoPlayer.prepare(mediaSource);
                 exoPlayer.setPlayWhenReady(true);
             }
