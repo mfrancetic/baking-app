@@ -260,10 +260,10 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
         /* If the savedInstanceState exists, get the saved values under their keys */
         if (savedInstanceState != null) {
-            savedInstanceState.getInt(stepIdKey, stepId);
-            savedInstanceState.getParcelableArrayList(stepListKey);
-            savedInstanceState.getString(recipeNameKey);
-            savedInstanceState.getParcelable(recipeKey);
+            stepId = savedInstanceState.getInt(stepIdKey);
+            stepList = savedInstanceState.getParcelableArrayList(stepListKey);
+            recipeName = savedInstanceState.getString(recipeNameKey);
+            recipe = savedInstanceState.getParcelable(recipeKey);
             /* If the savedInstanceState doesn't exist, get the values from the intent */
         } else if (getActivity() != null) {
             Intent intent = getActivity().getIntent();
@@ -282,6 +282,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
             SharedPreferences.Editor editor = sharedPreferences.edit();
             recipeName = sharedPreferences.getString(preferenceName, null);
             ingredientsString = sharedPreferences.getString(preferenceIngredients, null);
+            stepId = sharedPreferences.getInt(preferenceStepId, 0);
             recipe = DetailRecipeFragment.recipe;
             editor.apply();
         }
@@ -378,9 +379,6 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
         releasePlayer();
 
-        Log.d(LOG_TAG, "stepId - Fragment is" + stepId);
-        Log.d(LOG_TAG, "stepList length is - " + stepList.size());
-
         /* Get the videoUrl. If it is empty, get the thumbnailUrl */
         videoUrl = stepList.get(stepId).getStepVideoUrl();
         if (videoUrl.isEmpty()) {
@@ -406,6 +404,7 @@ public class DetailRecipeStepFragment extends Fragment implements Player.EventLi
 
         /* Hide the emptyPlayerView and initialize the media sessio */
         emptyPlayerView.setVisibility(View.GONE);
+
         initializeMediaSession();
 
         /* Parse the videoUri and initialize the player using that Uri */
