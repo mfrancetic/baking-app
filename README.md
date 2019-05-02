@@ -2,7 +2,7 @@
 
 "Baking App" project for the Udacity Android Developer Nanodegree program.
 
-The application displays recipes, baking instructions, ingredients, as well as video-guided steps from the provided JSON file:
+The application displays recipes, baking instructions, ingredients, as well as video-guided steps from the provided _JSON file_:
 
 http://go.udacity.com/android-baking-app-json
 
