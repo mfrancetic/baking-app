@@ -58,7 +58,7 @@ public class DetailActivityTest {
 
     private final int stepId = 0;
 
-    private final int ingredientQuantity = 2;
+    private final Double ingredientQuantity = 2.2;
 
     private final String ingredientMeasure = "CUP";
 

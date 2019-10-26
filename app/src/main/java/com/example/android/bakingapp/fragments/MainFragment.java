@@ -25,7 +25,9 @@ import com.example.android.bakingapp.idlingResource.SimpleIdlingResource;
 import com.example.android.bakingapp.models.Ingredient;
 import com.example.android.bakingapp.models.Recipe;
 import com.example.android.bakingapp.models.Step;
-import com.example.android.bakingapp.utils.QueryUtils;
+import com.example.android.bakingapp.utils.JsonBakingApi;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -42,8 +44,19 @@ import androidx.fragment.app.FragmentActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import okhttp3.Interceptor;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.logging.HttpLoggingInterceptor;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.QueryMap;
 
 
 public class MainFragment extends Fragment {
@@ -83,6 +96,10 @@ public class MainFragment extends Fragment {
 
     private SimpleIdlingResource idlingResource;
 
+    private JsonBakingApi jsonBakingApi;
+
+    public static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net/topher/2017/May/59121517_baking/baking.json";
+
     public MainFragment() {
         super();
     }
@@ -107,6 +124,18 @@ public class MainFragment extends Fragment {
 
         /* Get the idlingResource */
         getIdlingResource();
+
+        Gson gson = new GsonBuilder().serializeNulls().create();
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(BASE_URL + "/")
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build();
+
+        jsonBakingApi = retrofit.create(JsonBakingApi.class);
 
         LinearLayoutManager layoutManager;
         if (constraintLayoutTabletMode != null) {
@@ -141,7 +170,7 @@ public class MainFragment extends Fragment {
             recipeList = savedInstanceState.getParcelableArrayList(recipeListKey);
         } else {
             /* If the savedInstanceState doesn't exist, execute a new RecipeAsyncTask */
-            new RecipeAsyncTask().execute();
+            getRecipes();
             mainAdapter.notifyDataSetChanged();
         }
         return rootView;
@@ -155,117 +184,6 @@ public class MainFragment extends Fragment {
         if (getActivity() != null) {
             idlingResource = (SimpleIdlingResource) ((MainActivity) getActivity()).getIdlingResource();
             idlingResource.setIdleState(false);
-        }
-    }
-
-    /**
-     * RecipeAsyncTask class that creates the URL for loading the recipes, makes the HTTP request and
-     * parses the JSON String in order to create a new Recipe object.
-     * Returns a list of recipes.
-     */
-    @SuppressLint("StaticFieldLeak")
-    private class RecipeAsyncTask extends AsyncTask<String, Void, List<Recipe>> {
-
-        @Override
-        protected List<Recipe> doInBackground(String... strings) {
-            /* Create a new recipeList */
-            List<Recipe> recipeList = new ArrayList<>();
-
-            try {
-                URL url = QueryUtils.createUrl();
-                String recipeJson = QueryUtils.makeHttpRequest(url);
-
-                /* Create a new recipeArray */
-                JSONArray recipeArray = new JSONArray(recipeJson);
-
-                /* For each recipe in the recipeArray, create a Recipe object */
-                for (int i = 0; i < recipeArray.length(); i++) {
-
-                    /* Get a single recipe at position i within the list of recipes */
-                    JSONObject recipeObject = recipeArray.getJSONObject(i);
-
-                    /* Extract the value for the required keys */
-                    int id = recipeObject.getInt("id");
-                    String name = recipeObject.getString("name");
-
-                    /* Create a new ingredientList and get the ingredientArray */
-                    List<Ingredient> ingredientList = new ArrayList<>();
-                    JSONArray ingredientArray = (JSONArray) recipeObject.get("ingredients");
-
-                    /* For each ingredient in the recipeArray, create a Ingredient object */
-                    for (int j = 0; j < ingredientArray.length(); j++) {
-                        JSONObject ingredientObject = ingredientArray.getJSONObject(j);
-
-                        /* Extract the value for the required keys */
-                        int quantity = ingredientObject.getInt("quantity");
-                        String measure = ingredientObject.getString("measure");
-                        String ingredient = ingredientObject.getString("ingredient");
-
-                        /* Create a new Ingredient and add it to the ingredientList */
-                        Ingredient newIngredient = new Ingredient(quantity, measure, ingredient);
-                        ingredientList.add(newIngredient);
-                    }
-
-                    /* Create a new stepList and get the stepArray */
-                    List<Step> stepList = new ArrayList<>();
-                    JSONArray stepArray = (JSONArray) recipeObject.get("steps");
-
-                    /* For each step in the stepArray, create a Step object */
-                    for (int k = 0; k < stepArray.length(); k++) {
-
-                        /* Get a single step at position i within the list of steps */
-                        JSONObject stepObject = stepArray.getJSONObject(k);
-
-                        /* Extract the value for the required keys */
-                        int stepId = stepObject.getInt("id");
-                        String shortDescription = stepObject.getString("shortDescription");
-                        String description = stepObject.getString("description");
-                        String videoUrl = stepObject.getString("videoURL");
-                        String thumbnailUrl = stepObject.getString("thumbnailURL");
-
-                        /* Create a new Step and add it to the stepList */
-                        Step newStep = new Step(stepId, shortDescription, description, videoUrl, thumbnailUrl);
-                        stepList.add(newStep);
-                    }
-
-                    /* Extract the value for the required keys */
-                    int servings = recipeObject.getInt("servings");
-                    String image = recipeObject.getString("image");
-
-                    /* Create a new Recipe object and set the values to it */
-                    Recipe recipe = new Recipe(id, name, ingredientList, stepList, servings, image);
-                    recipe.setId(id);
-                    recipe.setName(name);
-                    recipe.setIngredientList(ingredientList);
-                    recipe.setStepList(stepList);
-                    recipe.setServings(servings);
-                    recipe.setImage(image);
-
-                    /* Add the recipe to the recipeList */
-                    recipeList.add(i, recipe);
-                }
-            } catch (IOException e) {
-                Log.e(LOG_TAG, "Problem retrieving the recipe JSON results");
-            } catch (JSONException e) {
-                Log.e(LOG_TAG, "Problem parsing the recipe JSON response");
-            }
-            return recipeList;
-        }
-
-        @Override
-        protected void onPostExecute(List<Recipe> recipes) {
-            if (recipes.size() == 0) {
-                /* If there are no recipes, show the emptyTextView and loadingIndicator */
-                emptyTextView.setVisibility(View.VISIBLE);
-                loadingIndicator.setVisibility(View.VISIBLE);
-            } else {
-                /* If there are recipes available, hide the emptyTextView and loadingIndicator and
-                * populate the recipes */
-                emptyTextView.setVisibility(View.GONE);
-                loadingIndicator.setVisibility(View.GONE);
-                populateRecipes(recipes);
-            }
-            idlingResource.setIdleState(true);
         }
     }
 
@@ -295,5 +213,40 @@ public class MainFragment extends Fragment {
         savedInstanceState.putInt(SCROLL_POSITION_X, scrollX);
         savedInstanceState.putInt(SCROLL_POSITION_Y, scrollY);
         super.onSaveInstanceState(savedInstanceState);
+    }
+
+    private void getRecipes() {
+        Call<List<Recipe>> call = jsonBakingApi.getRecipes(BASE_URL);
+        call.enqueue(new Callback<List<Recipe>>() {
+            @Override
+            public void onResponse(Call<List<Recipe>> call, Response<List<Recipe>> response) {
+                if (!response.isSuccessful()) {
+                    emptyTextView.setVisibility(View.VISIBLE);
+                    String responseCode = getString(R.string.code) + " " + response.code();
+                    emptyTextView.setText(responseCode);
+                    return;
+                }
+
+                List<Recipe> recipes = response.body();
+                if (recipes != null && !recipes.isEmpty()) {
+                    /* If there are recipes available, hide the emptyTextView and loadingIndicator and
+                     * populate the recipes */
+                    emptyTextView.setVisibility(View.GONE);
+                    loadingIndicator.setVisibility(View.GONE);
+                    populateRecipes(recipes);
+                } else {
+                    /* If there are no recipes, show the emptyTextView and loadingIndicator */
+                    emptyTextView.setVisibility(View.VISIBLE);
+                    loadingIndicator.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onFailure(Call<List<Recipe>> call, Throwable t) {
+                emptyTextView.setVisibility(View.VISIBLE);
+                emptyTextView.setText(t.getMessage());
+            }
+        });
+        idlingResource.setIdleState(true);
     }
 }

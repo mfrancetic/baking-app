@@ -3,29 +3,34 @@ package com.example.android.bakingapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 public class Ingredient implements Parcelable {
 
-    private final int ingredientQuantity;
+    @SerializedName("quantity")
+    private final Double ingredientQuantity;
 
+    @SerializedName("measure")
     private final String ingredientMeasure;
 
+    @SerializedName("ingredient")
     private final String ingredientName;
 
-    public Ingredient(int ingredientQuantity, String ingredientMeasure, String ingredientName) {
+    public Ingredient(Double ingredientQuantity, String ingredientMeasure, String ingredientName) {
         this.ingredientQuantity = ingredientQuantity;
         this.ingredientMeasure = ingredientMeasure;
         this.ingredientName = ingredientName;
     }
 
     private Ingredient(Parcel in) {
-        ingredientQuantity = in.readInt();
+        ingredientQuantity = in.readDouble();
         ingredientMeasure = in.readString();
         ingredientName = in.readString();
     }
 
     @Override
     public void writeToParcel(Parcel parcel, int flags) {
-        parcel.writeInt(ingredientQuantity);
+        parcel.writeDouble(ingredientQuantity);
         parcel.writeString(ingredientMeasure);
         parcel.writeString(ingredientName);
     }
@@ -48,7 +53,7 @@ public class Ingredient implements Parcelable {
     /**
      * Returns the quantity of the ingredient
      */
-    public int getIngredientQuantity() {
+    public Double getIngredientQuantity() {
         return ingredientQuantity;
     }
 

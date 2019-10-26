@@ -205,7 +205,7 @@ public class DetailRecipeFragment extends Fragment implements SharedPreferences.
         /* Create a new string from the quantity, measure and name of the ingredient */
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < ingredientList.size(); i++) {
-            int quantityInt = ingredientList.get(i).getIngredientQuantity();
+            Double quantityInt = ingredientList.get(i).getIngredientQuantity();
             String quantity = String.valueOf(quantityInt);
             String measure = ingredientList.get(i).getIngredientMeasure();
             String ingredient = ingredientList.get(i).getIngredientName();

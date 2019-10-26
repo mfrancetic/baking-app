@@ -3,25 +3,29 @@ package com.example.android.bakingapp.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class Recipe implements Parcelable {
 
-    private int id;
+    private Integer id;
 
     private String name;
 
+    @SerializedName("ingredients")
     private List<Ingredient> ingredientList;
 
+    @SerializedName("steps")
     private List<Step> stepList;
 
-    private int servings;
+    private Integer servings;
 
     private String image;
 
-    public Recipe(int id, String name, List<Ingredient> ingredientList, List<Step> stepList,
-                  int servings, String image) {
+    public Recipe(Integer id, String name, List<Ingredient> ingredientList, List<Step> stepList,
+                  Integer servings, String image) {
         this.id = id;
         this.name = name;
         this.ingredientList = ingredientList;
@@ -74,7 +78,7 @@ public class Recipe implements Parcelable {
     /**
      * Returns the id of the recipe
      */
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -104,6 +108,10 @@ public class Recipe implements Parcelable {
      */
     public String getImage() {
         return image;
+    }
+
+    public Integer getServings() {
+        return servings;
     }
 
     /**
